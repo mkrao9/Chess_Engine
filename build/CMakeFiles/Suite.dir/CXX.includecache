@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/mukun/Desktop/ChessComputer/include/board.hpp
+stdint.h
+-
+
+C:/Users/mukun/Desktop/ChessComputer/src/board.cpp
+../include/board.hpp
+C:/Users/mukun/Desktop/ChessComputer/include/board.hpp
+stdlib.h
+-
+iostream
+-
+
+C:/Users/mukun/Desktop/ChessComputer/src/main.cpp
+stdlib.h
+-
+stdio.h
+-
+iostream
+-
+../include/board.hpp
+C:/Users/mukun/Desktop/ChessComputer/include/board.hpp
+
