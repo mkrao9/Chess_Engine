@@ -11,6 +11,7 @@ Board::Board(){
     turn_number = 1;
     curr_ply = 0;
     en_pass_square = 0;
+    move_since = 0; 
 
     white_pawn = (0xFF << 8);
     white_rook = 0x81;
@@ -26,28 +27,24 @@ Board::Board(){
     black_bishop = white_bishop << 56;
     black_queen = white_queen << 56; 
     black_king = white_king << 56;
-
-    white_pieces = white_pawn | white_rook | white_knight | white_queen | white_bishop | white_king;
-    black_pieces = black_pawn | black_rook | black_knight | black_queen | black_bishop | black_king;
-
-    occupied_squares = white_pieces | black_pieces;
 }
 
 Board::Board(const char *fen){
 
-    uint64_t white_pawn = 0;
-    uint64_t white_rook = 0;
-    uint64_t white_knight = 0;
-    uint64_t white_bishop = 0;
-    uint64_t white_queen = 0;
-    uint64_t white_king = 0;
-    uint64_t black_pawn = 0;
-    uint64_t black_rook = 0;
-    uint64_t black_knight = 0;
-    uint64_t black_bishop = 0;
-    uint64_t black_queen = 0;
-    uint64_t black_king = 0;
-
+    
+    white_pawn = 0;
+    white_rook = 0;
+    white_knight = 0;
+    white_bishop = 0;
+    white_queen = 0;
+    white_king = 0;
+    black_pawn = 0;
+    black_rook = 0;
+    black_knight = 0;
+    black_bishop = 0;
+    black_queen = 0;
+    black_king = 0;
+    
     castle_rights = 0; 
     en_pass_square = 0; 
     white_to_move = true;
@@ -63,40 +60,40 @@ Board::Board(const char *fen){
         char c = fen[index];
         switch (c){
             case 'r': 
-                black_rook |= (1 << counter);
+                black_rook |= (1LL << counter);
                 break;
             case 'n': 
-                black_knight |= (1 << counter);
+                black_knight |= (1LL << counter);
                 break;
             case 'b':
-                black_bishop |= (1 << counter);
+                black_bishop |= (1LL << counter);
                 break;
             case 'q': 
-                black_queen  |= (1 << counter);
+                black_queen  |= (1LL << counter);
                 break;
             case 'k':
-                black_king  |= (1 << counter);
+                black_king  |= (1LL << counter);
                 break;
             case 'p':
-                black_pawn  |= (1 << counter);
+                black_pawn  |=  (1LL << counter);
                 break;
             case 'P': 
-                white_pawn  |= (1 << counter);
+                white_pawn  |= (1LL << counter);
                 break;
             case 'R': 
-                white_rook |= (1 << counter);
+                white_rook |= (1LL << counter);
                 break;
             case 'N': 
-                white_knight |= (1 << counter);
+                white_knight |= (1LL << counter);
                 break;
             case 'B': 
-                white_bishop |= (1 << counter);
+                white_bishop |= (1LL << counter);
                 break;
             case 'Q': 
-                white_queen |= (1 << counter);
+                white_queen |= (1LL << counter);
                 break;
             case 'K': 
-                white_king |= (1 << counter);
+                white_king |= (1LL << counter);
                 break;
             case '/': 
                 counter++;
@@ -121,6 +118,7 @@ Board::Board(const char *fen){
 
     if (fen[index] == '-'){
         i = 4;
+        index++;
     }
 
     while (i < 4 && fen[index] != ' '){
@@ -148,24 +146,54 @@ Board::Board(const char *fen){
 
     if (fen[index] == '-'){
         en_pass_square = 0;
+        index++;
     }
     else{
         int col = 7 - (fen[index] - 'a');
         index++;
         int row = fen[index] - '1';
         en_pass_square = 8*row + col;
+
+        index++;
     }
 
+
+    index++;
+
+    uint32_t curr = 0; 
+    while (fen[index] != ' '){
+        curr *= 10;
+        uint32_t num = fen[index] - '0';
+        curr += num;
+
+        index++;
+    }
+
+    move_since = curr;
+
+
+    index++;
+
+
+    curr = 0; 
+    while (fen[index] != ' ' && fen[index] != 0){
+        uint32_t num = fen[index] - '0';
+        curr *=10;
+        curr += num;
+        index++;
+    }
+
+    turn_number = curr;
 
 
 }
 
 uint64_t Board::getWhitePieces(){
-    return white_pawn | white_rook | white_knight | white_queen | white_bishop | white_king;
+    return (white_pawn | white_rook | white_knight | white_queen | white_bishop | white_king);
 }
 
 uint64_t Board::getBlackPieces(){
-    return black_pieces = black_pawn | black_rook | black_knight | black_queen | black_bishop | black_king;
+    return (black_pawn | black_rook | black_knight | black_queen | black_bishop | black_king);
 }
 
 uint64_t Board::getOccupiedSquares(){
