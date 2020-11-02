@@ -1,9 +1,10 @@
+
+
 #testing makefile 
 CC = g++
-CLAGS  = -g -Wall
+CLAGS  = -g -Wall -O3
 OBJFILES = main.o board.o
-TARGET = prog
-LDFLAGS = 
+TARGET = ../engine
 
 all: $(TARGET)
 
