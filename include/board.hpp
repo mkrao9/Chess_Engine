@@ -1,5 +1,8 @@
+#ifndef _BOARD_HPP_
+#define _BOARD_HPP_
+
 #include <stdint.h>
-#include <vector> 
+#include <vector>
 
 struct Board{
 
@@ -35,11 +38,14 @@ struct Board{
     
     Board();
 
-    /* bits 0-5: source square, bits 6-11: target square, bits 12-16: flags see https://www.chessprogramming.org/Encoding_Moves#From-To_Based for more details */
-    
+    Board(const char *fen);
+
+
+
+    /* TODO: Test convert fen-->my board
+    */
 
     /* TODO: testing framework --
-        1) Convert fen -->my board position  
         2) Use stockfish -- run perf 1 
         3) Make sure the number of moves = the number of moves generated 
     */
@@ -51,6 +57,8 @@ struct Board{
         4) Update castling rights 
         5) Update en pessant square 
     */
+
+    /* bits 0-5: source square, bits 6-11: target square, bits 12-16: flags see https://www.chessprogramming.org/Encoding_Moves#From-To_Based for more details */
     std::vector<uint16_t> getAllMoves();
     
 
@@ -58,3 +66,5 @@ struct Board{
     uint64_t getBlackPieces();
     uint64_t getOccupiedSquares();
 };
+
+#endif
