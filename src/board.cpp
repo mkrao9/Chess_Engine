@@ -2,8 +2,9 @@
 #include <stdlib.h>
 #include <iostream>
 
-Board::Board(){
 
+/*default constructor */ 
+Board::Board(){
     white_to_move = true; 
     turn_number = 1;
     curr_ply = 0;

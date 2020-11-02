@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include <vector> 
 
 struct Board{
 
@@ -33,6 +34,25 @@ struct Board{
     uint32_t curr_ply;
     
     Board();
+
+    /* bits 0-5: source square, bits 6-11: target square, bits 12-16: flags see https://www.chessprogramming.org/Encoding_Moves#From-To_Based for more details */
+    
+
+    /* TODO: testing framework --
+        1) Convert fen -->my board position  
+        2) Use stockfish -- run perf 1 
+        3) Make sure the number of moves = the number of moves generated 
+    */
+
+    /* TODO: gerenate moves -- ignore optimizations 
+        1) Check each piece see where it can move 
+        2) If it ends with check -- end 
+        3) if all end in check -- mate 
+        4) Update castling rights 
+        5) Update en pessant square 
+    */
+    std::vector<uint16_t> getAllMoves();
+    
 
     uint64_t getWhitePieces();
     uint64_t getBlackPieces();
