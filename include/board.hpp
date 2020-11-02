@@ -4,6 +4,8 @@
 #include <stdint.h>
 #include <vector>
 
+#define SHIFT(a) (1LL << a)
+
 struct Board{
 
     /* pieces */
@@ -20,10 +22,10 @@ struct Board{
     uint64_t black_queen;
     uint64_t black_king;
 
-    /* general board information */
-    uint64_t occupied_squares;
-    uint64_t white_pieces;
-    uint64_t black_pieces;
+
+    /*Another option is just having a list of moves (or maybe even just a list of origin squares?) 
+        and when checking if castle check to make sure no piece has been moved && the rook is there -- might be a big 
+        memory tradeoff with this though */
 
     /* bits: {0 - white queen side, 1 - white king side, 2 - black queen side , 3 - black king side} */
     uint8_t castle_rights; 
@@ -34,16 +36,13 @@ struct Board{
     /* game information */
     bool white_to_move;
     uint32_t turn_number; 
+    uint32_t move_since;
     uint32_t curr_ply;
     
     Board();
 
     Board(const char *fen);
 
-
-
-    /* TODO: Test convert fen-->my board
-    */
 
     /* TODO: testing framework --
         2) Use stockfish -- run perf 1 
