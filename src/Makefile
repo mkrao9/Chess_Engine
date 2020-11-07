@@ -1,9 +1,9 @@
 
 
 #testing makefile 
-CC = g++
-CLAGS  = -g -Wall -O3
-OBJFILES = main.o board.o
+CC = g++ 
+CFLAGS  = -g -o -Wall -O3 
+OBJFILES = main.o board.o move.o attack_set.o
 TARGET = ../engine
 
 all: $(TARGET)

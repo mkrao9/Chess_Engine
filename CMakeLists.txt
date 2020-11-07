@@ -10,11 +10,15 @@ add_subdirectory(googletest)
 
 set(Headers 
     include/board.hpp
+    include/move.hpp
+    include/attack_set.hpp
 )
 
 set(Sources
+    src/move.cpp
     src/main.cpp
     src/board.cpp
+    src/attack_set.cpp
 )
 
 add_library(${This} STATIC ${Sources} ${Headers})

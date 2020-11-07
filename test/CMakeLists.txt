@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.18.4)
 set(This AllTests)
 
 set(Sources
-    BoardTest.cpp
+    BoardConstructorTest.cpp
+    TestDetermineCheck.cpp
 )
 
 add_executable(${This} ${Sources})

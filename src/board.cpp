@@ -2,54 +2,70 @@
 #include <stdlib.h>
 #include <iostream>
 #include <string.h>
-
+#include "../include/attack_set.hpp"
 
 /*default constructor */ 
 Board::Board(){
     castle_rights = 15; 
     white_to_move = true; 
     turn_number = 1;
-    curr_ply = 0;
     en_pass_square = 0;
     move_since = 0; 
 
-    white_pawn = (0xFF << 8);
-    white_rook = 0x81;
+    white_pieces.pawn = (0xFF << 8);
+    white_pieces.rook = 0x81;
 
-    white_knight = 0x42;
-    white_bishop = 0x24;
-    white_queen = 0x10;
-    white_king = 0x08;
+    white_pieces.knight = 0x42;
+    white_pieces.bishop = 0x24;
+    white_pieces.queen = 0x10;
+    white_pieces.king = 0x08;
 
-    black_pawn = white_pawn << 40;
-    black_rook = white_rook << 56;
-    black_knight = white_knight << 56;
-    black_bishop = white_bishop << 56;
-    black_queen = white_queen << 56; 
-    black_king = white_king << 56;
+    black_pieces.pawn = white_pieces.pawn << 40;
+    black_pieces.rook = white_pieces.rook << 56;
+    black_pieces.knight = white_pieces.knight << 56;
+    black_pieces.bishop = white_pieces.bishop << 56;
+    black_pieces.queen = white_pieces.queen << 56; 
+    black_pieces.king = white_pieces.king << 56;
+
+    black_king_square = 59; 
+    white_king_square = 3;
+
+    for (int i = 0; i < 64; i++){
+        attack_set[i].bits = 0; 
+    }
+    
+    initializeAttackSet(attack_set, white_pieces, black_pieces, getOccupiedSquares());
+
+    move_list = new uint32_t[256];
+    curr_num_moves = 0;
 }
 
+/*
+    constructor that takes in a fen 
+    doesn't handle any error codes -- assumes input is valid.
+    This is used for testing purposes for right now. 
+*/
 Board::Board(const char *fen){
 
     
-    white_pawn = 0;
-    white_rook = 0;
-    white_knight = 0;
-    white_bishop = 0;
-    white_queen = 0;
-    white_king = 0;
-    black_pawn = 0;
-    black_rook = 0;
-    black_knight = 0;
-    black_bishop = 0;
-    black_queen = 0;
-    black_king = 0;
+    white_pieces.pawn = 0;
+    white_pieces.rook = 0;
+    white_pieces.knight = 0;
+    white_pieces.bishop = 0;
+    white_pieces.queen = 0;
+    white_pieces.king = 0;
+    black_pieces.pawn = 0;
+    black_pieces.rook = 0;
+    black_pieces.knight = 0;
+    black_pieces.bishop = 0;
+    black_pieces.queen = 0;
+    black_pieces.king = 0;
     
     castle_rights = 0; 
     en_pass_square = 0; 
     white_to_move = true;
     turn_number = 0; 
-    curr_ply = 0;
+
 
 
     int counter = 63; 
@@ -60,40 +76,42 @@ Board::Board(const char *fen){
         char c = fen[index];
         switch (c){
             case 'r': 
-                black_rook |= (1LL << counter);
+                black_pieces.rook |= (1LL << counter);
                 break;
             case 'n': 
-                black_knight |= (1LL << counter);
+                black_pieces.knight |= (1LL << counter);
                 break;
             case 'b':
-                black_bishop |= (1LL << counter);
+                black_pieces.bishop |= (1LL << counter);
                 break;
             case 'q': 
-                black_queen  |= (1LL << counter);
+                black_pieces.queen  |= (1LL << counter);
                 break;
             case 'k':
-                black_king  |= (1LL << counter);
+                black_pieces.king  |= (1LL << counter);
+                black_king_square = counter;
                 break;
             case 'p':
-                black_pawn  |=  (1LL << counter);
+                black_pieces.pawn  |=  (1LL << counter);
                 break;
             case 'P': 
-                white_pawn  |= (1LL << counter);
+            white_pieces.pawn  |= (1LL << counter);
                 break;
             case 'R': 
-                white_rook |= (1LL << counter);
+                white_pieces.rook |= (1LL << counter);
                 break;
             case 'N': 
-                white_knight |= (1LL << counter);
+                white_pieces.knight |= (1LL << counter);
                 break;
             case 'B': 
-                white_bishop |= (1LL << counter);
+                white_pieces.bishop |= (1LL << counter);
                 break;
             case 'Q': 
-                white_queen |= (1LL << counter);
+                white_pieces.queen |= (1LL << counter);
                 break;
             case 'K': 
-                white_king |= (1LL << counter);
+                white_pieces.king |= (1LL << counter);
+                white_king_square = counter;
                 break;
             case '/': 
                 counter++;
@@ -185,15 +203,22 @@ Board::Board(const char *fen){
 
     turn_number = curr;
 
+    for (int i = 0; i < 64; i++){
+        attack_set[i].bits = 0; 
+    }
 
+    initializeAttackSet(attack_set, white_pieces, black_pieces, getOccupiedSquares());
+
+    move_list = new uint32_t[256];
+    curr_num_moves = 0; 
 }
 
 uint64_t Board::getWhitePieces(){
-    return (white_pawn | white_rook | white_knight | white_queen | white_bishop | white_king);
+    return (white_pieces.pawn | white_pieces.rook | white_pieces.knight | white_pieces.queen | white_pieces.bishop | white_pieces.king);
 }
 
 uint64_t Board::getBlackPieces(){
-    return (black_pawn | black_rook | black_knight | black_queen | black_bishop | black_king);
+    return (black_pieces.pawn | black_pieces.rook | black_pieces.knight | black_pieces.queen | black_pieces.bishop | black_pieces.king);
 }
 
 uint64_t Board::getOccupiedSquares(){
