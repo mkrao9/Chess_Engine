@@ -5,7 +5,7 @@
 
 
 
-void initializeAttackSet(attack_set *attack_set, struct pieces white_pieces, struct pieces black_pieces, uint64_t occupied_squares);
+void initializeAttackSet(Board* board);
 
 void setQueen(attack_set *attack_set, uint8_t square, uint64_t occupied_squares);
 

@@ -65,14 +65,34 @@ TEST(GenerateKingMoves, game_one){
     ASSERT_EQ(board->move_list[4], 45 | (38 << 6) | (1 << 20));
     board = new Board("8/6pp/2k2p2/1pb2P2/3K4/2N2P2/7P/8 w - - 2 39");
     generateKingMoves(board);
-    for (int i = 0; i < board->curr_num_moves; i++){
-        std::cout << "to: " << ((board->move_list[i] & (0x3f << 6)) >> 6) << "\n";
-    }
     ASSERT_EQ(board->curr_num_moves, 2);
-
-
-
     ASSERT_EQ(board->move_list[0], 28 | (20 << 6));
     ASSERT_EQ(board->move_list[1], 28 | (27 << 6));
-
+    board = new Board("8/7p/5p2/5P1N/1p6/1Kb3kP/8/8 b - - 2 51");
+    generateKingMoves(board);
+    ASSERT_EQ(board->curr_num_moves, 6);
+    board = new Board("8/8/4K3/8/4q3/8/5k2/8 w - - 2 64");
+    generateKingMoves(board);
+    ASSERT_EQ(board->curr_num_moves, 4);
+    board = new Board("8/8/3K4/4q3/3k4/8/8/8 w - - 8 67");
+    generateKingMoves(board);
+    ASSERT_EQ(board->curr_num_moves, 2);
+    board = new Board("8/8/2K1q3/8/3k4/8/8/8 w - - 10 68");
+    generateKingMoves(board);
+    ASSERT_EQ(board->curr_num_moves, 3);
+    board = new Board("8/1K1q4/8/2k5/8/8/8/8 w - - 14 70");
+    generateKingMoves(board);
+    ASSERT_EQ(board->curr_num_moves, 3);
+    board = new Board("K7/q7/1k6/8/8/8/8/8 w - - 18 72");
+    generateKingMoves(board);
+    ASSERT_EQ(board->curr_num_moves, 0);
+    board = new Board("r4rk1/1p3pbp/pq4p1/8/P4B2/2P2R2/1P4PP/R2Q2K1 w - - 1 21");
+    generateKingMoves(board);
+    ASSERT_EQ(board->curr_num_moves, 2);
+    board = new Board("3r2k1/1pR2Qbp/pB4p1/8/P7/3r4/6PP/6K1 b - - 0 28");
+    generateKingMoves(board);
+    ASSERT_EQ(board->curr_num_moves, 1);
+    board = new Board("3r3k/1pR3Qp/pB4p1/8/P7/3r4/6PP/6K1 b - - 0 29");
+    generateKingMoves(board);
+    ASSERT_EQ(board->curr_num_moves, 0);
 }

@@ -31,10 +31,11 @@ Board::Board(){
     white_king_square = 3;
 
     for (int i = 0; i < 64; i++){
-        attack_set[i].bits = 0; 
+        full_attack_set.black_attack_set[i].bits = 0; 
+        full_attack_set.white_attack_set[i].bits = 0; 
     }
     
-    initializeAttackSet(attack_set, white_pieces, black_pieces, getOccupiedSquares());
+    initializeAttackSet(this);
 
     move_list = new uint32_t[256];
     curr_num_moves = 0;
@@ -204,10 +205,11 @@ Board::Board(const char *fen){
     turn_number = curr;
 
     for (int i = 0; i < 64; i++){
-        attack_set[i].bits = 0; 
+        full_attack_set.black_attack_set[i].bits = 0; 
+        full_attack_set.white_attack_set[i].bits = 0; 
     }
 
-    initializeAttackSet(attack_set, white_pieces, black_pieces, getOccupiedSquares());
+    initializeAttackSet(this);
 
     move_list = new uint32_t[256];
     curr_num_moves = 0; 

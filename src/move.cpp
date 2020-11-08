@@ -29,29 +29,39 @@ void generateKingMoves(Board* board){
     pieces other_pieces; 
     uint64_t other_pieces_board;
     uint64_t curr_pieces_board;
+    attack_set* attack;
     int king_square; 
+    attack_set king_attack_set; 
 
     if (board->white_to_move){
         other_pieces = board->black_pieces;
         king_square = board->white_king_square;
         curr_pieces_board = board->getWhitePieces();
         other_pieces_board = board->getBlackPieces();
+        attack = board->full_attack_set.black_attack_set;
     }
     else{
         other_pieces = board->white_pieces;
         king_square = board->black_king_square;
         curr_pieces_board = board->getBlackPieces();
         other_pieces_board = board->getWhitePieces();
+        attack = board->full_attack_set.white_attack_set;
     }
+
+    king_attack_set = attack[king_square];
 
 
 
     //up 
-    if (king_square < 56){
+    if (king_square < 56 && (!king_attack_set.fields.DOWN)){
         int val = king_square + UP_VAL;
         uint64_t shifted_square = SHIFT(val);
+
+        //occupied 
         if (!(curr_pieces_board & shifted_square)){
-            if (!checkHit(board->attack_set[val], val, other_pieces)){
+
+            //makes sure the square is not currently hit
+            if (attack[val].bits == 0){
                 board->move_list[board->curr_num_moves] = (king_square | ((val ) << 6));
 
                 //if it's a capture
@@ -65,11 +75,11 @@ void generateKingMoves(Board* board){
     }
 
     //down
-    if (king_square > 7){
+    if (king_square > 7 && (!king_attack_set.fields.UP)){
         int val = king_square + DOWN_VAL;
         uint64_t shifted_square = SHIFT(val);
         if (!(curr_pieces_board & shifted_square)){
-            if (!checkHit(board->attack_set[val], val, other_pieces)){
+            if (attack[val].bits == 0){
                 board->move_list[board->curr_num_moves] = (king_square | ((val) << 6));
 
                 //if it's a capture
@@ -83,11 +93,11 @@ void generateKingMoves(Board* board){
     }
 
     //left
-    if (king_square % 8 != 7){
+    if (king_square % 8 != 7 && (!king_attack_set.fields.RIGHT)){
         int val = king_square + LEFT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if (!(curr_pieces_board & shifted_square)){
-            if (!checkHit(board->attack_set[val], val, other_pieces)){
+            if (attack[val].bits == 0){
                 board->move_list[board->curr_num_moves] = (king_square | ((val ) << 6));
                 //if it's a capture
                 if (other_pieces_board & shifted_square){
@@ -99,11 +109,11 @@ void generateKingMoves(Board* board){
     }
 
     //right 
-    if (king_square % 8 != 0){
+    if (king_square % 8 != 0 && (!king_attack_set.fields.LEFT)){
         int val = king_square + RIGHT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if (!(curr_pieces_board & shifted_square)){
-            if (!checkHit(board->attack_set[val], val, other_pieces)){
+            if (attack[val].bits == 0){
                 board->move_list[board->curr_num_moves] = (king_square | ((val ) << 6));
 
                 //if it's a capture
@@ -120,14 +130,16 @@ void generateKingMoves(Board* board){
         int val = king_square + UP_LEFT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if (!(curr_pieces_board & shifted_square)){
-            if (!checkHit(board->attack_set[val], val, other_pieces)){
-                board->move_list[board->curr_num_moves] = (king_square | ((val ) << 6));
+            if (attack[val].bits == 0){
+                if (!king_attack_set.fields.DOWN_RIGHT || (SHIFT(king_square + king_attack_set.fields.DOWN_RIGHT * DOWN_RIGHT_VAL) & other_pieces.pawn)) {
+                    board->move_list[board->curr_num_moves] = (king_square | ((val ) << 6));
 
-                //if it's a capture
-                if (other_pieces_board & shifted_square){
-                    board->move_list[board->curr_num_moves] |= (getPieceCode(shifted_square, other_pieces)) << 20;
+                    //if it's a capture
+                    if (other_pieces_board & shifted_square){
+                        board->move_list[board->curr_num_moves] |= (getPieceCode(shifted_square, other_pieces)) << 20;
+                    }
+                    board->curr_num_moves++;
                 }
-                board->curr_num_moves++;
             }
         }
     }
@@ -137,13 +149,15 @@ void generateKingMoves(Board* board){
         int val = king_square + UP_RIGHT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if (!(curr_pieces_board & shifted_square)){
-            if (!(checkHit(board->attack_set[val], val, other_pieces))){
+            if (!(checkHit(attack[val], val, other_pieces))){
+             if (!king_attack_set.fields.DOWN_LEFT || (SHIFT(king_square + king_attack_set.fields.DOWN_LEFT * DOWN_LEFT_VAL) & other_pieces.pawn)){
                 board->move_list[board->curr_num_moves] = (king_square | ((val ) << 6));
                 //if it's a capture
                 if (other_pieces_board & shifted_square){
                     board->move_list[board->curr_num_moves] |= (getPieceCode(shifted_square, other_pieces)) << 20;
                 }
                 board->curr_num_moves++;
+             }
             }
         }
     }
@@ -153,14 +167,16 @@ void generateKingMoves(Board* board){
         int val = king_square + DOWN_LEFT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if (!(curr_pieces_board & shifted_square)){
-            if (!checkHit(board->attack_set[val], val, other_pieces)){
-                board->move_list[board->curr_num_moves] = (king_square | ((val ) << 6));
+            if (attack[val].bits == 0){
+                if (!king_attack_set.fields.UP_RIGHT || (SHIFT(king_square + king_attack_set.fields.UP_RIGHT * UP_RIGHT_VAL) & other_pieces.pawn)){
+                    board->move_list[board->curr_num_moves] = (king_square | ((val ) << 6));
 
-                //if it's a capture
-                if (other_pieces_board & shifted_square){
-                    board->move_list[board->curr_num_moves] |= (getPieceCode(shifted_square, other_pieces)) << 20;
+                    //if it's a capture
+                    if (other_pieces_board & shifted_square){
+                        board->move_list[board->curr_num_moves] |= (getPieceCode(shifted_square, other_pieces)) << 20;
+                    }
+                    board->curr_num_moves++;
                 }
-                board->curr_num_moves++;
             }
         }
     }
@@ -170,14 +186,17 @@ void generateKingMoves(Board* board){
         int val = king_square + DOWN_RIGHT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if (!(curr_pieces_board & shifted_square)){
-            if (!checkHit(board->attack_set[val], val, other_pieces)){
-                board->move_list[board->curr_num_moves] = (king_square | ((val) << 6));
+            if (attack[val].bits == 0){
+                if (!king_attack_set.fields.UP_LEFT || (SHIFT(king_square + king_attack_set.fields.UP_LEFT * UP_LEFT_VAL) & other_pieces.pawn)){
+                    board->move_list[board->curr_num_moves] = (king_square | ((val) << 6));
 
-                //if it's a capture
-                if (other_pieces_board & shifted_square){
-                    board->move_list[board->curr_num_moves] |= (getPieceCode(shifted_square, other_pieces)) << 20;
+                    //if it's a capture
+                    if (other_pieces_board & shifted_square){
+                        board->move_list[board->curr_num_moves] |= (getPieceCode(shifted_square, other_pieces)) << 20;
+                    }
+                    board->curr_num_moves++;
                 }
-                board->curr_num_moves++;
+               
             }
         }
     }
@@ -250,15 +269,15 @@ uint8_t inCheck(Board* board){
 
     if (white_to_move){
         int king_square = board->white_king_square;
-        if (!(board->attack_set[king_square].bits)){
+        if (!(board->full_attack_set.black_attack_set[king_square].bits)){
             return 0;
         }
         else{
             struct pieces other_pieces = board->black_pieces;
 
-            attack_set attack = board->attack_set[king_square];
+            attack_set attack = board->full_attack_set.black_attack_set[king_square];
             int target_square = king_square;
-            if (checkKnightHit(attack, target_square, other_pieces)){
+            if (GET_N_HITS(attack.bits)){
                 return 2; 
             }
             return checkStraightCheck(attack, target_square, other_pieces);
@@ -266,13 +285,14 @@ uint8_t inCheck(Board* board){
     }
     else{
         int king_square = board->black_king_square;
-        if (!(board->attack_set[king_square].bits)){
+        if (!(board->full_attack_set.white_attack_set[king_square].bits)){
+            
             return false;
         }
         else{
             struct pieces other_pieces = board->white_pieces;
 
-            attack_set attack = board->attack_set[king_square];
+            attack_set attack = board->full_attack_set.white_attack_set[king_square];
             if (checkKnightHit(attack, king_square, other_pieces)){
                 return 2; 
             }
@@ -282,7 +302,7 @@ uint8_t inCheck(Board* board){
 }
 
 inline bool checkHit(attack_set attack, int target_square, pieces other_pieces){
-    return (checkStraightHit(attack, target_square, other_pieces) || checkKnightHit(attack, target_square, other_pieces));
+    return (attack.bits != 0);
 }
 
 uint8_t checkStraightCheck(attack_set attack, int target_square, struct pieces other_pieces){
@@ -358,8 +378,8 @@ uint8_t checkStraightCheck(attack_set attack, int target_square, struct pieces o
     }
 
     return count | (curr << 4);
-
 }
+
 
 bool checkKnightHit(attack_set attack, int target_square, struct pieces other_pieces){
 

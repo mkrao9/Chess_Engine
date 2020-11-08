@@ -60,6 +60,11 @@ struct pieces {
 
 };
 
+struct full_attack_set{
+    attack_set white_attack_set[64];
+    attack_set black_attack_set[64];
+};
+
 struct Board{
     /* pieces */
 
@@ -72,8 +77,10 @@ struct Board{
 
 /* square-centric attack sets: 
     uint32_t attack_set[64]; 
-*/
-    attack_set attack_set[64];
+*/  
+
+    struct full_attack_set full_attack_set;
+
 
     /*Another option is just having a list of moves (or maybe even just a list of origin squares?) 
         and when checking if castle check to make sure no piece has been moved && the rook is there -- might be a big 

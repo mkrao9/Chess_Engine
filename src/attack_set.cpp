@@ -3,43 +3,73 @@
 #include <stdlib.h>
 #include <iostream>
 
-void initializeAttackSet(attack_set* attack_set, struct pieces white_pieces, struct pieces black_pieces, uint64_t occupied_squares){
+void initializeAttackSet(Board* board){
+    
+    pieces white_pieces = board->white_pieces; 
+    pieces black_pieces = board->black_pieces; 
+    uint64_t occupied_squares = board->getOccupiedSquares();
+
     int count = 0; 
     for (uint8_t i = 0; i < 64; i++){
         uint64_t square = SHIFT(i);
         if (SHIFT(i) & occupied_squares){
-            if (square & (white_pieces.queen | black_pieces.queen)){
-                setQueen(attack_set, i, occupied_squares);
+            if (square & (black_pieces.queen)){
+                setQueen(board->full_attack_set.black_attack_set, i, occupied_squares);
+                continue;
+            }   
+            if (square & (white_pieces.queen)){
+                setQueen(board->full_attack_set.white_attack_set, i, occupied_squares);
                 continue;
             }
 
-            if (square & (white_pieces.bishop | black_pieces.bishop)){
-                setBishop(attack_set, i, occupied_squares);
+            if (square & (white_pieces.bishop)){
+                setBishop(board->full_attack_set.white_attack_set, i, occupied_squares);
                 continue;
             }
 
-            if (square & (white_pieces.rook | black_pieces.rook)){
-                setRook(attack_set, i, occupied_squares);
+            if (square & (black_pieces.bishop)){
+                setBishop(board->full_attack_set.black_attack_set, i, occupied_squares);
                 continue;
             }
 
-            if (square & (white_pieces.king | black_pieces.king)){
-                setKing(attack_set, i, occupied_squares); 
+            if (square & (white_pieces.rook)){
+                setRook(board->full_attack_set.white_attack_set, i, occupied_squares);
                 continue;
             }
 
-            if (square & (white_pieces.knight | black_pieces.knight)){
-                setKnight(attack_set, i, occupied_squares);
+            if (square & (black_pieces.rook)){
+                setRook(board->full_attack_set.black_attack_set, i, occupied_squares);
+                continue;
+            }
+
+
+            if (square & (black_pieces.king)){
+                setKing(board->full_attack_set.black_attack_set, i, occupied_squares); 
+                continue;
+            }
+
+            if (square & (white_pieces.king)){
+                setKing(board->full_attack_set.white_attack_set, i, occupied_squares); 
+                continue;
+            }
+
+            if (square & (black_pieces.knight)){
+                setKnight(board->full_attack_set.black_attack_set, i, occupied_squares);
+                continue;
+            }
+
+            if (square & (white_pieces.knight)){
+                setKnight(board->full_attack_set.white_attack_set, i, occupied_squares);
                 continue;
             }
 
             if (square & white_pieces.pawn){
-                setWhitePawn(attack_set, i, occupied_squares);
+                setWhitePawn(board->full_attack_set.white_attack_set, i, occupied_squares);
                 continue;
             }
 
             if (square & black_pieces.pawn){
-                setBlackPawn(attack_set, i, occupied_squares);
+                setBlackPawn(board->full_attack_set.black_attack_set, i, occupied_squares);
                 continue;
             }
 
@@ -259,14 +289,6 @@ void setKnight(attack_set *attack_set, uint8_t square, uint64_t occupied_sqares)
 
 void setWhitePawn(attack_set *attack_set, uint8_t square, uint64_t occupied_sqares){
     int square_num = square; 
-
-    if (square_num < 16 && square_num >= 8){
-        if (!(occupied_sqares & SHIFT(square_num + UP_VAL))){
-            attack_set[square_num + 2*UP_VAL].fields.DOWN = 2;
-        }
-    }
-
-    attack_set[square_num + UP_VAL].fields.DOWN = 1;
     
     if (square_num % 8 != 7){
         attack_set[square_num + UP_LEFT_VAL].fields.DOWN_RIGHT = 1;
@@ -280,14 +302,6 @@ void setWhitePawn(attack_set *attack_set, uint8_t square, uint64_t occupied_sqar
 void setBlackPawn(attack_set *attack_set, uint8_t square, uint64_t occupied_sqares){
 
     int square_num = square; 
-
-    if (square_num < 56 && square_num >= 48){
-        if (!(occupied_sqares & SHIFT(square_num + DOWN_VAL))){
-            attack_set[square_num + 2*DOWN_VAL].fields.UP = 2;
-        }
-    }
-
-    attack_set[square_num + DOWN_VAL].fields.UP = 1; 
     
     if (square_num % 8 != 7){
         attack_set[square_num + DOWN_LEFT_VAL].fields.UP_RIGHT = 1;
