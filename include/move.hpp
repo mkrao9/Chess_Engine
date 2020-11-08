@@ -51,17 +51,11 @@ uint32_t generateAllMoves(Board *board);
 
 uint8_t inCheck(Board* board);
 
-bool checkHit(attack_set attack, int target_square, struct pieces other_pieces);
-
-bool checkKnightHit(attack_set attack, int target_square, struct pieces other_pieces);
-
 /* first 4 bits: 0 = no check, 1 = blockable check, 2 = not blockable check
    last 4 bits: code for direction, 0 = Left, 7 = down left */ 
 uint8_t checkStraightCheck(attack_set attack, int target_square, struct pieces other_pieces);
 
 void generateKingMoves(Board* board);
-
-bool checkStraightHit(attack_set attack, int target_square, struct pieces other_pieces);
 
 uint8_t getPieceCode(uint64_t square, pieces other_pieces);
 

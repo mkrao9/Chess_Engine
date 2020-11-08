@@ -120,7 +120,6 @@ struct Board{
 
     /* bits 0-5: source square, bits 6-11: target square, bits 12-16: flags see https://www.chessprogramming.org/Encoding_Moves#From-To_Based for more details */
     std::vector<uint32_t> getAllMoves();
-    
 
     uint64_t getWhitePieces();
     uint64_t getBlackPieces();

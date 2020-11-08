@@ -149,7 +149,7 @@ void generateKingMoves(Board* board){
         int val = king_square + UP_RIGHT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if (!(curr_pieces_board & shifted_square)){
-            if (!(checkHit(attack[val], val, other_pieces))){
+            if (attack[val].bits == 0) {
              if (!king_attack_set.fields.DOWN_LEFT || (SHIFT(king_square + king_attack_set.fields.DOWN_LEFT * DOWN_LEFT_VAL) & other_pieces.pawn)){
                 board->move_list[board->curr_num_moves] = (king_square | ((val ) << 6));
                 //if it's a capture
@@ -221,48 +221,6 @@ uint8_t getPieceCode(uint64_t square, pieces other_pieces){
     return 0;
 }
 
-bool checkStraightHit(attack_set attack, int target_square, struct pieces other_pieces){
-    if (!(GET_LINE_HITS(attack.bits))){
-        return false;
-    }
-
-    uint64_t line_pieces = other_pieces.bishop | other_pieces.rook | other_pieces.pawn | other_pieces.queen | other_pieces.king;
-
-    if (attack.fields.LEFT && (SHIFT(target_square + LEFT_VAL * attack.fields.LEFT) & line_pieces)){
-        return true;
-    }
-
-    if (attack.fields.UP_LEFT && (SHIFT(target_square + UP_LEFT_VAL * attack.fields.UP_LEFT) & line_pieces)){
-        return true;
-    }
-
-
-    if (attack.fields.UP && (SHIFT(target_square + UP_VAL * attack.fields.UP) & (line_pieces ^ other_pieces.pawn))){
-        return true; 
-    }
-
-    if (attack.fields.UP_RIGHT && (SHIFT(target_square + UP_RIGHT_VAL * attack.fields.UP_RIGHT) & line_pieces)){
-        return true;
-    }
-
-    if (attack.fields.RIGHT && (SHIFT(target_square + RIGHT_VAL * attack.fields.RIGHT) & line_pieces)){
-        return true;
-    }
-
-    if (attack.fields.DOWN_RIGHT && (SHIFT(target_square + DOWN_RIGHT_VAL * attack.fields.DOWN_RIGHT) & line_pieces)){
-        return true;
-    }
-
-    if (attack.fields.DOWN && (SHIFT(target_square + DOWN_VAL * attack.fields.DOWN) & (line_pieces ^ other_pieces.pawn))){
-        return true;
-    }
-
-    if (attack.fields.DOWN_LEFT && (SHIFT(target_square + DOWN_LEFT_VAL * attack.fields.DOWN_LEFT) & line_pieces)){
-        return true;
-    }
-
-    return false;
-}
 
 uint8_t inCheck(Board* board){
     bool white_to_move = board->white_to_move;
@@ -293,7 +251,7 @@ uint8_t inCheck(Board* board){
             struct pieces other_pieces = board->white_pieces;
 
             attack_set attack = board->full_attack_set.white_attack_set[king_square];
-            if (checkKnightHit(attack, king_square, other_pieces)){
+            if (GET_N_HITS(attack.bits)){
                 return 2; 
             }
             return checkStraightCheck(attack, king_square, other_pieces);
@@ -301,9 +259,6 @@ uint8_t inCheck(Board* board){
     }
 }
 
-inline bool checkHit(attack_set attack, int target_square, pieces other_pieces){
-    return (attack.bits != 0);
-}
 
 uint8_t checkStraightCheck(attack_set attack, int target_square, struct pieces other_pieces){
     if (!(GET_LINE_HITS(attack.bits))){
@@ -380,46 +335,3 @@ uint8_t checkStraightCheck(attack_set attack, int target_square, struct pieces o
     return count | (curr << 4);
 }
 
-
-bool checkKnightHit(attack_set attack, int target_square, struct pieces other_pieces){
-
-    if (!(GET_N_HITS(attack.bits))){
-        return false;
-    }
-
-    uint64_t other_knights = other_pieces.knight;
-    if (attack.fields.N_UL_SHORT && (SHIFT(target_square + N_DL_SHORT) & other_knights)){
-        return true; 
-    }
-
-    if (attack.fields.N_UL_TALL && (SHIFT(target_square + N_UL_TALL) & other_knights)){
-        return true; 
-    }
-
-    if (attack.fields.N_UR_TALL && (SHIFT(target_square + N_UR_TALL) & other_knights)){
-        return true; 
-    }
-
-    if (attack.fields.N_UR_SHORT && (SHIFT(target_square + N_UR_SHORT) & other_knights)){
-        return true; 
-    }
-
-    if (attack.fields.N_DR_SHORT && (SHIFT(target_square + N_DR_SHORT) & other_knights)){
-        return true; 
-    }
-
-    if (attack.fields.N_DR_TALL && (SHIFT(target_square + N_DR_TALL) & other_knights)){
-        return true; 
-    }
-
-    if (attack.fields.N_DL_TALL && (SHIFT(target_square + N_DL_TALL) & other_knights)){
-        return true; 
-    }
-
-    if (attack.fields.N_DL_SHORT && (SHIFT(target_square + N_DL_SHORT) & other_knights)){
-        return true; 
-    }
-
-    return false;
-
-}
