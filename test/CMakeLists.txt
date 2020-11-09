@@ -5,6 +5,8 @@ set(This AllTests)
 set(Sources
     BoardConstructorTest.cpp
     TestDetermineCheck.cpp
+    TestMoveGeneration.cpp
+    TestMakeMove.cpp
 )
 
 add_executable(${This} ${Sources})

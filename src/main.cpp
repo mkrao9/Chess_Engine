@@ -9,13 +9,14 @@
 void printBoard(Board *b);
 
 int main(){
-    Board* board = new Board("5b2/6pp/p1k2p2/1P3P2/3KN3/5P2/7P/8 b - - 0 37");
-    // generateKingMoves(board);
-
-    // /* Fix this :(  why is it not working QQ */
+    Board* board = new Board(); 
     // for (int i = 0; i < board->curr_num_moves; i++){
-    //     std::cout << "to: " << ((board->move_list[i] & (0x3f << 6)) >> 6) << "\n";
+    //     uint32_t move = move_list[i];
+    //     std::cout << "from: " << (move & 0x3f) << " to: " << 
+    //         ((move >> 6) & 0x3f) << " special: " <<  ((move >> 12) & 0xf) << " capture: " << ((move >> 20) & 0xf) << "\n";
     // }
+
+
     
     return 0;
 }

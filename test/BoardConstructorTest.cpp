@@ -28,7 +28,10 @@ TEST(BoardTests, fen_test_default){
     ASSERT_EQ(board->white_to_move, true);
     ASSERT_EQ(board->turn_number, 1);
     ASSERT_EQ(board->move_since, 0);
-    ASSERT_EQ(board->castle_rights, 15);
+    ASSERT_EQ(board->castle_rights.black_k_castle, 1);
+    ASSERT_EQ(board->castle_rights.black_q_castle, 1);
+    ASSERT_EQ(board->castle_rights.white_k_castle, 1);
+    ASSERT_EQ(board->castle_rights.white_q_castle, 1);
     ASSERT_EQ(board->white_pieces.pawn, (0xFF << 8));
     ASSERT_EQ(board->white_pieces.rook, 0x81);
     ASSERT_EQ(board->white_pieces.bishop, 0x24);
@@ -50,7 +53,10 @@ TEST(BoardTests, fen_test_1e4){
     ASSERT_EQ(board->white_to_move, false);
     ASSERT_EQ(board->turn_number, 1);
     ASSERT_EQ(board->move_since, 0);
-    ASSERT_EQ(board->castle_rights, 15);
+    ASSERT_EQ(board->castle_rights.black_k_castle, 1);
+    ASSERT_EQ(board->castle_rights.black_q_castle, 1);
+    ASSERT_EQ(board->castle_rights.white_k_castle, 1);
+    ASSERT_EQ(board->castle_rights.white_q_castle, 1);
     ASSERT_EQ(board->white_pieces.pawn, ((0xFF << 8) & ~ SHIFT(11)) | SHIFT(27) );
     ASSERT_EQ(board->white_pieces.rook, 0x81);
     ASSERT_EQ(board->white_pieces.bishop, 0x24);
@@ -72,7 +78,10 @@ TEST(BoardTests, fen_test_1e4_c5){
     ASSERT_EQ(board->white_to_move, true);
     ASSERT_EQ(board->turn_number, 2);
     ASSERT_EQ(board->move_since, 0);
-    ASSERT_EQ(board->castle_rights, 15);
+    ASSERT_EQ(board->castle_rights.black_k_castle, 1);
+    ASSERT_EQ(board->castle_rights.black_q_castle, 1);
+    ASSERT_EQ(board->castle_rights.white_k_castle, 1);
+    ASSERT_EQ(board->castle_rights.white_q_castle, 1);
     ASSERT_EQ(board->white_pieces.pawn, ((0xFF << 8) & ~ SHIFT(11)) | SHIFT(27) );
     ASSERT_EQ(board->white_pieces.rook, 0x81);
     ASSERT_EQ(board->white_pieces.bishop, 0x24);
@@ -94,7 +103,10 @@ TEST(BoardTests, fen_test_1e4_c5_2nf3){
     ASSERT_EQ(board->white_to_move, false);
     ASSERT_EQ(board->turn_number, 2);
     ASSERT_EQ(board->move_since, 1);
-    ASSERT_EQ(board->castle_rights, 15);
+    ASSERT_EQ(board->castle_rights.black_k_castle, 1);
+    ASSERT_EQ(board->castle_rights.black_q_castle, 1);
+    ASSERT_EQ(board->castle_rights.white_k_castle, 1);
+    ASSERT_EQ(board->castle_rights.white_q_castle, 1);
     ASSERT_EQ(board->white_pieces.pawn, ((0xFF << 8) & ~ SHIFT(11)) | SHIFT(27) );
     ASSERT_EQ(board->white_pieces.rook, 0x81);
     ASSERT_EQ(board->white_pieces.bishop, 0x24);
@@ -109,7 +121,10 @@ TEST(BoardTests, fen_test_1e4_c5_2nf3){
 }
 TEST(BoardTests, fen_test_random_board){
     Board *board = new Board("r2r4/pp1qkQ2/2p3nB/4P3/P2P4/1BP5/2K2P2/7R b - - 17 74");
-    ASSERT_EQ(board->castle_rights, 0);
+    ASSERT_EQ(board->castle_rights.white_k_castle, 0);
+    ASSERT_EQ(board->castle_rights.black_k_castle, 0);
+    ASSERT_EQ(board->castle_rights.black_q_castle, 0);
+    ASSERT_EQ(board->castle_rights.white_q_castle, 0);
     ASSERT_EQ(board->en_pass_square, 0);
     ASSERT_EQ(board->white_to_move, false);
     ASSERT_EQ(board->turn_number, 74);

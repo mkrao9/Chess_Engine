@@ -12,6 +12,7 @@ set(Headers
     include/board.hpp
     include/move.hpp
     include/attack_set.hpp
+    include/make_unmake.hpp
 )
 
 set(Sources
@@ -19,6 +20,7 @@ set(Sources
     src/main.cpp
     src/board.cpp
     src/attack_set.cpp
+    src/make_unmake.cpp
 )
 
 add_library(${This} STATIC ${Sources} ${Headers})

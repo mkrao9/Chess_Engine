@@ -6,7 +6,11 @@
 
 /*default constructor */ 
 Board::Board(){
-    castle_rights = 15; 
+    castle_rights.black_k_castle = 1;
+    castle_rights.white_k_castle = 1; 
+    castle_rights.black_q_castle = 1; 
+    castle_rights.white_q_castle = 1; 
+
     white_to_move = true; 
     turn_number = 1;
     en_pass_square = 0;
@@ -39,6 +43,8 @@ Board::Board(){
 
     move_list = new uint32_t[256];
     curr_num_moves = 0;
+
+    setCurrentState();
 }
 
 /*
@@ -62,7 +68,11 @@ Board::Board(const char *fen){
     black_pieces.queen = 0;
     black_pieces.king = 0;
     
-    castle_rights = 0; 
+    castle_rights.white_k_castle = 0; 
+    castle_rights.black_k_castle = 0; 
+    castle_rights.white_q_castle = 0; 
+    castle_rights.black_q_castle = 0; 
+
     en_pass_square = 0; 
     white_to_move = true;
     turn_number = 0; 
@@ -144,16 +154,16 @@ Board::Board(const char *fen){
         char c = fen[index];
         switch (c){
             case 'K':   
-                castle_rights |= 2;
+                castle_rights.white_k_castle  = 1;
                 break;
             case 'Q': 
-                castle_rights |= 1;
+                castle_rights.white_q_castle = 1;
                 break;
             case 'k': 
-                castle_rights |= 8;
+                castle_rights.black_k_castle = 1;
                 break;
             case 'q': 
-                castle_rights |= 4;
+                castle_rights.black_q_castle = 1;
                 break;
         }
 
@@ -209,20 +219,10 @@ Board::Board(const char *fen){
         full_attack_set.white_attack_set[i].bits = 0; 
     }
 
-    initializeAttackSet(this);
 
     move_list = new uint32_t[256];
     curr_num_moves = 0; 
-}
 
-uint64_t Board::getWhitePieces(){
-    return (white_pieces.pawn | white_pieces.rook | white_pieces.knight | white_pieces.queen | white_pieces.bishop | white_pieces.king);
-}
-
-uint64_t Board::getBlackPieces(){
-    return (black_pieces.pawn | black_pieces.rook | black_pieces.knight | black_pieces.queen | black_pieces.bishop | black_pieces.king);
-}
-
-uint64_t Board::getOccupiedSquares(){
-    return getWhitePieces() | getBlackPieces();
+    initializeAttackSet(this);
+    setCurrentState();
 }
