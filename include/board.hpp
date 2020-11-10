@@ -165,6 +165,18 @@ struct Board{
             current_attack_set = full_attack_set.black_attack_set;
         }
     }
+
+    Board(const Board &b2){
+        white_pieces = b2.white_pieces;
+        black_pieces = b2.black_pieces;
+        white_king_square = b2.white_king_square;
+        black_king_square = b2.black_king_square;
+        full_attack_set = b2.full_attack_set; 
+        white_to_move = b2.white_to_move;
+        castle_rights = b2.castle_rights;
+        en_pass_square = b2.en_pass_square;
+        setCurrentState();
+    }
 };
 
 #endif

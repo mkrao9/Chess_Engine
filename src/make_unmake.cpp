@@ -1,6 +1,5 @@
 #include "../include/make_unmake.hpp"
 #include "../include/board.hpp"
-#include "../include/move.hpp"
 
 
 inline void removeKing(attack_set* attack_set, int square){
@@ -75,7 +74,7 @@ inline void removeRook(Board* board, attack_set* attack_set, int from, uint64_t 
 
 
     curr = from + RIGHT_VAL; 
-    while (curr % 8 != 7 ){
+    while ((unsigned) curr % 8 != 7 ){
         attack_set[curr].fields.LEFT = 0; 
         if ((SHIFT(curr) & occupied_squares)){
             break;
@@ -176,7 +175,7 @@ inline void removeQueen(Board* board, attack_set* attack_set, int from, uint64_t
     }
 
     curr = from + RIGHT_VAL; 
-    while (curr % 8 != 7 ){
+    while ((unsigned) curr % 8 != 7 ){
         attack_set[curr].fields.LEFT = 0; 
         if ((SHIFT(curr) & occupied_squares)){
             break;
@@ -269,6 +268,24 @@ inline void removeCapturePiece(Board* board, attack_set* attack_set, int square,
             board->other_pieces->bishop ^= SHIFT(square);
             return;
         case 4: 
+            if (square == 0){
+                board->castle_rights.white_k_castle = 0; 
+            }
+            else{
+                if (square == 7){
+                    board->castle_rights.white_q_castle = 0; 
+                }
+                else{
+                    if (square == 56){
+                        board->castle_rights.black_k_castle = 0; 
+                    }
+                    else{
+                        if (square == 63){
+                            board->castle_rights.black_q_castle = 0; 
+                        }
+                    }
+                }
+            }
             removeRook(board, attack_set, square, ouccpied_squares); 
             board->other_pieces->rook ^= SHIFT(square);
             return; 
@@ -286,7 +303,7 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
     if (curr != 0){
         if (SHIFT(square + curr*LEFT_VAL) & lat_pieces){
             int new_sq = square + RIGHT_VAL; 
-            while (new_sq % 8 != 7){
+            while ((unsigned) new_sq % 8 != 7){
                 attack_set[new_sq].fields.LEFT = curr + 1; 
                 if (SHIFT(new_sq) & occupied_squares){
                     break;
@@ -301,7 +318,7 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
     if (curr != 0){
         if (SHIFT(square + curr*UP_LEFT_VAL) & diags){
             int new_sq = square + DOWN_RIGHT_VAL; 
-            while (new_sq % 8 != 7 && new_sq >= 0){
+            while ((unsigned) new_sq % 8 != 7 && new_sq >= 0){
                 attack_set[new_sq].fields.UP_LEFT = curr + 1; 
                 if (SHIFT(new_sq) & occupied_squares){
                     break;
@@ -361,7 +378,7 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
     if (curr != 0){
         if (SHIFT(square + curr*DOWN_RIGHT_VAL) & diags){
             int new_sq = square + UP_LEFT_VAL; 
-            while (new_sq % 8 != 0 && new_sq < 64){
+            while ((unsigned) new_sq % 8 != 0 && new_sq < 64){
                 attack_set[new_sq].fields.DOWN_RIGHT = curr + 1; 
                 if (SHIFT(new_sq) & occupied_squares){
                     break;
@@ -391,7 +408,7 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
     if (curr != 0){
         if (SHIFT(square + curr*DOWN_LEFT_VAL) & diags){
             int new_sq = square + UP_RIGHT_VAL; 
-            while (new_sq % 8 != 7 && new_sq < 64){
+            while ((unsigned) new_sq % 8 != 7 && new_sq < 64){
                 attack_set[new_sq].fields.DOWN_LEFT = curr + 1; 
                 if (SHIFT(new_sq) & occupied_squares){
                     break;
@@ -409,7 +426,7 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
     int old = attack_set[square].fields.LEFT;
     if(old != 0){
         curr = square + RIGHT_VAL; 
-        while (curr % 8 != 7 && attack_set[curr].fields.LEFT > old){
+        while ((unsigned) curr % 8 != 7 && attack_set[curr].fields.LEFT > old){
             old++;
             attack_set[curr].fields.LEFT = 0; 
             curr += RIGHT_VAL;
@@ -419,7 +436,7 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
     old = attack_set[square].fields.UP_LEFT;
     if(old != 0){
         curr = square + DOWN_RIGHT_VAL; 
-        while (curr % 8 != 7 && curr >= 0 && attack_set[curr].fields.UP_LEFT > old){
+        while ((unsigned) curr % 8 != 7 && curr >= 0 && attack_set[curr].fields.UP_LEFT > old){
             old++;
             attack_set[curr].fields.UP_LEFT = 0; 
             curr += DOWN_RIGHT_VAL;
@@ -440,7 +457,7 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
     old = attack_set[square].fields.UP_RIGHT;
     if(old != 0){
         curr = square + DOWN_LEFT_VAL; 
-        while (curr % 8 != 0 && curr >= 0 && attack_set[curr].fields.UP_RIGHT > old){
+        while ((unsigned) curr % 8 != 0 && curr >= 0 && attack_set[curr].fields.UP_RIGHT > old){
             old++;
             attack_set[curr].fields.UP_RIGHT = 0; 
             curr += DOWN_LEFT_VAL;
@@ -450,7 +467,7 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
     old = attack_set[square].fields.RIGHT;
     if(old != 0){
         curr = square + LEFT_VAL; 
-        while (curr % 8 != 0 && attack_set[curr].fields.RIGHT > old){
+        while ((unsigned) curr % 8 != 0 && attack_set[curr].fields.RIGHT > old){
             old++;
             attack_set[curr].fields.RIGHT = 0; 
             curr += LEFT_VAL;
@@ -460,7 +477,7 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
     old = attack_set[square].fields.DOWN_RIGHT;
     if(old != 0){
         curr = square + UP_LEFT_VAL; 
-        while (curr % 8 != 0 && curr < 64 && attack_set[curr].fields.DOWN_RIGHT > old){
+        while ((unsigned) curr % 8 != 0 && curr < 64 && attack_set[curr].fields.DOWN_RIGHT > old){
             old++;
             attack_set[curr].fields.DOWN_RIGHT = 0; 
             curr += UP_LEFT_VAL;
@@ -480,7 +497,7 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
     old = attack_set[square].fields.DOWN_LEFT;
     if(old != 0){
         curr = square + UP_RIGHT_VAL; 
-        while (curr % 8 != 7 && curr < 64 && attack_set[curr].fields.DOWN_LEFT > old){
+        while ((unsigned) curr % 8 != 7 && curr < 64 && attack_set[curr].fields.DOWN_LEFT > old){
             old++;
             attack_set[curr].fields.DOWN_LEFT = 0; 
             curr += UP_RIGHT_VAL;
@@ -555,7 +572,7 @@ inline void addLat(attack_set* attack_set, int square, uint64_t occupied_squares
     //right 
     ind = 0; 
     square_num = square; 
-    while (square_num % 8 != 0){
+    while ((unsigned) square_num % 8 != 0){
         square_num += RIGHT_VAL;
         ind++;
         attack_set[square_num].fields.LEFT = ind;
@@ -634,42 +651,42 @@ inline void addKing(attack_set* attack_set, int square){
 inline void addKnight(attack_set* attack_set, int square){
 
     //ul short 
-    if (square % 8 < 6 && square < 56){
+    if ((unsigned) square % 8 < 6 && square < 56){
         attack_set[square + N_UL_SHORT].fields.N_DR_SHORT = 1;
     }
 
     //ul tall 
-    if (square % 8 != 7 && square < 48){
+    if ((unsigned) square % 8 != 7 && square < 48){
         attack_set[square + N_UL_TALL].fields.N_DR_TALL = 1;
     }
 
     //ur tall 
-    if (square % 8 != 0 && square < 48){
+    if ((unsigned) square % 8 != 0 && square < 48){
         attack_set[square + N_UR_TALL].fields.N_DL_TALL = 1;;
     }
 
     //ur short 
-    if (square % 8 > 1 && square < 56){
+    if ((unsigned) square % 8 > 1 && square < 56){
         attack_set[square + N_UR_SHORT].fields.N_DL_SHORT = 1;;
     }
 
     //dr short 
-    if (square % 8 > 1 && square > 7){
+    if ((unsigned) square % 8 > 1 && square > 7){
         attack_set[square + N_DR_SHORT].fields.N_UL_SHORT = 1;
     }
 
     //dr tall
-    if (square % 8 != 0 && square > 15){
+    if ((unsigned) square % 8 != 0 && square > 15){
         attack_set[square + N_DR_TALL].fields.N_UL_TALL = 1;
     } 
 
     //dl tall 
-    if (square % 8 != 7 && square > 15){
+    if ((unsigned) square % 8 != 7 && square > 15){
         attack_set[square + N_DL_TALL].fields.N_UR_TALL = 1;
     }
 
     //dl short 
-    if (square % 8 < 6 && square > 7){
+    if ((unsigned) square % 8 < 6 && square > 7){
         attack_set[square + N_DL_SHORT].fields.N_UR_SHORT = 1;
     }
 }
@@ -717,6 +734,7 @@ inline void handleKCastle(Board* board, bool is_white){
         board->white_pieces.king = 2; 
         board->white_pieces.rook ^= 0; 
         board->white_pieces.rook |= 3;
+        board->white_king_square = 1;
         addKing(board->current_attack_set, 1);
         addLat(board->current_attack_set, 2, board->getOccupiedSquares()); 
     }
@@ -726,8 +744,9 @@ inline void handleKCastle(Board* board, bool is_white){
         removeRook(board, board->current_attack_set, 56, board->getOccupiedSquares());
         removeKing(board->current_attack_set, 59);
         board->black_pieces.king = 0x200000000000000; 
-        board->black_pieces.rook ^= 100000000000000; 
+        board->black_pieces.rook ^= 0x100000000000000; 
         board->black_pieces.rook |= 0x400000000000000;
+        board->black_king_square = 57;
         addKing(board->current_attack_set, 57);
         addLat(board->current_attack_set, 58, board->getOccupiedSquares()); 
     }
@@ -736,6 +755,7 @@ inline void handleQCastle(Board* board, bool is_white){
     if (is_white){
         removeRook(board, board->current_attack_set, 7, board->getOccupiedSquares());
         removeKing(board->current_attack_set, 3);
+        board->white_king_square = 5;
         board->white_pieces.king = 0x20; 
         board->white_pieces.rook ^= 0x80; 
         board->white_pieces.rook |= 0x10;
@@ -745,6 +765,7 @@ inline void handleQCastle(Board* board, bool is_white){
     else{
         removeRook(board, board->current_attack_set, 63, board->getOccupiedSquares());
         removeKing(board->current_attack_set, 59);
+        board->black_king_square = 61;
         board->black_pieces.king = 0x2000000000000000; 
         board->black_pieces.rook ^= 0x8000000000000000; 
         board->black_pieces.rook |= 0x1000000000000000;
@@ -770,7 +791,7 @@ inline void handleKingMove(Board* board, int from, int to, int special, int capt
         board->castle_rights.white_q_castle = 0;
     }
     else{
-        if (from == 61){
+        if (from == 59){
             board->castle_rights.black_q_castle = 0; 
             board->castle_rights.black_k_castle = 0;
         }
@@ -878,10 +899,10 @@ inline void handleRookMoves(Board* board, int from, int to, int capture){
         addLat(board->current_attack_set, to, board->getOccupiedSquares());
     }
     else{
-        board->current_pieces->rook |= SHIFT(to);
         uint64_t occupied_squares = board->getOccupiedSquares();
         removeRook(board, board->current_attack_set, from, occupied_squares);
         board->current_pieces->rook ^= SHIFT(from);
+        board->current_pieces->rook |= SHIFT(to);
         blockRays(board, to);
         occupied_squares = board->getOccupiedSquares();
         extendRays(board, from, occupied_squares);
@@ -921,7 +942,10 @@ inline void handleBlackPawnMoves(Board* board, int from, int to, int special, in
         if (special == 4){
             board->current_pieces->pawn ^= SHIFT(from);
             board->other_pieces->pawn ^= SHIFT(to + 8);
+            removePawn(board, board->current_attack_set, from, false);
+            removePawn(board, board->other_attack_set, to + 8, true);
             board->current_pieces->pawn |= SHIFT(to);
+            addBlackPawn(board->current_attack_set, to);
             uint64_t occupied_squares = board->getOccupiedSquares();
             extendRays(board, from, occupied_squares);
             extendRays(board, to + 8, occupied_squares);
@@ -1001,8 +1025,11 @@ inline void handleWhitePawnMoves(Board* board, int from, int to, int special, in
 
         //ep capture
         if (special == 4){
-            board->current_pieces->pawn ^= SHIFT(from);
             board->other_pieces->pawn ^= SHIFT(to - 8);
+            removePawn(board, board->current_attack_set, from, true);
+            removePawn(board, board->other_attack_set, to - 8, false);
+            board->current_pieces->pawn ^= SHIFT(from);
+            addWhitePawn(board->current_attack_set, to);
             board->current_pieces->pawn |= SHIFT(to);
             uint64_t occupied_squares = board->getOccupiedSquares();
             extendRays(board, from, occupied_squares);
@@ -1119,3 +1146,49 @@ void makeMove(Board* board, uint32_t move){
     if (board->white_to_move) board->turn_number++;
 }
 
+inline void handleQueenUnMove(Board* board, int from, int to, int capture){
+    
+}
+
+void unmakeMove(Board* board, uint32_t move){
+    int from = move & 0x3f; 
+    int to = (move >> 6) & 0x3f;
+    int special = move >> 12 & 0xFF; 
+    int capture = move >> 20 & 0xf;
+    uint64_t shifted = SHIFT(from);
+    if (shifted & board->current_pieces->queen){
+        handleQueenUnMove(board, from, to, capture);
+    }
+    else{
+        if (shifted & board->current_pieces->bishop){
+            handleBishopMove(board, from, to, capture);
+        }
+        else{
+            if (shifted & board->current_pieces->knight){
+                handleKnightMoves(board, from, to, capture);
+            }
+            else{
+                if (shifted & board->current_pieces->king){
+                    handleKingMove(board, from, to, special, capture);
+                }
+                else{
+                    if (shifted & board->current_pieces->rook){
+                        handleRookMoves(board, from, to, capture);
+                    }
+                    else{
+                        if (board->white_to_move){
+                            handleWhitePawnMoves(board, from, to, special, capture);
+                        }
+                        else{
+                            handleBlackPawnMoves(board, from, to, special, capture);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    board->white_to_move = !board->white_to_move;
+    board->setCurrentState();
+    if (board->white_to_move) board->turn_number++;
+}
