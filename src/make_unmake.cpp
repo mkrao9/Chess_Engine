@@ -731,9 +731,10 @@ inline void handleKCastle(Board* board, bool is_white){
         board->castle_rights.white_q_castle = 0;
         removeRook(board, board->current_attack_set, 0, board->getOccupiedSquares());
         removeKing(board->current_attack_set, 3);
+        extendRays(board, board->white_king_square, board->getOccupiedSquares());
         board->white_pieces.king = 2; 
-        board->white_pieces.rook ^= 0; 
-        board->white_pieces.rook |= 3;
+        board->white_pieces.rook ^= 1; 
+        board->white_pieces.rook |= 4;
         board->white_king_square = 1;
         addKing(board->current_attack_set, 1);
         addLat(board->current_attack_set, 2, board->getOccupiedSquares()); 
@@ -860,10 +861,10 @@ inline void handleBishopMove(Board* board, int from, int to, int capture){
         addDiags(board->current_attack_set, to, board->getOccupiedSquares());
     }
     else{
-        board->current_pieces->bishop |= SHIFT(to);
         uint64_t occupied_squares = board->getOccupiedSquares();
         removeBishop(board, board->current_attack_set, from, occupied_squares);
         board->current_pieces->bishop ^= SHIFT(from);
+        board->current_pieces->bishop |= SHIFT(to);
         blockRays(board, to);
         occupied_squares = board->getOccupiedSquares();
         extendRays(board, from, occupied_squares);

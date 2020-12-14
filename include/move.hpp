@@ -4,11 +4,11 @@
 #include "board.hpp"
 #include <stdlib.h>
 
-
+/* extra bits: 4 for old castle rights: 3 bits for old ep square,  3 bits for half move counter
 /* Bits: 
         0-5: Source Square
         6-11: Destination Square square 
-        12-16: Special Flags 
+        12-15: Special Flags 
         20-23: Piece Captures 
             1 = pawn 
             2 = knight 

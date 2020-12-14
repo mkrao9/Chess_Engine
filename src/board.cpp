@@ -4,6 +4,12 @@
 #include <string.h>
 #include "../include/attack_set.hpp"
 
+
+/* 
+    Things to do -- have a list of previous positions somehow stored in the board 
+    
+
+*/
 /*default constructor */ 
 Board::Board(){
     castle_rights.black_k_castle = 1;
