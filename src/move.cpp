@@ -377,7 +377,6 @@ uint32_t generateAllMoves(Board *board, uint32_t* move_list){
 }
 
 bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is_ep){
-    return false;
     uint32_t king_square = board->current_king_square;
     attack_set* opp_attack_set = board->other_attack_set;
     pieces* other_pieces = board->other_pieces;
