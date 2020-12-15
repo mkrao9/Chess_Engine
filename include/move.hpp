@@ -5,10 +5,20 @@
 #include <stdlib.h>
 
 
+struct move {
+    unsigned int source: 6; 
+    unsigned int dest: 6; 
+    unsigned int special: 4; 
+    unsigned int capture: 4; 
+    unsigned int old_ep: 3; 
+    unsigned int old_castle: 4; 
+    unsigned int old_counter: 3; 
+};
+
 /* Bits: 
         0-5: Source Square
         6-11: Destination Square square 
-        12-16: Special Flags 
+        12-15: Special Flags 
         20-23: Piece Captures 
             1 = pawn 
             2 = knight 

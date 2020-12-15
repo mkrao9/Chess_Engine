@@ -1,0 +1,1129 @@
+ Sharper v0.17 by Albert Bertilsson
+ Read 26148 unique positions from opening book.
+34>hashsize
+1092>hashsize
+usage: hashsize <mb of main hash table>
+ Sharper v0.17 by Albert Bertilsson
+4>hashsize
+10789>hashsize
+ Sharper v0.17 by Albert Bertilsson
+4>hashsize
+9702>hashsize
+usage: hashsize <mb of main hash table>
+ Sharper v0.17 by Albert Bertilsson
+4>hashsize
+2030>hashsize
+usage: hashsize <mb of main hash table>
+ Sharper v0.17 by Albert Bertilsson
+4>hashsize
+1199>divide
+usage: divide <depth>
+3479>divide
+b1c3 440
+b1a3 400
+g1h3 400
+g1f3 440
+a2a3 380
+a2a4 420
+b2b3 420
+b2b4 421
+c2c3 420
+c2c4 441
+d2d3 539
+d2d4 560
+e2e3 599
+e2e4 600
+f2f3 380
+f2f4 401
+g2g3 420
+g2g4 421
+h2h3 380
+h2h4 420
+Nodes: 8902
+Moves: 20
+14515>divide
+b1c3 440
+b1a3 400
+g1h3 400
+g1f3 440
+a2a3 380
+a2a4 420
+b2b3 420
+b2b4 421
+c2c3 420
+c2c4 441
+d2d3 539
+d2d4 560
+e2e3 599
+e2e4 600
+f2f3 380
+f2f4 401
+g2g3 420
+g2g4 421
+h2h3 380
+h2h4 420
+Nodes: 8902
+Moves: 20
+26911>new
+31721>divide
+b1c3 1
+b1a3 1
+g1h3 1
+g1f3 1
+a2a3 1
+a2a4 1
+b2b3 1
+b2b4 1
+c2c3 1
+c2c4 1
+d2d3 1
+d2d4 1
+e2e3 1
+e2e4 1
+f2f3 1
+f2f4 1
+g2g3 1
+g2g4 1
+h2h3 1
+h2h4 1
+Nodes: 20
+Moves: 20
+36915>divide
+b1c3 440
+b1a3 400
+g1h3 400
+g1f3 440
+a2a3 380
+a2a4 420
+b2b3 420
+b2b4 421
+c2c3 420
+c2c4 441
+d2d3 539
+d2d4 560
+e2e3 599
+e2e4 600
+f2f3 380
+f2f4 401
+g2g3 420
+g2g4 421
+h2h3 380
+h2h4 420
+Nodes: 8902
+Moves: 20
+39596>new
+51678>setboard
+54096>divide
+c1b1 1492
+d1e1 1414
+d1f1 1382
+d1g1 1382
+h1g1 1348
+h1f1 1284
+h1e1 1252
+a2a3 1378
+a2a4 1346
+b2b3 1317
+b2b4 1349
+d2e1 1406
+d2d3 1279
+d2d4 1268
+d2e2 1407
+d2f2 1506
+d2g2 1537
+h2h3 1380
+h2h4 1410
+c3d5 1451
+c3e2 1312
+c3b1 1342
+c3a4 1376
+c3b5 1432
+e3f4 1334
+e3g5 1306
+e3h6 1270
+e3d4 1240
+e3f2 1407
+e3g1 1245
+f3f4 1252
+c4d5 1206
+c4e6 1376
+c4b3 1156
+c4b5 1328
+c4a6 1306
+c4d3 1179
+c4e2 1123
+c4f1 1187
+e4e5 1399
+g4g5 1241
+Nodes: 54605
+Moves: 41
+1767477>divide
+c1b1 1
+d1e1 1
+d1f1 1
+d1g1 1
+h1g1 1
+h1f1 1
+h1e1 1
+a2a3 1
+a2a4 1
+b2b3 1
+b2b4 1
+d2e1 1
+d2d3 1
+d2d4 1
+d2e2 1
+d2f2 1
+d2g2 1
+h2h3 1
+h2h4 1
+c3d5 1
+c3e2 1
+c3b1 1
+c3a4 1
+c3b5 1
+e3f4 1
+e3g5 1
+e3h6 1
+e3d4 1
+e3f2 1
+e3g1 1
+f3f4 1
+c4d5 1
+c4e6 1
+c4b3 1
+c4b5 1
+c4a6 1
+c4d3 1
+c4e2 1
+c4f1 1
+e4e5 1
+g4g5 1
+Nodes: 41
+Moves: 41
+ Sharper v0.17 by Albert Bertilsson
+6>hashsize
+619810>hashsize
+usage: hashsize <mb of main hash table>
+ Sharper v0.17 by Albert Bertilsson
+4>hashsize
+4139>new
+6980>new
+9566>divide
+b1c3 1
+b1a3 1
+g1h3 1
+g1f3 1
+a2a3 1
+a2a4 1
+b2b3 1
+b2b4 1
+c2c3 1
+c2c4 1
+d2d3 1
+d2d4 1
+e2e3 1
+e2e4 1
+f2f3 1
+f2f4 1
+g2g3 1
+g2g4 1
+h2h3 1
+h2h4 1
+Nodes: 20
+Moves: 20
+11638>divide
+b1c3 440
+b1a3 400
+g1h3 400
+g1f3 440
+a2a3 380
+a2a4 420
+b2b3 420
+b2b4 421
+c2c3 420
+c2c4 441
+d2d3 539
+d2d4 560
+e2e3 599
+e2e4 600
+f2f3 380
+f2f4 401
+g2g3 420
+g2g4 421
+h2h3 380
+h2h4 420
+Nodes: 8902
+Moves: 20
+24122>board
+Error (unknown command): board
+27006>new
+29013>divide
+b1c3 440
+b1a3 400
+g1h3 400
+g1f3 440
+a2a3 380
+a2a4 420
+b2b3 420
+b2b4 421
+c2c3 420
+c2c4 441
+d2d3 539
+d2d4 560
+e2e3 599
+e2e4 600
+f2f3 380
+f2f4 401
+g2g3 420
+g2g4 421
+h2h3 380
+h2h4 420
+Nodes: 8902
+Moves: 20
+38163>new
+39979>divide
+b1c3 440
+b1a3 400
+g1h3 400
+g1f3 440
+a2a3 380
+a2a4 420
+b2b3 420
+b2b4 421
+c2c3 420
+c2c4 441
+d2d3 539
+d2d4 560
+e2e3 599
+e2e4 600
+f2f3 380
+f2f4 401
+g2g3 420
+g2g4 421
+h2h3 380
+h2h4 420
+Nodes: 8902
+Moves: 20
+42807>new
+44335>new
+48529>3
+Error (unknown command): 3
+50306>divide
+b1c3 440
+b1a3 400
+g1h3 400
+g1f3 440
+a2a3 380
+a2a4 420
+b2b3 420
+b2b4 421
+c2c3 420
+c2c4 441
+d2d3 539
+d2d4 560
+e2e3 599
+e2e4 600
+f2f3 380
+f2f4 401
+g2g3 420
+g2g4 421
+h2h3 380
+h2h4 420
+Nodes: 8902
+Moves: 20
+60125>perft
+Nodes:       8902,  Time:    0 cs
+68345>setboard
+70534>divide
+e8d7 1628
+e8e7 1453
+e8f8 1483
+e8d8 1527
+e8g8 1449
+f5h6 1439
+f5h4 1509
+f5g3 1532
+f5e3 1439
+f5d4 1666
+f5d6 1475
+f5e7 1369
+b6c7 1742
+b6d8 1705
+b6a5 1662
+b6c5 1674
+b6d4 1938
+b6b5 1645
+b6a6 1684
+c6d8 1415
+c6e7 1418
+c6e5 1791
+c6d4 1718
+c6a5 1453
+c6b8 1527
+a7a6 1672
+a7a5 1630
+f7f6 1715
+g7g6 1627
+g7g5 1590
+h7h6 1597
+h7h5 1669
+a8b8 1593
+c8d7 1711
+b4c5 1735
+b4d6 1852
+b4e7 1775
+b4f8 1617
+b4a3 1721
+b4a5 1508
+b4c3 1369
+h8g8 1592
+h8f8 1516
+Nodes: 68830
+Moves: 43
+557304>divide
+usage: divide <depth>
+ Sharper v0.17 by Albert Bertilsson
+5>hashsize
+2838>setboard
+Invalid FEN, 7 '/' dividers required.
+6235>setboard
+Invalid FEN, unknown piece type.
+Debug print:
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   | Material: 0
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   |   | Castling: 
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   |   |   | Moves   : 0 1
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   |   |   | To move : White
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   | Checkers: None
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   | Hash    : C9CB3A0B5CB5012F
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     A   B   C   D   E   F   G   H  
+14177>setboard
+17119>divide
+g8h8 1680
+b6c7 1680
+b6d8 1352
+b6a5 1712
+b6c5 1717
+b6d4 1955
+b6b5 1620
+b6b4 1836
+b6a6 1619
+c6d8 1349
+c6e5 1921
+c6d4 1958
+c6b4 1719
+c6a5 1679
+c6b8 1472
+a7a6 1686
+a7a5 1767
+d7e8 1393
+d7c8 1393
+e7d6 1675
+e7c5 1546
+e7b4 1563
+e7d8 1310
+e7f6 1549
+e7g5 1634
+e7h4 1585
+f7f6 1640
+f7f5 1764
+g7g6 1639
+g7g5 1560
+h7h6 1636
+h7h5 1634
+a8b8 1557
+a8c8 1557
+a8d8 1393
+a8e8 1434
+f8e8 1639
+f8d8 1516
+f8c8 1598
+f8b8 1516
+Nodes: 64453
+Moves: 40
+ Sharper v0.17 by Albert Bertilsson
+4>hashsize
+2680>newboard
+Error (unknown command): newboard
+6474>setboard
+8331>divide
+g1f2 38
+g1h1 38
+f1f2 38
+f1e1 38
+f1d1 38
+f1c1 38
+f1b1 38
+a1a2 38
+a1b1 38
+a1c1 38
+a1d1 38
+a1e1 38
+d2c1 38
+d2e1 38
+d2d3 38
+d2d1 38
+d2c2 38
+d2b2 38
+d2a2 38
+e2d1 38
+e2d3 38
+e2c4 39
+e2b5 37
+e2a6 37
+g2g3 38
+g2g4 38
+h2h3 38
+h2h4 38
+a3a4 38
+c3d5 39
+c3e4 39
+c3d1 38
+c3b1 38
+c3a2 38
+c3a4 38
+c3b5 37
+e3e4 39
+f3g5 36
+f3h4 38
+f3e1 38
+b4b5 38
+Nodes: 1557
+Moves: 41
+593313>setboard
+602370>divide
+g8h8 1
+b6c7 1
+b6d8 1
+b6a5 1
+b6c5 1
+b6d4 1
+b6b5 1
+b6b4 1
+b6a6 1
+c6d8 1
+c6e5 1
+c6d4 1
+c6b4 1
+c6a5 1
+a7a6 1
+a7a5 1
+d7e8 1
+d7c8 1
+e7d6 1
+e7c5 1
+e7b4 1
+e7d8 1
+e7f6 1
+e7g5 1
+e7h4 1
+f7f6 1
+f7f5 1
+g7g6 1
+g7g5 1
+h7h6 1
+h7h5 1
+b8c8 1
+b8d8 1
+b8e8 1
+b8a8 1
+f8e8 1
+f8d8 1
+f8c8 1
+Nodes: 38
+Moves: 38
+2147950>setboard
+2149900>divide
+g1f2 42
+g1h1 42
+f1f2 42
+f1e1 42
+f1d1 42
+f1c1 42
+f1b1 42
+a1a2 42
+a1b1 42
+a1c1 42
+a1d1 42
+a1e1 42
+d2c1 42
+d2e1 42
+d2d3 42
+d2d1 42
+d2c2 42
+d2b2 42
+d2a2 42
+e2d1 42
+e2d3 42
+e2c4 43
+e2b5 41
+e2a6 41
+g2g3 42
+g2g4 43
+h2h3 42
+h2h4 42
+a3a4 42
+c3d5 43
+c3e4 44
+c3d1 42
+c3b1 42
+c3a2 42
+c3a4 42
+c3b5 41
+e3e4 44
+f3g5 39
+f3h4 42
+f3e1 42
+b4b5 42
+e5f6 41
+Nodes: 1764
+Moves: 42
+2447625>divide
+ Sharper v0.17 by Albert Bertilsson
+4>hashsize
+3076>divide
+b1c3 9755
+b1a3 8885
+g1h3 8881
+g1f3 9748
+a2a3 8457
+a2a4 9329
+b2b3 9345
+b2b4 9332
+c2c3 9272
+c2c4 9744
+d2d3 11959
+d2d4 12435
+e2e3 13134
+e2e4 13160
+f2f3 8457
+f2f4 8929
+g2g3 9345
+g2g4 9328
+h2h3 8457
+h2h4 9329
+Nodes: 197281
+Moves: 20
+240065>divide
+ Sharper v0.17 by Albert Bertilsson
+4>hashsize
+2709>divide
+b1c3 9755
+b1a3 8885
+g1h3 8881
+g1f3 9748
+a2a3 8457
+a2a4 9329
+b2b3 9345
+b2b4 9332
+c2c3 9272
+c2c4 9744
+d2d3 11959
+d2d4 12435
+e2e3 13134
+e2e4 13160
+f2f3 8457
+f2f4 8929
+g2g3 9345
+g2g4 9328
+h2h3 8457
+h2h4 9329
+Nodes: 197281
+Moves: 20
+887388>divide
+usage: divide <depth>
+ Sharper v0.17 by Albert Bertilsson
+3>hashsize
+13587>setboard
+17165>divide
+g1h1 76542
+b1c3 71087
+b1a3 73027
+d1e1 68502
+d1c1 72962
+f1e1 70798
+a2a3 66614
+a2a4 72954
+b2c3 63903
+b2d4 65766
+b2e5 61929
+b2f6 63435
+b2a3 61528
+b2c1 60270
+c2c3 62673
+c2c4 72279
+d2d3 64591
+d2d4 64472
+e2d3 70236
+e2c4 75882
+e2b5 57685
+e2a6 71833
+g2g3 69546
+g2g4 69973
+h2h3 71166
+h2h4 68814
+b3b4 68202
+e3e4 71323
+f3g5 80470
+f3h4 74786
+f3e1 70799
+f3d4 69846
+f3e5 70359
+Nodes: 2274252
+Moves: 33
+2136977>setboard
+Invalid FEN, 7 '/' dividers required.
+2138857>setboard
+2141065>divide
+e8d7 1607
+e8f8 1432
+e8g8 1466
+f5g6 1475
+f5e4 1506
+f5d3 1459
+f5c2 1557
+f5g4 1472
+f5h3 1430
+c6e7 1340
+c6e5 1329
+c6d4 1460
+c6b4 1458
+c6a5 1466
+c6b8 1396
+d6e7 1353
+d6f8 1361
+d6c5 1573
+d6b4 1497
+d6a3 1442
+d6e5 1381
+d6f4 1573
+d6g3 1492
+d6h2 113
+e6e5 1376
+a7a6 1607
+a7a5 1607
+b7b6 1532
+b7b5 1493
+g7g6 1514
+g7g5 1495
+g7f6 1092
+h7h6 1607
+h7h5 1639
+a8b8 1499
+a8c8 1499
+d8e7 1520
+d8f6 1424
+d8d7 1541
+d8c8 1492
+d8b8 1385
+d5d4 1473
+h8g8 1536
+h8f8 1466
+Nodes: 63435
+Moves: 44
+2186513>divide
+usage: divide <depth>
+ Sharper v0.17 by Albert Bertilsson
+4>hashsize
+7730>setboard
+10411>divide
+e8d7 1607
+e8f8 1432
+e8g8 1466
+f5g6 1475
+f5e4 1506
+f5d3 1459
+f5c2 1557
+f5g4 1472
+f5h3 1430
+c6e7 1340
+c6e5 1329
+c6d4 1460
+c6b4 1458
+c6a5 1466
+c6b8 1396
+d6e7 1353
+d6f8 1361
+d6c5 1573
+d6b4 1497
+d6a3 1442
+d6e5 1381
+d6f4 1573
+d6g3 1492
+d6h2 113
+e6e5 1376
+a7a6 1607
+a7a5 1607
+b7b6 1532
+b7b5 1493
+g7g6 1514
+g7g5 1495
+g7f6 1092
+h7h6 1607
+h7h5 1639
+a8b8 1499
+a8c8 1499
+d8e7 1520
+d8f6 1424
+d8d7 1541
+d8c8 1492
+d8b8 1385
+d5d4 1473
+h8g8 1536
+h8f8 1466
+Nodes: 63435
+Moves: 44
+66263>setboard
+68358>divide
+e8d7 1607
+e8f8 1432
+e8g8 1466
+f5g6 1475
+f5e4 1506
+f5d3 1459
+f5c2 1557
+f5g4 1472
+f5h3 1430
+c6e7 1340
+c6e5 1329
+c6d4 1460
+c6b4 1458
+c6a5 1466
+c6b8 1396
+d6e7 1353
+d6f8 1361
+d6c5 1573
+d6b4 1497
+d6a3 1442
+d6e5 1381
+d6f4 1573
+d6g3 1492
+d6h2 113
+e6e5 1376
+a7a6 1607
+a7a5 1607
+b7b6 1532
+b7b5 1493
+g7g6 1514
+g7g5 1495
+g7f6 1092
+h7h6 1607
+h7h5 1639
+a8b8 1499
+a8c8 1499
+d8e7 1520
+d8f6 1424
+d8d7 1541
+d8c8 1492
+d8b8 1385
+d5d4 1473
+h8g8 1536
+h8f8 1466
+Nodes: 63435
+Moves: 44
+339327>divide
+usage: divide <depth>
+ Sharper v0.17 by Albert Bertilsson
+3>hashsize
+2410>setboard
+Invalid FEN, 7 '/' dividers required.
+7704>setboard
+10160>divide
+g1h1 41
+b1c3 41
+b1a3 41
+d1e1 41
+d1c1 41
+f1e1 41
+a2a3 41
+a2a4 41
+c2c3 42
+c2c4 43
+d2d3 40
+d2d4 40
+e2d3 40
+e2c4 42
+e2b5 34
+e2a6 40
+g2g3 40
+g2g4 40
+h2h3 41
+h2h4 41
+b3b4 40
+e3e4 40
+f3g5 40
+f3h4 41
+f3e1 41
+f3d4 40
+f3e5 36
+f6g7 43
+f6h8 42
+f6e5 41
+f6d4 44
+f6c3 45
+f6b2 45
+f6e7 39
+f6d8 40
+f6g5 42
+f6h4 44
+Nodes: 1514
+Moves: 37
+728479>setboard
+732105>divide
+g1h1 76542
+b1c3 71087
+b1a3 73027
+d1e1 68502
+d1c1 72962
+f1e1 70798
+a2a3 66614
+a2a4 72954
+b2c3 63903
+b2d4 65766
+b2e5 61929
+b2f6 63435
+b2a3 61528
+b2c1 60270
+c2c3 62673
+c2c4 72279
+d2d3 64591
+d2d4 64472
+e2d3 70236
+e2c4 75882
+e2b5 57685
+e2a6 71833
+g2g3 69546
+g2g4 69973
+h2h3 71166
+h2h4 68814
+b3b4 68202
+e3e4 71323
+f3g5 80470
+f3h4 74786
+f3e1 70799
+f3d4 69846
+f3e5 70359
+Nodes: 2274252
+Moves: 33
+897613>divide
+usage: divide <depth>
+ Sharper v0.17 by Albert Bertilsson
+3>hashsize
+17671>setboard
+Invalid FEN, unknown piece type.
+Debug print:
+   +---+---+---+---+---+---+---+---+
+ 8 |   |   |   |   |   |   |   |   | Material: 0
+   +---+---+---+---+---+---+---+---+
+ 7 |   |   |   |   |   |   |   |   | Castling: 
+   +---+---+---+---+---+---+---+---+
+ 6 |   |   |   |   |   |   |   |   | Moves   : 0 1
+   +---+---+---+---+---+---+---+---+
+ 5 |   |   |   |   |   |   |   |   | To move : White
+   +---+---+---+---+---+---+---+---+
+ 4 |   |   |   |   |   |   |   |   | Checkers: None
+   +---+---+---+---+---+---+---+---+
+ 3 |   |   |   |   |   |   |   |   | Hash    : C9CB3A0B5CB5012F
+   +---+---+---+---+---+---+---+---+
+ 2 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+ 1 |   |   |   |   |   |   |   |   |
+   +---+---+---+---+---+---+---+---+
+     A   B   C   D   E   F   G   H  
+23211>setboard
+25527>divide
+e8e7 67464
+e8d8 69967
+e8c8 65111
+c6d8 68875
+c6e7 69359
+c6e5 77263
+c6d4 86415
+c6b4 79487
+c6a5 75595
+c6b8 68687
+a7a6 78639
+a7a5 78383
+b7b6 74680
+b7b5 71620
+d7c8 69339
+d7e6 71537
+d7d8 80105
+d7d6 83139
+d7d5 89313
+d7d4 98114
+d7e7 64987
+f7f6 78581
+g7g6 76726
+g7g5 76627
+h7h6 78705
+h7h5 80382
+a8b8 73127
+a8c8 73161
+a8d8 69538
+f5g6 76921
+f5e4 82795
+f5d3 74377
+f5c2 75707
+f5b1 76181
+f5e6 75835
+f5g4 75652
+f5h3 78743
+f8e7 84334
+f8d6 77264
+f8c5 89314
+f8b4 82173
+f8a3 78203
+h8g8 76717
+Nodes: 3299142
+Moves: 43
+212435>divide
+e8e7 1599
+e8d8 1676
+e8c8 1574
+c6d8 1645
+c6e7 1648
+c6e5 1929
+c6d4 2063
+c6b4 1939
+c6a5 1812
+c6b8 1641
+a7a6 1874
+a7a5 1871
+b7b6 1783
+b7b5 1748
+d7c8 1646
+d7e6 1902
+d7d8 1903
+d7d6 2026
+d7d5 2190
+d7d4 2425
+d7e7 1722
+f7f6 1874
+g7g6 1827
+g7g5 1861
+h7h6 1875
+h7h5 1915
+a8b8 1744
+a8c8 1745
+a8d8 1660
+f5g6 1830
+f5e4 1963
+f5d3 1886
+f5c2 1897
+f5b1 1852
+f5e6 1782
+f5g4 1793
+f5h3 1827
+f8e7 2002
+f8d6 1879
+f8c5 2088
+f8b4 1993
+f8a3 1946
+h8g8 1828
+Nodes: 79683
+Moves: 43
+222339>divide
+e8e7 1599
+e8d8 1676
+e8c8 1574
+c6d8 1645
+c6e7 1648
+c6e5 1929
+c6d4 2063
+c6b4 1939
+c6a5 1812
+c6b8 1641
+a7a6 1874
+a7a5 1871
+b7b6 1783
+b7b5 1748
+d7c8 1646
+d7e6 1902
+d7d8 1903
+d7d6 2026
+d7d5 2190
+d7d4 2425
+d7e7 1722
+f7f6 1874
+g7g6 1827
+g7g5 1861
+h7h6 1875
+h7h5 1915
+a8b8 1744
+a8c8 1745
+a8d8 1660
+f5g6 1830
+f5e4 1963
+f5d3 1886
+f5c2 1897
+f5b1 1852
+f5e6 1782
+f5g4 1793
+f5h3 1827
+f8e7 2002
+f8d6 1879
+f8c5 2088
+f8b4 1993
+f8a3 1946
+h8g8 1828
+Nodes: 79683
+Moves: 43
+231865>setboard
+234207>divide
+e1d2 1848
+e1f1 1843
+e1g1 1752
+d1c2 1979
+d1b3 2280
+d1a4 2113
+d1d2 1755
+d1d3 1874
+d1c1 1913
+d1b1 1919
+a1b1 1851
+h1h2 1653
+h1g1 1742
+h1f1 1699
+a2a3 1883
+a2a4 1880
+e2d3 1953
+e2c4 2034
+e2b5 1949
+e2a6 1892
+e2f1 1771
+g2g3 1740
+g2g4 1793
+c3c4 1716
+f3g5 1873
+f3h4 1870
+f3h2 1823
+f3g1 1690
+f3d2 1824
+f3e5 2017
+h3h4 1877
+d4d5 1954
+f4g5 1628
+f4h6 1657
+f4e3 1669
+f4d2 1477
+f4c1 1651
+f4e5 1708
+f4d6 1637
+f4c7 1776
+f4g3 1610
+f4h2 1608
+Nodes: 76181
+Moves: 42
+2526462>divide
