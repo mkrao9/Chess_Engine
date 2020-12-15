@@ -218,5 +218,7 @@ TEST(MakeMoveTests, board_default){
     ASSERT_EQ(PerftFourNoUnmake("2kr3r/pppq1ppp/2nb1n2/3ppb2/3P4/1P2PN1P/PBPNBPP1/R2Q1RK1 b - - 0 10"), 1919391);
     ASSERT_EQ(PerftFourNoUnmake("8/PK1k1p2/6p1/3Pp3/8/8/8/7q b - - 0 56"), 44809); 
     ASSERT_EQ(PerftFourNoUnmake("8/2p2pk1/p1P3p1/P3p2p/B1P1P3/5K2/1r6/8 b - - 0 42"), 31091);
+    ASSERT_EQ(PerftFourNoUnmake("r3kb1r/pppq1ppp/2n5/5b2/3P1B2/2P2N1P/P3BPP1/R2QK2R b KQkq - 2 11"), 3299142);
+    ASSERT_EQ(PerftFourNoUnmake("r4rk1/ppp2ppp/2nq2B1/8/3P4/2P2N1P/P4PP1/R2Q1RK1 b - - 0 15"), 1796262);
 
 }

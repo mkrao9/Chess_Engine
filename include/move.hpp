@@ -15,7 +15,7 @@ struct move {
     unsigned int old_counter: 3; 
 };
 
-/* Bits: 
+/* Bits: Will change piece captures
         0-5: Source Square
         6-11: Destination Square square 
         12-15: Special Flags 

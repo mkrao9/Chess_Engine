@@ -60,6 +60,9 @@ TEST(LeavesInCheckTests, basic_pin_tests){
 TEST(BlockGenTests, test_basic_block){
     Board* board = new Board("B3R3/6k1/N5N1/2B5/K6q/5PP1/3P4/8 w - - 0 1");
     generateBlockMoves(board, 4);
+    for (int i = 0; i < board->curr_num_moves; i++){
+        std::cout << "from: " <<  (board->move_list[i] & 0x3f) << "to: " << ((board->move_list[i] & 0xfc0) >> 6) << std::endl;
+    }
     ASSERT_EQ(board->curr_num_moves, 11);
     board = new Board("b3r3/6K1/n5n1/2b5/k6Q/5pp1/3p4/8 b - - 0 1");
     generateBlockMoves(board, 4);

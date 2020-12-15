@@ -75,8 +75,6 @@ void initializeAttackSet(Board* board){
 
         }
     }
-    
-    return;
 }
 
 

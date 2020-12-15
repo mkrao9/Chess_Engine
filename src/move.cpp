@@ -5,6 +5,296 @@
 
 int code_to_val[8] = {1, 9, 8, 7, -1, -9, -8, -7};
 
+void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces_board){
+
+    attack_set current_attack_set = board->current_attack_set[to_square];
+    pieces* other_pieces = board->other_pieces;
+    if (current_attack_set.fields.LEFT){
+        int from_square = to_square + current_attack_set.fields.LEFT * LEFT_VAL; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+
+    if (current_attack_set.fields.UP){
+        int from_square = to_square + current_attack_set.fields.UP * UP_VAL; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+
+    if (current_attack_set.fields.RIGHT){
+        int from_square = to_square + current_attack_set.fields.RIGHT * RIGHT_VAL; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+
+    if (current_attack_set.fields.DOWN){
+        int from_square = to_square + current_attack_set.fields.DOWN * DOWN_VAL; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+
+
+    if (current_attack_set.fields.UP_LEFT){
+        int from_square = to_square + current_attack_set.fields.UP_LEFT * UP_LEFT_VAL; 
+        uint64_t shifted_square = SHIFT(to_square);
+        if (SHIFT(from_square) & board->current_pieces->pawn){
+            if ((shifted_square & other_pieces_board)){
+                if (!leavesInCheck(board, from_square, to_square, false)){
+                    int code = getPieceCode(shifted_square, other_pieces);
+                    if (to_square < 8 || to_square >= 56){
+                        addMove(board, from_square, to_square, 5, code);
+                        addMove(board, from_square, to_square, 6, code);
+                        addMove(board, from_square, to_square, 7, code);
+                        addMove(board, from_square, to_square, 8, code);
+                    }
+                    else{
+                        addMove(board, from_square, to_square, 0, code);
+                    }
+                }
+            }
+            else{
+                if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
+                    addMove(board, from_square, to_square, 4, 1);
+                }
+            }
+        }
+        else{
+            if (!leavesInCheck(board, from_square, to_square, false)){
+                int code = 0; 
+                if (shifted_square & other_pieces_board){
+                    code = getPieceCode(shifted_square, other_pieces);
+                }
+                addMove(board, from_square, to_square, 0, code);
+            }
+        } 
+    }
+
+    if (current_attack_set.fields.UP_RIGHT){
+        int from_square = to_square + current_attack_set.fields.UP_RIGHT * UP_RIGHT_VAL; 
+        uint64_t shifted_square = SHIFT(to_square);
+        if (SHIFT(from_square) & board->current_pieces->pawn){
+            if ((shifted_square & other_pieces_board)){
+                if (!leavesInCheck(board, from_square, to_square, false)){
+                    int code = getPieceCode(shifted_square, other_pieces);
+                    if (to_square < 8 || to_square >= 56){
+                        addMove(board, from_square, to_square, 5, code);
+                        addMove(board, from_square, to_square, 6, code);
+                        addMove(board, from_square, to_square, 7, code);
+                        addMove(board, from_square, to_square, 8, code);
+                    }
+                    else{
+                        addMove(board, from_square, to_square, 0, code);
+                    }
+                }
+            }
+            else{
+                if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
+                    addMove(board, from_square, to_square, 4, 1);
+                }
+            }
+        }
+        else{
+            if (!leavesInCheck(board, from_square, to_square, false)){
+                int code = 0; 
+                if (shifted_square & other_pieces_board){
+                    code = getPieceCode(shifted_square, other_pieces);
+                }
+                addMove(board, from_square, to_square, 0, code);
+            }
+        }
+    }
+
+    if (current_attack_set.fields.DOWN_RIGHT){
+        int from_square = to_square + current_attack_set.fields.DOWN_RIGHT * DOWN_RIGHT_VAL; 
+        uint64_t shifted_square = SHIFT(to_square);
+        if (SHIFT(from_square) & board->current_pieces->pawn){
+            if ((shifted_square & other_pieces_board)){
+                if (!leavesInCheck(board, from_square, to_square, false)){
+                    int code = getPieceCode(shifted_square, other_pieces);
+                    if (to_square < 8 || to_square >= 56){
+                        addMove(board, from_square, to_square, 5, code);
+                        addMove(board, from_square, to_square, 6, code);
+                        addMove(board, from_square, to_square, 7, code);
+                        addMove(board, from_square, to_square, 8, code);
+                    }
+                    else{
+                        addMove(board, from_square, to_square, 0, code);
+                    }
+                }
+            }
+            else{
+                if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
+                    addMove(board, from_square, to_square, 4, 1);
+                }
+            }
+        }
+        else{
+            if (!leavesInCheck(board, from_square, to_square, false)){
+                int code = 0; 
+                if (shifted_square & other_pieces_board){
+                    code = getPieceCode(shifted_square, other_pieces);
+                }
+                addMove(board, from_square, to_square, 0, code);
+            }
+        }  
+    }
+
+    if (current_attack_set.fields.DOWN_LEFT){
+        int from_square = to_square + current_attack_set.fields.DOWN_LEFT * DOWN_LEFT_VAL; 
+        uint64_t shifted_square = SHIFT(to_square);
+        if (SHIFT(from_square) & board->current_pieces->pawn){
+            if ((shifted_square & other_pieces_board)){
+                if (!leavesInCheck(board, from_square, to_square, false)){
+                    int code = getPieceCode(shifted_square, other_pieces);
+                    if (to_square < 8 || to_square >= 56){
+                        addMove(board, from_square, to_square, 5, code);
+                        addMove(board, from_square, to_square, 6, code);
+                        addMove(board, from_square, to_square, 7, code);
+                        addMove(board, from_square, to_square, 8, code);
+                    }
+                    else{
+                        addMove(board, from_square, to_square, 0, code);
+                    }
+                }
+            }
+            else{
+                if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
+                    addMove(board, from_square, to_square, 4, 1);
+                }
+            }
+        }
+        else{
+            if (!leavesInCheck(board, from_square, to_square, false)){
+                int code = 0; 
+                if (shifted_square & other_pieces_board){
+                    code = getPieceCode(shifted_square, other_pieces);
+                }
+                addMove(board, from_square, to_square, 0, code);
+            }
+        }
+    }
+
+    if (current_attack_set.fields.N_UL_SHORT){
+        int from_square = to_square + N_UL_SHORT; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+
+    if (current_attack_set.fields.N_UL_TALL){
+        int from_square = to_square + N_UL_TALL; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+
+    if (current_attack_set.fields.N_UR_TALL){
+        int from_square = to_square + N_UR_TALL; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+    if (current_attack_set.fields.N_UR_SHORT){
+        int from_square = to_square + N_UR_SHORT; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+
+    if (current_attack_set.fields.N_DR_SHORT){
+        int from_square = to_square + N_DR_SHORT; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+
+    if (current_attack_set.fields.N_DR_TALL){
+        int from_square = to_square + N_DR_TALL; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+
+    if (current_attack_set.fields.N_DL_TALL){
+        int from_square = to_square + N_DL_TALL; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+
+    if (current_attack_set.fields.N_DL_SHORT){
+        int from_square = to_square + N_DL_SHORT; 
+        if (!leavesInCheck(board, from_square, to_square, false)){
+            uint64_t shifted_square = SHIFT(to_square);
+            int code = 0; 
+            if (shifted_square & other_pieces_board){
+                code = getPieceCode(shifted_square, other_pieces);
+            }
+            addMove(board, from_square, to_square, 0, code);
+        }
+    }
+}
+
+
 inline void generateTakeKnight(Board* board){
     attack_set king = board->other_attack_set[board->current_king_square];
     if (king.fields.N_DL_SHORT){
@@ -87,7 +377,6 @@ uint32_t generateAllMoves(Board *board, uint32_t* move_list){
 }
 
 bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is_ep){
-
     uint32_t king_square = board->current_king_square;
     attack_set* opp_attack_set = board->other_attack_set;
     pieces* other_pieces = board->other_pieces;
@@ -297,13 +586,13 @@ void generateBlockMoves(Board* board, uint8_t code){
             continue;
         }
 
-        generateMovesToSquare(board, current_square, other_pieces);
+        generateMovesToSquareOld(board, current_square, other_pieces);
         
         current_square += diff;
     }
 
     if (curr_attack_set[current_square].bits != 0){
-        generateMovesToSquare(board, current_square, other_pieces);
+        generateMovesToSquareOld(board, current_square, other_pieces);
     }
 
     //ep edge case 
