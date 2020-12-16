@@ -98,7 +98,10 @@ inline void addMove(Board* board, int from, int to, uint8_t special, uint8_t cap
     board->move_list[board->curr_num_moves].source = from; 
     board->move_list[board->curr_num_moves].dest = to; 
     board->move_list[board->curr_num_moves].special = special; 
-    board->move_list[board->curr_num_moves].capture = capture; 
+    board->move_list[board->curr_num_moves].capture = capture;
+    board->move_list[board->curr_num_moves].old_castle = board->old_castle; 
+    board->move_list[board->curr_num_moves].old_ep = board->old_ep; 
+    board->move_list[board->curr_num_moves].old_half_move = board->old_half_move;
     board->curr_num_moves++;
 }
 

@@ -1191,16 +1191,6 @@ inline void handleWhitePawnMoves(Board* board, int from, int to, int special, in
 
 void makeMove(Board* board, Move move){
 
-    if (board->white_to_move){
-        board->old_castle = board->castle_rights.white_q_castle << 1 | board->castle_rights.white_k_castle;
-    }
-    else{
-        board->old_castle = board->castle_rights.black_q_castle << 1 | board->castle_rights.black_k_castle; 
-    }
-
-    board->old_ep = board->en_pass_square ? board->en_pass_square % 8 | 1 << 3 : 0;
-    board->old_half_move = board->move_since;
-
     int from = move.source; 
     int to = move.dest;
     int special = move.special; 
@@ -1255,7 +1245,7 @@ void makeMove(Board* board, Move move){
 inline void handleKnightUnMoves(Board* board, int from, int to, int capture){
     if (capture){
         uint64_t occupied_squares = board->getOccupiedSquares();
-        removeCapturePiece(board, board->current_attack_set, to, capture, occupied_squares);
+        addCapturePiece(board, board->current_attack_set, to, capture, occupied_squares);
         removeKnight(board->other_attack_set, to);
         board->other_pieces->knight ^= SHIFT(to);
         blockRays(board, from);
@@ -1291,7 +1281,7 @@ inline void handleKingUnMove(Board* board, int from, int to, int special, int ca
         board->black_king_square = from;
     }
     else{
-        board->black_king_square = from;
+        board->white_king_square = from;
     }
     
     if (capture){
@@ -1318,8 +1308,8 @@ inline void handleRookUnMoves(Board* board, int from, int to, int capture){
         uint64_t occupied_squares = board->getOccupiedSquares();
         addCapturePiece(board, board->current_attack_set, to, capture, occupied_squares);
         removeRook(board, board->other_attack_set, to, occupied_squares);
-        board->current_pieces->rook ^= SHIFT(to);
-        board->current_pieces->rook |= SHIFT(from);
+        board->other_pieces->rook ^= SHIFT(to);
+        board->other_pieces->rook |= SHIFT(from);
         blockRays(board, from);
 
         addLat(board->other_attack_set, from, board->getOccupiedSquares());
@@ -1380,7 +1370,7 @@ inline void handleWhitePawnUnMove(Board* board, int from, int to, int special, i
         }
         addWhitePawn(board->other_attack_set, from);
         blockRays(board, from);
-        occupied_squares |= SHIFT(from);
+        board->other_pieces->pawn |= SHIFT(from);
     }
     else{
 
@@ -1410,7 +1400,7 @@ inline void handleWhitePawnUnMove(Board* board, int from, int to, int special, i
         }
         addWhitePawn(board->other_attack_set, from);
         blockRays(board, from);
-        occupied_squares |= SHIFT(from);
+        board->other_pieces->pawn |= SHIFT(from);
     }
 }
 
@@ -1458,7 +1448,7 @@ inline void handleBlackPawnUnMove(Board* board, int from, int to, int special, i
         }
         addBlackPawn(board->other_attack_set, from);
         blockRays(board, from);
-        occupied_squares |= SHIFT(from);
+        board->other_pieces->pawn |= SHIFT(from);
     }
     else{
 
@@ -1488,7 +1478,7 @@ inline void handleBlackPawnUnMove(Board* board, int from, int to, int special, i
         }
         addBlackPawn(board->other_attack_set, from);
         blockRays(board, from);
-        occupied_squares |= SHIFT(from);
+        board->other_pieces->pawn |= SHIFT(from);
     }
 }
 
@@ -1545,38 +1535,49 @@ void unmakeMove(Board* board, Move move){
     int special = move.special; 
     int capture = move.capture;
 
-    uint64_t shifted = SHIFT(from);
-    if (shifted & board->current_pieces->queen){
-        handleQueenUnMove(board, from, to, capture);
-    }
-    else{
-        if (shifted & board->current_pieces->bishop){
-            handleBishopUnMove(board, from, to, capture);
+    if (special >= 5){
+        if (!board->white_to_move){
+            handleWhitePawnUnMove(board, from, to, special, capture);
         }
         else{
-            if (shifted & board->current_pieces->knight){
-                handleKnightUnMoves(board, from, to, capture);
+            handleBlackPawnUnMove(board, from, to, special, capture);
+        }
+    }
+    else{
+        uint64_t shifted = SHIFT(to);
+        if (shifted & board->other_pieces->queen){
+            handleQueenUnMove(board, from, to, capture);
+        }
+        else{
+            if (shifted & board->other_pieces->bishop){
+                handleBishopUnMove(board, from, to, capture);
             }
             else{
-                if (shifted & board->current_pieces->king){
-                    handleKingUnMove(board, from, to, special, capture);
+                if (shifted & board->other_pieces->knight){
+                    handleKnightUnMoves(board, from, to, capture);
                 }
                 else{
-                    if (shifted & board->current_pieces->rook){
-                        handleRookUnMoves(board, from, to, capture);
+                    if (shifted & board->other_pieces->king){
+                        handleKingUnMove(board, from, to, special, capture);
                     }
                     else{
-                        if (board->white_to_move){
-                            handleWhitePawnUnMove(board, from, to, special, capture);
+                        if (shifted & board->other_pieces->rook){
+                            handleRookUnMoves(board, from, to, capture);
                         }
                         else{
-                            handleBlackPawnUnMove(board, from, to, special, capture);
+                            if (!board->white_to_move){
+                                handleWhitePawnUnMove(board, from, to, special, capture);
+                            }
+                            else{
+                                handleBlackPawnUnMove(board, from, to, special, capture);
+                            }
                         }
                     }
                 }
             }
         }
     }
+    
 
     board->white_to_move = !board->white_to_move;
     board->setCurrentState();
