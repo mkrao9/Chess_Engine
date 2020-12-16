@@ -4,6 +4,16 @@
 #include <stdint.h>
 #include <vector>
 
+struct Move {
+    unsigned int source: 6; 
+    unsigned int dest: 6; 
+    unsigned int special: 4; 
+    unsigned int capture: 4; 
+    unsigned int old_ep: 4; /*Bit 3: whether or not there was ep; rest: col (0 = h file, 7 = a file) */
+    unsigned int old_castle: 2; 
+    unsigned int old_half_move: 6;
+};
+
 /* constants for directions */ 
 int constexpr LEFT_VAL = 1; 
 int constexpr UP_LEFT_VAL = 9; 
@@ -50,33 +60,32 @@ typedef union {
 } attack_set;
 
 
-struct pieces {
+struct Pieces {
     uint64_t pawn;
     uint64_t rook;
     uint64_t knight;
     uint64_t bishop;
     uint64_t queen;
     uint64_t king;
+} __attribute__ ((__packed__));
 
-};
-
-struct castle_rights{
+struct CastleRights{
     unsigned int white_q_castle : 1; 
     unsigned int white_k_castle : 1;
     unsigned int black_q_castle : 1; 
     unsigned int black_k_castle : 1;
-};
+} __attribute__ ((__packed__));
 
-struct full_attack_set{
+struct FullAttackSet{
     attack_set white_attack_set[64];
     attack_set black_attack_set[64];
-};
+} __attribute__ ((__packed__));
 
 struct Board{
     /* pieces */
 
-    struct pieces white_pieces;
-    struct pieces black_pieces;
+    struct Pieces white_pieces;
+    struct Pieces black_pieces;
 
     uint8_t white_king_square; 
     uint8_t black_king_square; 
@@ -86,14 +95,9 @@ struct Board{
     uint32_t attack_set[64]; 
 */  
 
-    struct full_attack_set full_attack_set;
+    struct FullAttackSet full_attack_set;
 
-
-    /*Another option is just having a list of moves (or maybe even just a list of origin squares?) 
-        and when checking if castle check to make sure no piece has been moved && the rook is there -- might be a big 
-        memory tradeoff with this though */
-
-    castle_rights castle_rights; 
+    CastleRights castle_rights; 
 
     /* 1 << square = bit indication */
     uint8_t en_pass_square;
@@ -103,34 +107,22 @@ struct Board{
     uint32_t turn_number; 
     uint32_t move_since;
 
-    uint32_t *move_list;
+    Move *move_list;
     uint32_t curr_num_moves;
 
-    pieces* current_pieces; 
-    pieces* other_pieces; 
+    Pieces* current_pieces; 
+    Pieces* other_pieces; 
     int current_king_square; 
     attack_set* current_attack_set; 
     attack_set* other_attack_set; 
     
+    uint8_t old_ep; 
+    uint8_t old_castle; 
+    uint8_t old_half_move; 
     Board();
 
     Board(const char *fen);
 
-
-    /* TODO: testing framework --
-        2) Use a given engine -- run perf 1 
-        3) Make sure the number of moves = the number of moves generated 
-    */
-
-    /* TODO: gerenate moves -- ignore optimizations 
-        1) Check each piece see where it can move 
-        2) If it ends with check -- end 
-        3) if there are no moves -- mate  
-        4) Update castling rights 
-        5) Update en pessant square 
-    */
-
-    /* bits 0-5: source square, bits 6-11: target square, bits 12-16: flags see https://www.chessprogramming.org/Encoding_Moves#From-To_Based for more details */
     std::vector<uint32_t> getAllMoves();
 
     inline uint64_t getWhitePieces(){
@@ -177,6 +169,6 @@ struct Board{
         en_pass_square = b2.en_pass_square;
         setCurrentState();
     }
-};
+} __attribute__ ((__packed__));
 
 #endif
