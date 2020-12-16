@@ -7,6 +7,7 @@ set(Sources
     TestDetermineCheck.cpp
     TestMoveGeneration.cpp
     TestMakeMove.cpp
+    TestUnmake.cpp
 )
 
 add_executable(${This} ${Sources})

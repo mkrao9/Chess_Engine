@@ -26,14 +26,14 @@ void printMove(uint32_t move){
 uint32_t PerftTwoNoUnmake(const char *fen){
     // std::cout << "\n\n\n";
     Board *board = new Board(fen);
-    uint32_t list[256];
+    Move list[256];
     generateAllMoves(board, list);
     uint32_t num_first_moves = board->curr_num_moves; 
     uint32_t count = 0; 
     for (int i = 0; i < num_first_moves; i++){
         Board* new_board = new Board(fen);
         makeMove(new_board, list[i]);
-        uint32_t new_list[256];
+        Move new_list[256];
         generateAllMoves(new_board, new_list);
 
         count += new_board->curr_num_moves;
@@ -64,7 +64,7 @@ uint32_t getMove(const char *from, const char* to, uint8_t special, uint8_t capt
 uint32_t PerftFourNoUnmake(const char *fen){
     // std::cout << "\n\n\n\n";
     Board *board = new Board(fen);
-    uint32_t list[256];
+    Move list[256];
     generateAllMoves(board, list);
 
     uint32_t num_first_moves = board->curr_num_moves; 
@@ -73,7 +73,7 @@ uint32_t PerftFourNoUnmake(const char *fen){
     for (int i = 0; i < num_first_moves; i++){
         Board* new_board = new Board(fen);
         makeMove(new_board, list[i]);
-        uint32_t new_list[256];
+        Move new_list[256];
         generateAllMoves(new_board, new_list);
 
         int count_a = 0;
@@ -83,12 +83,12 @@ uint32_t PerftFourNoUnmake(const char *fen){
             Board* two_board = new Board(fen);
             makeMove(two_board, list[i]);
             makeMove(two_board, new_list[j]);
-            uint32_t third_list[256];
+            Move third_list[256];
             generateAllMoves(two_board, third_list);  
 
             for (int k = 0; k < two_board->curr_num_moves; k++){
                 Board* three_board = new Board(fen);
-                uint32_t last_list[256];
+                Move last_list[256];
                 makeMove(three_board, list[i]);
                 makeMove(three_board, new_list[j]);
                 makeMove(three_board, third_list[k]);
@@ -105,11 +105,11 @@ uint32_t PerftFourNoUnmake(const char *fen){
 }
 
 
-uint32_t P3Given(const char *fen, uint32_t move){
+uint32_t P3Given(const char *fen, Move move){
     // std::cout << "\n\n\n\n";
     Board *board = new Board(fen);
     makeMove(board, move);
-    uint32_t list[256];
+    Move list[256];
     generateAllMoves(board, list);
 
     uint32_t num_first_moves = board->curr_num_moves; 
@@ -119,7 +119,7 @@ uint32_t P3Given(const char *fen, uint32_t move){
         Board* new_board = new Board(fen);
         makeMove(new_board, move);
         makeMove(new_board, list[i]);
-        uint32_t new_list[256];
+        Move new_list[256];
         generateAllMoves(new_board, new_list);
         int count_a = 0; 
 
@@ -129,7 +129,7 @@ uint32_t P3Given(const char *fen, uint32_t move){
             makeMove(two_board, move);
             makeMove(two_board, list[i]);
             makeMove(two_board, new_list[j]);
-            uint32_t third_list[256];
+            Move third_list[256];
             generateAllMoves(two_board, third_list);  
 
 
@@ -146,7 +146,7 @@ uint32_t P3Given(const char *fen, uint32_t move){
 uint32_t PerftThreeNoUnmake(const char *fen){
     // std::cout << "\n\n\n\n";
     Board *board = new Board(fen);
-    uint32_t list[256];
+    Move list[256];
     generateAllMoves(board, list);
 
     uint32_t num_first_moves = board->curr_num_moves; 
@@ -155,7 +155,7 @@ uint32_t PerftThreeNoUnmake(const char *fen){
     for (int i = 0; i < num_first_moves; i++){
         Board* new_board = new Board(fen);
         makeMove(new_board, list[i]);
-        uint32_t new_list[256];
+        Move new_list[256];
         generateAllMoves(new_board, new_list);
         int count_a = 0; 
 
@@ -164,7 +164,7 @@ uint32_t PerftThreeNoUnmake(const char *fen){
             Board* two_board = new Board(fen);
             makeMove(two_board, list[i]);
             makeMove(two_board, new_list[j]);
-            uint32_t third_list[256];
+            Move third_list[256];
             generateAllMoves(two_board, third_list);  
 
             count += two_board->curr_num_moves;
@@ -181,18 +181,31 @@ uint32_t PerftThreeNoUnmake(const char *fen){
 
 TEST(MakeMoveTests, board_default){
     Board* board = new Board();
-    uint32_t move_list[256];
+    Move move_list[256];
     generateAllMoves(board, move_list);
-    makeMove(board, 11 | (27 << 6) | (1 << 12));
+    Move mv{};
+    mv.source = 11; 
+    mv.dest = 27; 
+    mv.special = 12; 
+
+    makeMove(board, mv);
     ASSERT_NE(board->white_pieces.pawn & (SHIFT(27)), 0);
     ASSERT_EQ(board->curr_num_moves, 20);
-    makeMove(board, 53 | (37 << 6) | (1 << 12));
+
+    mv.source = 53; 
+    mv.dest = 37; 
+    mv.special = 1; 
+    makeMove(board, mv);
     generateAllMoves(board, move_list);
     ASSERT_EQ(board->curr_num_moves, 30);
-    makeMove(board, 1 | (18 << 6));
+    mv.source = 1; 
+    mv.dest = 18; 
+    makeMove(board, mv);
     generateAllMoves(board, move_list);
     ASSERT_EQ(board->curr_num_moves, 22);
-    makeMove(board, 62 | (45 << 6));
+    mv.source = 62; 
+    mv.dest = 45;
+    makeMove(board, mv);
     generateAllMoves(board, move_list);
     ASSERT_EQ(board->curr_num_moves, 28);
     ASSERT_EQ(PerftTwoNoUnmake("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0"), 400);

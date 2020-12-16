@@ -8,7 +8,7 @@ int code_to_val[8] = {1, 9, 8, 7, -1, -9, -8, -7};
 void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces_board){
 
     attack_set current_attack_set = board->current_attack_set[to_square];
-    pieces* other_pieces = board->other_pieces;
+    Pieces* other_pieces = board->other_pieces;
     if (current_attack_set.fields.LEFT){
         int from_square = to_square + current_attack_set.fields.LEFT * LEFT_VAL; 
         if (!leavesInCheck(board, from_square, to_square, false)){
@@ -336,7 +336,7 @@ inline void generateTakeKnight(Board* board){
 
 }
 
-uint32_t generateAllMoves(Board *board, uint32_t* move_list){
+uint32_t generateAllMoves(Board *board, Move* move_list){
     board->move_list = move_list;
     board->curr_num_moves = 0; 
     uint8_t check = inCheck(board);
@@ -379,7 +379,7 @@ uint32_t generateAllMoves(Board *board, uint32_t* move_list){
 bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is_ep){
     uint32_t king_square = board->current_king_square;
     attack_set* opp_attack_set = board->other_attack_set;
-    pieces* other_pieces = board->other_pieces;
+    Pieces* other_pieces = board->other_pieces;
     uint64_t occupied_squares = board->getOccupiedSquares();
 
     if (from_square == king_square){
@@ -787,7 +787,7 @@ void generateCastleMoves(Board* board){
 void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_board){
 
     attack_set current_attack_set = board->current_attack_set[to_square];
-    pieces* other_pieces = board->other_pieces;
+    Pieces* other_pieces = board->other_pieces;
     if (current_attack_set.fields.LEFT){
         int from_square = to_square + current_attack_set.fields.LEFT * LEFT_VAL; 
         if (!leavesInCheck(board, from_square, to_square, false)){
@@ -1075,7 +1075,7 @@ void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_bo
 
 void generateKingMoves(Board* board, bool do_capture){
 
-    pieces* other_pieces = board->other_pieces;
+    Pieces* other_pieces = board->other_pieces;
     uint64_t other_pieces_board = board->getOtherPieces();
     uint64_t curr_pieces_board = board->getCurrentPieces();
     attack_set* attack = board->other_attack_set;
@@ -1252,7 +1252,7 @@ uint8_t inCheck(Board* board){
     }
 
     else{
-        pieces* other_pieces = board->other_pieces;
+        Pieces* other_pieces = board->other_pieces;
 
         attack_set attack = board->other_attack_set[king_square];
         int target_square = king_square;
@@ -1269,7 +1269,7 @@ uint8_t inCheck(Board* board){
     }
 }
 
-uint8_t checkStraightCheck(attack_set attack, int target_square, pieces* other_pieces){
+uint8_t checkStraightCheck(attack_set attack, int target_square, Pieces* other_pieces){
     if (!(GET_LINE_HITS(attack.bits))){
         return 0;
     }

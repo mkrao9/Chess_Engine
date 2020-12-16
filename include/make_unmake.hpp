@@ -3,8 +3,8 @@
 
 #include "board.hpp"
 
-void makeMove(Board* board, uint32_t move);
+void makeMove(Board* board, Move move);
 
-void unmakeMove(Board* board, uint32_t move);
+void unmakeMove(Board* board, Move move);
 
 #endif

@@ -5,7 +5,7 @@
 
 TEST(MoveGenTests, default_board){
     Board* board = new Board(); 
-    uint32_t move_list[256];
+    Move move_list[256];
     generateAllMoves(board, move_list);
     ASSERT_EQ(board->curr_num_moves, 20);
 }
@@ -61,7 +61,7 @@ TEST(BlockGenTests, test_basic_block){
     Board* board = new Board("B3R3/6k1/N5N1/2B5/K6q/5PP1/3P4/8 w - - 0 1");
     generateBlockMoves(board, 4);
     for (int i = 0; i < board->curr_num_moves; i++){
-        std::cout << "from: " <<  (board->move_list[i] & 0x3f) << "to: " << ((board->move_list[i] & 0xfc0) >> 6) << std::endl;
+        std::cout << "from: " <<  (board->move_list[i].source) << "to: " << ((board->move_list[i].dest) >> 6) << std::endl;
     }
     ASSERT_EQ(board->curr_num_moves, 11);
     board = new Board("b3r3/6K1/n5n1/2b5/k6Q/5pp1/3p4/8 b - - 0 1");
@@ -91,7 +91,6 @@ TEST(BlockGenTests, block_promo_test){
     board = new Board("4r2K/3P4/8/8/8/8/8/5k2 w - - 0 1");
     generateBlockMoves(board, 0);
     ASSERT_EQ(board->curr_num_moves, 4);
-    ASSERT_GT((board->move_list[0] >> 12) & 0xF, 0);
     board = new Board("4r2K/3p4/8/8/8/8/8/5k2 w - - 0 1");
     generateBlockMoves(board, 0);
     ASSERT_EQ(board->curr_num_moves, 0);
@@ -104,23 +103,22 @@ TEST(BlockGenTests, block_promo_test){
     board = new Board("7K/8/8/8/8/8/4p3/5R1k b - - 0 1");
     generateBlockMoves(board, 0);
     ASSERT_EQ(board->curr_num_moves, 4);
-    ASSERT_GT((board->move_list[0] >> 12) & 0xF, 0);
 }
 
 void checkMove(const char * str, int num){
     Board* board = new Board(str);
-    uint32_t move_list[256];
+    Move move_list[256];
     generateAllMoves(board, move_list);
     if (board->curr_num_moves != num){
         for (int i = 0; i < board->curr_num_moves; i++){
-            std::cout << "from: " << (board->move_list[i] & 0x3f) << " to: " << ((board->move_list[i] >> 6) & 0x3f) << "\n";
+            std::cout << "from: " << (board->move_list[i].source) << " to: " << board->move_list[i].dest << "\n";
         }
     }
     ASSERT_EQ(board->curr_num_moves, num);
 }
 
 TEST(EPTests, gen_ep_tests){
-    uint32_t move_list[256];
+    Move move_list[256];
     Board* board = new Board("3k4/8/8/4pP2/8/8/8/3K4 w - e6 0 2");
     generateMovesToSquare(board, 43, board->getOtherPieces());
     ASSERT_EQ(board->curr_num_moves, 1);
@@ -146,7 +144,7 @@ TEST(EPTests, gen_ep_tests){
 }
 
 TEST(MoveGenTests, game_one){
-    uint32_t move_list[256];
+    Move move_list[256];
     Board* board = new Board("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
     generateAllMoves(board, move_list);
     ASSERT_EQ(board->curr_num_moves, 20);

@@ -47,7 +47,7 @@ Board::Board(){
     
     initializeAttackSet(this);
 
-    move_list = new uint32_t[256];
+    move_list = new Move[256];
     curr_num_moves = 0;
 
     setCurrentState();
@@ -226,7 +226,7 @@ Board::Board(const char *fen){
     }
 
 
-    move_list = new uint32_t[256];
+    move_list = new Move[256];
     curr_num_moves = 0; 
 
     initializeAttackSet(this);

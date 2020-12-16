@@ -5,17 +5,8 @@
 #include <stdlib.h>
 
 
-struct move {
-    unsigned int source: 6; 
-    unsigned int dest: 6; 
-    unsigned int special: 4; 
-    unsigned int capture: 4; 
-    unsigned int old_ep: 3; 
-    unsigned int old_castle: 4; 
-    unsigned int old_counter: 3; 
-};
 
-/* Bits: Will change piece captures
+/* OUTDATED: Bits: Will change piece captures
         0-5: Source Square
         6-11: Destination Square square 
         12-15: Special Flags 
@@ -77,13 +68,13 @@ void generateAllPawnMoves(Board *board);
 
 void generateCastleMoves(Board* board);
 
-uint32_t generateAllMoves(Board *board, uint32_t* move_list);
+uint32_t generateAllMoves(Board *board, Move* move_list);
 
 uint8_t inCheck(Board* board);
 
 /* first 4 bits: 0 = no check, 1 = blockable check, 2 = not blockable check
    last 4 bits: code for direction, 0 = Left, 7 = down left */ 
-uint8_t checkStraightCheck(attack_set attack, int target_square, pieces* other_pieces);
+uint8_t checkStraightCheck(attack_set attack, int target_square, Pieces* other_pieces);
 
 void generateKingMoves(Board* board, bool do_capture);
 
@@ -104,11 +95,14 @@ inline bool isSameAntiDiag(uint8_t a, uint8_t b){
 }
 
 inline void addMove(Board* board, int from, int to, uint8_t special, uint8_t capture){
-    board->move_list[board->curr_num_moves] = from | (to << 6) | (special << 12) | (capture << 20);
+    board->move_list[board->curr_num_moves].source = from; 
+    board->move_list[board->curr_num_moves].dest = to; 
+    board->move_list[board->curr_num_moves].special = special; 
+    board->move_list[board->curr_num_moves].capture = capture; 
     board->curr_num_moves++;
 }
 
-inline uint8_t getPieceCode(uint64_t square, pieces* other_pieces){
+inline uint8_t getPieceCode(uint64_t square, Pieces* other_pieces){
     if (other_pieces->pawn & square){
         return 1; 
     }

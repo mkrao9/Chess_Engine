@@ -14,7 +14,7 @@ void printBoard(Board *b);
 uint32_t PerftFourNoUnmake(const char *fen){
     // std::cout << "\n\n\n\n";
     Board board(fen);
-    uint32_t list[256];
+    Move list[256];
     generateAllMoves(&board, list);
 
     uint32_t num_first_moves = board.curr_num_moves; 
@@ -24,7 +24,7 @@ uint32_t PerftFourNoUnmake(const char *fen){
         Board new_board = board;
 
         makeMove(&new_board, list[i]);
-        uint32_t new_list[256];
+        Move new_list[256];
 
         generateAllMoves(&new_board, new_list);
 
@@ -33,12 +33,12 @@ uint32_t PerftFourNoUnmake(const char *fen){
 
             Board two_board = new_board;
             makeMove(&two_board, new_list[j]);
-            uint32_t third_list[256];
+            Move third_list[256];
             generateAllMoves(&two_board, third_list);  
 
             for (int k = 0; k < two_board.curr_num_moves; k++){
                 Board three_board = two_board;
-                uint32_t last_list[256];
+                Move last_list[256];
                 makeMove(&three_board, third_list[k]);
                 generateAllMoves(&three_board, last_list);
                 count += three_board.curr_num_moves;

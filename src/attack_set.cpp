@@ -5,8 +5,8 @@
 
 void initializeAttackSet(Board* board){
     
-    pieces white_pieces = board->white_pieces; 
-    pieces black_pieces = board->black_pieces; 
+    Pieces white_pieces = board->white_pieces; 
+    Pieces black_pieces = board->black_pieces; 
     uint64_t occupied_squares = board->getOccupiedSquares();
 
     int count = 0; 
