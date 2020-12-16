@@ -337,6 +337,19 @@ inline void generateTakeKnight(Board* board){
 }
 
 uint32_t generateAllMoves(Board *board, Move* move_list){
+
+    
+    if (board->white_to_move){
+        board->old_castle = board->castle_rights.white_q_castle << 1 | board->castle_rights.white_k_castle;
+    }
+    else{
+        board->old_castle = board->castle_rights.black_q_castle << 1 | board->castle_rights.black_k_castle; 
+    }
+
+    board->old_ep = board->en_pass_square ? board->en_pass_square % 8 | 1 << 3 : 0;
+    board->old_half_move = board->move_since;
+
+    
     board->move_list = move_list;
     board->curr_num_moves = 0; 
     uint8_t check = inCheck(board);
