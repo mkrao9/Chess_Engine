@@ -9,9 +9,9 @@ struct Move {
     unsigned int dest: 6; 
     unsigned int special: 3; 
     unsigned int capture: 3; 
-    unsigned int old_ep: 4; /*Bit 3: whether or not there was ep; rest: col (0 = h file, 7 = a file) */
-    unsigned int old_castle: 4; 
-    unsigned int old_half_move: 6;
+    // unsigned int old_ep: 4; /*Bit 3: whether or not there was ep; rest: col (0 = h file, 7 = a file) */
+    // unsigned int old_castle: 4; 
+    // unsigned int old_half_move: 6;
 };
 
 /* constants for directions */ 
@@ -114,7 +114,7 @@ struct Board{
     /* game information */
     bool white_to_move;
     uint32_t turn_number; 
-    uint32_t move_since;
+    uint8_t move_since;
 
     bool in_check = false; 
 
@@ -127,9 +127,6 @@ struct Board{
     attack_set* current_attack_set; 
     attack_set* other_attack_set; 
     
-    uint8_t old_ep; 
-    uint8_t old_castle; 
-    uint8_t old_half_move; 
     Board();
 
     Board(const char *fen);

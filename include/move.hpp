@@ -61,31 +61,13 @@ extern int code_to_val[8];
         unmake: pretty much the same thing 
 */
 
-void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_board);
-
-void generateBlackPawnMoves(Board *board, int from_square, uint64_t occupied_squares);
-
-void generateAllPawnMoves(Board *board);
-
-void generateCastleMoves(Board* board);
 
 uint32_t generateAllMoves(Board *board, Move* move_list);
 
-uint8_t inCheck(Board* board);
 
-/* first 4 bits: 0 = no check, 1 = blockable check, 2 = not blockable check
-   last 4 bits: code for direction, 0 = Left, 7 = down left */ 
-uint8_t checkStraightCheck(attack_set attack, int target_square, Pieces* other_pieces);
-
-void generateKingMoves(Board* board, bool do_capture);
-
-void generatePawnBlocks(Board* board, int current_square, uint64_t occupied_squares, uint64_t curr_pawns);
-
-void generateBlockMoves(Board *board, uint8_t code);
-
-bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is_ep);
-
-void generateWhitePawnMove(Board *board, int from_square, uint64_t occupied_squares);
+// /* first 4 bits: 0 = no check, 1 = blockable check, 2 = not blockable check
+//    last 4 bits: code for direction, 0 = Left, 7 = down left */ 
+// uint8_t checkStraightCheck(attack_set attack, int target_square, Pieces* other_pieces);
 
 inline bool isSameDiag(uint8_t a, uint8_t b){
    return (((a / 8) - (b / 8)) == (-1 * ((a % 8) - (b % 8))));
@@ -96,13 +78,14 @@ inline bool isSameAntiDiag(uint8_t a, uint8_t b){
 }
 
 inline void addMove(Board* board, int from, int to, uint8_t special, uint8_t capture){
-    board->move_list[board->curr_num_moves].source = from; 
-    board->move_list[board->curr_num_moves].dest = to; 
-    board->move_list[board->curr_num_moves].special = special; 
-    board->move_list[board->curr_num_moves].capture = capture;
-    board->move_list[board->curr_num_moves].old_castle = board->old_castle; 
-    board->move_list[board->curr_num_moves].old_ep = board->old_ep; 
-    board->move_list[board->curr_num_moves].old_half_move = board->old_half_move;
+ 
+    Move mv{};
+    mv.source = from; 
+    mv.dest = to; 
+    mv.special = special; 
+    mv.capture = capture;
+    board->move_list[board->curr_num_moves] = mv;
+
     board->curr_num_moves++;
 }
 

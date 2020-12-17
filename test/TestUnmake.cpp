@@ -65,14 +65,19 @@ bool unmakeOne(const char *fen){
 
     int num_moves = generateAllMoves(b1, ml1);
     for (int i = 0; i < num_moves; i++){
+        int old_ep = b1->en_pass_square; 
+        int old_moves_since = b1->move_since; 
+        CastleRights old_castle_rights = b1->castle_rights; 
         makeMove(b1, ml1[i]);
         unmakeMove(b1, ml1[i]);
+        b1->en_pass_square = old_ep; 
+        b1->move_since = old_moves_since;
+        b1->castle_rights = old_castle_rights;
         if (!isBoardEqual(b1, b2)){
             std::cout << "from: " << ml1[i].source << " to: " << ml1[i].dest << std::endl; 
             return false;
         }
     }
-
     return true;
 }
 TEST(Unmake_Units, test_all_first_moves){
@@ -81,8 +86,14 @@ TEST(Unmake_Units, test_all_first_moves){
     Move ml1[256];
     int num_moves = generateAllMoves(b1, ml1);
     for (int i = 0; i < num_moves; i++){
+        int old_ep = b1->en_pass_square; 
+        int old_moves_since = b1->move_since; 
+        CastleRights old_castle_rights = b1->castle_rights; 
         makeMove(b1, ml1[i]);
         unmakeMove(b1, ml1[i]);
+        b1->en_pass_square = old_ep; 
+        b1->move_since = old_moves_since;
+        b1->castle_rights = old_castle_rights;
 
         ASSERT_TRUE(isBoardEqual(b1, b2));
     }
@@ -94,8 +105,14 @@ TEST(Unmake_Units, test_ep){
     Move ml1[256];
     int num_moves = generateAllMoves(b1, ml1);
     for (int i = 0; i < num_moves; i++){
+        int old_ep = b1->en_pass_square; 
+        int old_moves_since = b1->move_since; 
+        CastleRights old_castle_rights = b1->castle_rights; 
         makeMove(b1, ml1[i]);
-        unmakeMove(b1, ml1[i]); 
+        unmakeMove(b1, ml1[i]);
+        b1->en_pass_square = old_ep; 
+        b1->move_since = old_moves_since;
+        b1->castle_rights = old_castle_rights;
         ASSERT_TRUE(isBoardEqual(b1, b2));
     }
 
@@ -104,8 +121,14 @@ TEST(Unmake_Units, test_ep){
 
     num_moves = generateAllMoves(b1, ml1);
     for (int i = 0; i < num_moves; i++){
+        int old_ep = b1->en_pass_square; 
+        int old_moves_since = b1->move_since; 
+        CastleRights old_castle_rights = b1->castle_rights; 
         makeMove(b1, ml1[i]);
         unmakeMove(b1, ml1[i]);
+        b1->en_pass_square = old_ep; 
+        b1->move_since = old_moves_since;
+        b1->castle_rights = old_castle_rights;
         std::cout << "from: " << ml1[i].source << " to: " << ml1[i].dest << std::endl; 
         ASSERT_TRUE(isBoardEqual(b1, b2));
     }
@@ -172,14 +195,23 @@ uint32_t perftDoubleCheckUnmake (Board* board, int depth){
     int curr_num_moves = board->curr_num_moves;
     for (int i = 0; i < curr_num_moves; i++){
         Board b2 = *board; 
+        int old_ep = board->en_pass_square; 
+        int old_moves_since = board->move_since; 
+        CastleRights old_castle_rights = board->castle_rights; 
         makeMove(board, ml[i]);
-        unmakeMove(board, ml[i]); 
+        unmakeMove(board, ml[i]);
+        board->en_pass_square = old_ep; 
+        board->move_since = old_moves_since;
+        board->castle_rights = old_castle_rights;
         if(!isBoardEqual(board, &b2)){
             return -1;
         }
         makeMove(board, ml[i]);
         nodes += perftDoubleCheckUnmake(board, depth - 1); 
         unmakeMove(board, ml[i]); 
+        board->en_pass_square = old_ep; 
+        board->move_since = old_moves_since;
+        board->castle_rights = old_castle_rights;
     }
     return nodes; 
 }
@@ -206,7 +238,7 @@ TEST(Perft_Tests, starting_pos){
     ASSERT_EQ(perftDoubleCheckUnmake(b, 3), 8902);
     ASSERT_EQ(perftDoubleCheckUnmake(b, 4), 197281);
     ASSERT_EQ(perftDoubleCheckUnmake(b, 5), 4865609);
-    ASSERT_EQ(perftDoubleCheckUnmake(b, 6), 119060324); /* This takes a ton of time */
+    // ASSERT_EQ(perftDoubleCheckUnmake(b, 6), 119060324); /* This takes a ton of time */
 }
 
 

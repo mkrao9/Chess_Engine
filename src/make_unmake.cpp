@@ -1581,16 +1581,10 @@ void unmakeMove(Board* board, Move move){
     board->white_to_move = !board->white_to_move;
     board->setCurrentState();
 
-    board->castle_rights.white_q_castle = (move.old_castle & 0x8) >> 3;
-    board->castle_rights.white_k_castle = (move.old_castle & 0x4) >> 2; 
-    board->castle_rights.black_q_castle = (move.old_castle & 0x2) >> 1; 
-    board->castle_rights.black_k_castle = (move.old_castle & 0x1); 
     /* After turn has already been flipped */
     if (board->white_to_move) {
-        board->en_pass_square = move.old_ep ? ((move.old_ep & 0x7) + 40) : 0; 
     }
     else{
-        board->en_pass_square = move.old_ep ? ((move.old_ep & 0x7) + 16) : 0;  
         board->turn_number--;
     }
 }

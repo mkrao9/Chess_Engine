@@ -10,97 +10,97 @@ TEST(MoveGenTests, default_board){
     ASSERT_EQ(board->curr_num_moves, 20);
 }
 
-TEST(LeavesInCheckTests, basic_pin_tests){
-    Board* board = new Board("k3q3/8/8/8/8/4R3/8/4K3 w - - 0 1");
-    for (int i = 11; i < 64; i+=8){
-        if (i == 19){
-            continue;
-        }
-        ASSERT_EQ(leavesInCheck(board, 19, i, false), false);
-    }
-    for (int i = 16; i < 24; i++){
-        if (i == 19){
-            continue;
-        }
-        ASSERT_EQ(leavesInCheck(board, 19, i, false), true);
-    }
+// TEST(LeavesInCheckTests, basic_pin_tests){
+//     Board* board = new Board("k3q3/8/8/8/8/4R3/8/4K3 w - - 0 1");
+//     for (int i = 11; i < 64; i+=8){
+//         if (i == 19){
+//             continue;
+//         }
+//         ASSERT_EQ(leavesInCheck(board, 19, i, false), false);
+//     }
+//     for (int i = 16; i < 24; i++){
+//         if (i == 19){
+//             continue;
+//         }
+//         ASSERT_EQ(leavesInCheck(board, 19, i, false), true);
+//     }
 
-    board = new Board("k3q3/8/8/4R3/8/4R3/8/4K3 w - - 0 1");
-    for (int i = 16; i < 24; i++){
-        if (i == 19){
-            continue;
-        }
-        ASSERT_EQ(leavesInCheck(board, 19, i, false), false);
-    }
+//     board = new Board("k3q3/8/8/4R3/8/4R3/8/4K3 w - - 0 1");
+//     for (int i = 16; i < 24; i++){
+//         if (i == 19){
+//             continue;
+//         }
+//         ASSERT_EQ(leavesInCheck(board, 19, i, false), false);
+//     }
 
-    //same thing but flipped for black
-    board = new Board("K3R3/8/8/8/8/4q3/8/4k3 b - - 0 1");
-    for (int i = 11; i < 64; i+=8){
-        if (i == 19){
-            continue;
-        }
-        ASSERT_EQ(leavesInCheck(board, 19, i, false), false);
-    }
-    for (int i = 16; i < 24; i++){
-        if (i == 19){
-            continue;
-        }
-        ASSERT_EQ(leavesInCheck(board, 19, i, false), true);
-    }
+//     //same thing but flipped for black
+//     board = new Board("K3R3/8/8/8/8/4q3/8/4k3 b - - 0 1");
+//     for (int i = 11; i < 64; i+=8){
+//         if (i == 19){
+//             continue;
+//         }
+//         ASSERT_EQ(leavesInCheck(board, 19, i, false), false);
+//     }
+//     for (int i = 16; i < 24; i++){
+//         if (i == 19){
+//             continue;
+//         }
+//         ASSERT_EQ(leavesInCheck(board, 19, i, false), true);
+//     }
 
-    board = new Board("k3q3/8/8/4R3/8/4R3/8/4K3 w - - 0 1");
-    for (int i = 16; i < 24; i++){
-        if (i == 19){
-            continue;
-        }
-        ASSERT_EQ(leavesInCheck(board, 19, i, false), false);
-    }
-}
+//     board = new Board("k3q3/8/8/4R3/8/4R3/8/4K3 w - - 0 1");
+//     for (int i = 16; i < 24; i++){
+//         if (i == 19){
+//             continue;
+//         }
+//         ASSERT_EQ(leavesInCheck(board, 19, i, false), false);
+//     }
+// }
 
-TEST(BlockGenTests, test_basic_block){
-    Board* board = new Board("B3R3/6k1/N5N1/2B5/K6q/5PP1/3P4/8 w - - 0 1");
-    generateBlockMoves(board, 4);
-    ASSERT_EQ(board->curr_num_moves, 11);
-    board = new Board("b3r3/6K1/n5n1/2b5/k6Q/5pp1/3p4/8 b - - 0 1");
-    generateBlockMoves(board, 4);
-    ASSERT_EQ(board->curr_num_moves, 7);
-    board = new Board("b3r3/3p2K1/n5n1/2b2pp1/k6Q/8/8/8 b - - 0 1");
-    generateBlockMoves(board, 4);
-    ASSERT_EQ(board->curr_num_moves, 10);
-    board = new Board("b3r3/4p1K1/n5n1/2b2pp1/k6Q/8/8/8 b - - 0 1");
-    generateBlockMoves(board, 4);
-    ASSERT_EQ(board->curr_num_moves, 9);
-    board = new Board("b4r2/4p1K1/nb4n1/k6Q/8/8/8/8 b - - 0 1");
-    generateBlockMoves(board, 4);
-    ASSERT_EQ(board->curr_num_moves, 6);
-    board = new Board("b4r2/4p1K1/nb2p1n1/k6Q/8/8/8/8 b - - 0 1");
-    generateBlockMoves(board, 4);
-    ASSERT_EQ(board->curr_num_moves, 6);
-    board = new Board("b4r2/4p1K1/n3p1n1/k6Q/8/b7/8/R7 b - - 0 1");
-    generateBlockMoves(board, 4);
-    ASSERT_EQ(board->curr_num_moves, 5);
-}
+// TEST(BlockGenTests, test_basic_block){
+//     Board* board = new Board("B3R3/6k1/N5N1/2B5/K6q/5PP1/3P4/8 w - - 0 1");
+//     generateBlockMoves(board, 4);
+//     ASSERT_EQ(board->curr_num_moves, 11);
+//     board = new Board("b3r3/6K1/n5n1/2b5/k6Q/5pp1/3p4/8 b - - 0 1");
+//     generateBlockMoves(board, 4);
+//     ASSERT_EQ(board->curr_num_moves, 7);
+//     board = new Board("b3r3/3p2K1/n5n1/2b2pp1/k6Q/8/8/8 b - - 0 1");
+//     generateBlockMoves(board, 4);
+//     ASSERT_EQ(board->curr_num_moves, 10);
+//     board = new Board("b3r3/4p1K1/n5n1/2b2pp1/k6Q/8/8/8 b - - 0 1");
+//     generateBlockMoves(board, 4);
+//     ASSERT_EQ(board->curr_num_moves, 9);
+//     board = new Board("b4r2/4p1K1/nb4n1/k6Q/8/8/8/8 b - - 0 1");
+//     generateBlockMoves(board, 4);
+//     ASSERT_EQ(board->curr_num_moves, 6);
+//     board = new Board("b4r2/4p1K1/nb2p1n1/k6Q/8/8/8/8 b - - 0 1");
+//     generateBlockMoves(board, 4);
+//     ASSERT_EQ(board->curr_num_moves, 6);
+//     board = new Board("b4r2/4p1K1/n3p1n1/k6Q/8/b7/8/R7 b - - 0 1");
+//     generateBlockMoves(board, 4);
+//     ASSERT_EQ(board->curr_num_moves, 5);
+// }
 
-TEST(BlockGenTests, block_promo_test){
-    Board* board = new Board("r6K/3P4/8/8/8/8/8/5k2 w - - 0 1");
-    generateBlockMoves(board, 0);
-    ASSERT_EQ(board->curr_num_moves, 4);
-    board = new Board("4r2K/3P4/8/8/8/8/8/5k2 w - - 0 1");
-    generateBlockMoves(board, 0);
-    ASSERT_EQ(board->curr_num_moves, 4);
-    board = new Board("4r2K/3p4/8/8/8/8/8/5k2 w - - 0 1");
-    generateBlockMoves(board, 0);
-    ASSERT_EQ(board->curr_num_moves, 0);
-    board = new Board("4r2K/1P6/8/8/8/8/8/5k2 w - - 0 1");
-    generateBlockMoves(board, 0);
-    ASSERT_EQ(board->curr_num_moves, 0);
-    board = new Board("7K/8/8/8/8/8/4p3/R6k b - - 0 1");
-    generateBlockMoves(board, 0);
-    ASSERT_EQ(board->curr_num_moves, 4);
-    board = new Board("7K/8/8/8/8/8/4p3/5R1k b - - 0 1");
-    generateBlockMoves(board, 0);
-    ASSERT_EQ(board->curr_num_moves, 4);
-}
+// TEST(BlockGenTests, block_promo_test){
+//     Board* board = new Board("r6K/3P4/8/8/8/8/8/5k2 w - - 0 1");
+//     generateBlockMoves(board, 0);
+//     ASSERT_EQ(board->curr_num_moves, 4);
+//     board = new Board("4r2K/3P4/8/8/8/8/8/5k2 w - - 0 1");
+//     generateBlockMoves(board, 0);
+//     ASSERT_EQ(board->curr_num_moves, 4);
+//     board = new Board("4r2K/3p4/8/8/8/8/8/5k2 w - - 0 1");
+//     generateBlockMoves(board, 0);
+//     ASSERT_EQ(board->curr_num_moves, 0);
+//     board = new Board("4r2K/1P6/8/8/8/8/8/5k2 w - - 0 1");
+//     generateBlockMoves(board, 0);
+//     ASSERT_EQ(board->curr_num_moves, 0);
+//     board = new Board("7K/8/8/8/8/8/4p3/R6k b - - 0 1");
+//     generateBlockMoves(board, 0);
+//     ASSERT_EQ(board->curr_num_moves, 4);
+//     board = new Board("7K/8/8/8/8/8/4p3/5R1k b - - 0 1");
+//     generateBlockMoves(board, 0);
+//     ASSERT_EQ(board->curr_num_moves, 4);
+// }
 
 void checkMove(const char * str, int num){
     Board* board = new Board(str);
@@ -114,31 +114,31 @@ void checkMove(const char * str, int num){
     ASSERT_EQ(board->curr_num_moves, num);
 }
 
-TEST(EPTests, gen_ep_tests){
-    Move move_list[256];
-    Board* board = new Board("3k4/8/8/4pP2/8/8/8/3K4 w - e6 0 2");
-    generateMovesToSquare(board, 43, board->getOtherPieces());
-    ASSERT_EQ(board->curr_num_moves, 1);
-    board = new Board("3k4/8/8/4pP2/8/8/8/3K4 w - - 0 2");
-    generateMovesToSquare(board, 43, board->getOtherPieces());
-    ASSERT_EQ(board->curr_num_moves, 0);
-    board = new Board("3k4/8/8/8/4pP2/8/8/1K6 b - f3 0 1");
-    generateMovesToSquare(board, 18, board->getOtherPieces());
-    ASSERT_EQ(board->curr_num_moves, 1);
-    board = new Board("8/8/8/1K4k1/6pP/8/8/8 b - h3 0 1");
-    generateBlockMoves(board, 5);
-    ASSERT_EQ(board->curr_num_moves, 2);
-    generateAllMoves(board, move_list);
-    ASSERT_EQ(board->curr_num_moves, 8);
-    board = new Board("8/8/8/k4PpP/5K2/8/8/8 w - g6 0 2");
-    generateBlockMoves(board, 3);
-    ASSERT_EQ(board->curr_num_moves, 3);
-    board = new Board("8/8/8/k5Pp/6K1/8/8/8 w - h6 0 2");
-    generateBlockMoves(board, 3);
-    ASSERT_EQ(board->curr_num_moves, 2);
-    board = new Board("4k3/8/8/1K2Pp1q/8/8/8/8 w - f6 0 2");
-    ASSERT_TRUE(leavesInCheck(board, 35, 42, true));
-}
+// TEST(EPTests, gen_ep_tests){
+//     Move move_list[256];
+//     Board* board = new Board("3k4/8/8/4pP2/8/8/8/3K4 w - e6 0 2");
+//     generateMovesToSquare(board, 43, board->getOtherPieces());
+//     ASSERT_EQ(board->curr_num_moves, 1);
+//     board = new Board("3k4/8/8/4pP2/8/8/8/3K4 w - - 0 2");
+//     generateMovesToSquare(board, 43, board->getOtherPieces());
+//     ASSERT_EQ(board->curr_num_moves, 0);
+//     board = new Board("3k4/8/8/8/4pP2/8/8/1K6 b - f3 0 1");
+//     generateMovesToSquare(board, 18, board->getOtherPieces());
+//     ASSERT_EQ(board->curr_num_moves, 1);
+//     board = new Board("8/8/8/1K4k1/6pP/8/8/8 b - h3 0 1");
+//     generateBlockMoves(board, 5);
+//     ASSERT_EQ(board->curr_num_moves, 2);
+//     generateAllMoves(board, move_list);
+//     ASSERT_EQ(board->curr_num_moves, 8);
+//     board = new Board("8/8/8/k4PpP/5K2/8/8/8 w - g6 0 2");
+//     generateBlockMoves(board, 3);
+//     ASSERT_EQ(board->curr_num_moves, 3);
+//     board = new Board("8/8/8/k5Pp/6K1/8/8/8 w - h6 0 2");
+//     generateBlockMoves(board, 3);
+//     ASSERT_EQ(board->curr_num_moves, 2);
+//     board = new Board("4k3/8/8/1K2Pp1q/8/8/8/8 w - f6 0 2");
+//     ASSERT_TRUE(leavesInCheck(board, 35, 42, true));
+// }
 
 TEST(MoveGenTests, game_one){
     Move move_list[256];
