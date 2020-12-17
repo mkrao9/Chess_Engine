@@ -319,7 +319,7 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
         if (SHIFT(square + curr*UP_LEFT_VAL) & diags){
             int new_sq = square + DOWN_RIGHT_VAL; 
             while ((unsigned) new_sq % 8 != 7 && new_sq >= 0){
-                attack_set[new_sq].fields.UP_LEFT = curr + 1; 
+               attack_set[new_sq].fields.UP_LEFT = curr + 1; 
                 if (SHIFT(new_sq) & occupied_squares){
                     break;
                 }
@@ -768,7 +768,7 @@ inline void handleKCastle(Board* board, bool is_white){
     if (is_white){
         removeRook(board, board->current_attack_set, 0, board->getOccupiedSquares());
         removeKing(board->current_attack_set, 3);
-        extendRays(board, board->white_king_square, board->getOccupiedSquares());
+        board->current_attack_set[2].fields.LEFT = board->current_attack_set[3].fields.LEFT ? board->current_attack_set[3].fields.LEFT + 1 : 0 ; 
         board->white_pieces.king = 2; 
         board->white_pieces.rook ^= 1; 
         board->white_pieces.rook |= 4;
@@ -777,10 +777,9 @@ inline void handleKCastle(Board* board, bool is_white){
         addLat(board->current_attack_set, 2, board->getOccupiedSquares()); 
     }
     else{
-        board->castle_rights.black_k_castle = 0; 
-        board->castle_rights.black_q_castle = 0;
         removeRook(board, board->current_attack_set, 56, board->getOccupiedSquares());
         removeKing(board->current_attack_set, 59);
+        board->current_attack_set[58].fields.LEFT = board->current_attack_set[59].fields.LEFT ? board->current_attack_set[59].fields.LEFT + 1 : 0; 
         board->black_pieces.king = 0x200000000000000; 
         board->black_pieces.rook ^= 0x100000000000000; 
         board->black_pieces.rook |= 0x400000000000000;
@@ -794,7 +793,6 @@ inline void handleKUnCastle(Board* board, bool is_white){
     if (is_white){
         removeRook(board, board->other_attack_set, 2, board->getOccupiedSquares());
         removeKing(board->other_attack_set, 1);
-        blockRayAttacks(board, board->other_attack_set, 3);
         board->white_pieces.king = 0x8; 
         board->white_pieces.rook ^= 4; 
         board->white_pieces.rook |= 1;
@@ -803,15 +801,14 @@ inline void handleKUnCastle(Board* board, bool is_white){
         addLat(board->other_attack_set, 0, board->getOccupiedSquares()); 
     }
     else{
-        removeRook(board, board->current_attack_set, 58, board->getOccupiedSquares());
-        removeKing(board->current_attack_set, 57);
+        removeRook(board, board->other_attack_set, 58, board->getOccupiedSquares());
+        removeKing(board->other_attack_set, 57);
         board->black_pieces.king = 0x800000000000000; 
         board->black_pieces.rook |= 0x100000000000000; 
         board->black_pieces.rook ^= 0x400000000000000;
-        blockRayAttacks(board, board->other_attack_set, 59);
         board->black_king_square = 59;
-        addKing(board->current_attack_set, 59);
-        addLat(board->current_attack_set, 56, board->getOccupiedSquares()); 
+        addKing(board->other_attack_set, 59);
+        addLat(board->other_attack_set, 56, board->getOccupiedSquares()); 
     }
 }
 
@@ -819,7 +816,7 @@ inline void handleQCastle(Board* board, bool is_white){
     if (is_white){
         removeRook(board, board->current_attack_set, 7, board->getOccupiedSquares());
         removeKing(board->current_attack_set, 3);
-        
+        board->current_attack_set[4].fields.RIGHT = board->current_attack_set[3].fields.RIGHT ? board->current_attack_set[3].fields.RIGHT + 1 : 0; 
         board->white_king_square = 5;
         board->white_pieces.king = 0x20; 
         board->white_pieces.rook ^= 0x80; 
@@ -830,6 +827,7 @@ inline void handleQCastle(Board* board, bool is_white){
     else{
         removeRook(board, board->current_attack_set, 63, board->getOccupiedSquares());
         removeKing(board->current_attack_set, 59);
+        board->current_attack_set[60].fields.RIGHT = board->current_attack_set[59].fields.RIGHT ? board->current_attack_set[59].fields.RIGHT + 1 : 0; 
         board->black_king_square = 61;
         board->black_pieces.king = 0x2000000000000000; 
         board->black_pieces.rook ^= 0x8000000000000000; 
@@ -841,39 +839,30 @@ inline void handleQCastle(Board* board, bool is_white){
 
 inline void handleQUnCastle(Board* board, bool is_white){
     if (is_white){
-        removeRook(board, board->current_attack_set, 4, board->getOccupiedSquares());
-        removeKing(board->current_attack_set, 5);
+        removeRook(board, board->other_attack_set, 4, board->getOccupiedSquares());
+        removeKing(board->other_attack_set, 5);
         blockRayAttacks(board, board->other_attack_set, 3);
         board->white_king_square = 3;
         board->white_pieces.king = 0x8; 
         board->white_pieces.rook |= 0x80; 
         board->white_pieces.rook ^= 0x10;
-        addKing(board->current_attack_set, 3);
-        addLat(board->current_attack_set, 7, board->getOccupiedSquares()); 
+        addKing(board->other_attack_set, 3);
+        addLat(board->other_attack_set, 7, board->getOccupiedSquares()); 
     }
     else{
-        removeRook(board, board->current_attack_set, 60, board->getOccupiedSquares());
-        removeKing(board->current_attack_set, 61);
+        removeRook(board, board->other_attack_set, 60, board->getOccupiedSquares());
+        removeKing(board->other_attack_set, 61);
         board->black_king_square = 59;
         board->black_pieces.king = 0x800000000000000; 
         board->black_pieces.rook |= 0x8000000000000000; 
         board->black_pieces.rook ^= 0x1000000000000000;
-        addKing(board->current_attack_set, 59);
-        addLat(board->current_attack_set, 63, board->getOccupiedSquares()); 
+        addKing(board->other_attack_set, 59);
+        addLat(board->other_attack_set, 63, board->getOccupiedSquares()); 
     }
 }
 
 inline void handleKingMove(Board* board, int from, int to, int special, int capture){
     board->en_pass_square = 0; 
-    if (special){
-        if (special == 2){
-            handleKCastle(board, from < 32);
-        }
-        else{
-            handleQCastle(board, from < 32);
-        }
-        return;
-    }
 
     if (from == 3){
         board->castle_rights.white_k_castle = 0; 
@@ -885,6 +874,18 @@ inline void handleKingMove(Board* board, int from, int to, int special, int capt
             board->castle_rights.black_k_castle = 0;
         }
     }
+
+    if (special){
+        if (special == 1){
+            handleKCastle(board, from < 32);
+        }
+        else{
+            handleQCastle(board, from < 32);
+        }
+        return;
+    }
+
+
 
     if (board->white_to_move){
         board->white_king_square = to;
@@ -1020,24 +1021,24 @@ inline void handleKnightMoves(Board* board, int from, int to, int capture){
     }   
 }
 inline void handleBlackPawnMoves(Board* board, int from, int to, int special, int capture){     
-    if (special == 1){
+    if (from - to == 16){
         board->en_pass_square = to + 8;
     }
     else{
         board->en_pass_square = 0; 
 
         //ep capture
-        if (special == 4){
+        if (special == EP){
             board->current_pieces->pawn ^= SHIFT(from);
             board->other_pieces->pawn ^= SHIFT(to + 8);
             removePawn(board, board->current_attack_set, from, false);
             removePawn(board, board->other_attack_set, to + 8, true);
             board->current_pieces->pawn |= SHIFT(to);
+            blockRays(board, to);
             addBlackPawn(board->current_attack_set, to);
             uint64_t occupied_squares = board->getOccupiedSquares();
             extendRays(board, from, occupied_squares);
             extendRays(board, to + 8, occupied_squares);
-            blockRays(board, to);
 
             return;
         }
@@ -1051,19 +1052,19 @@ inline void handleBlackPawnMoves(Board* board, int from, int to, int special, in
         occupied_squares |= SHIFT(to);
         extendRays(board, from, occupied_squares);
         switch(special){
-            case 5: 
+            case N_PROMO: 
                 board->current_pieces->knight |= SHIFT(to);
                 addKnight(board->current_attack_set, to);
                 break;
-            case 6: 
+            case B_PROMO: 
                 board->current_pieces->bishop |= SHIFT(to);
                 addDiags(board->current_attack_set, to, board->getOccupiedSquares());
                 break;
-            case 7: 
+            case ROOK_PROMO: 
                 board->current_pieces->rook |= SHIFT(to);
                 addLat(board->current_attack_set, to, board->getOccupiedSquares());
                 break; 
-            case 8: 
+            case QUEEN_PROMO: 
                 board->current_pieces->queen |= SHIFT(to);
                 addQueen(board->current_attack_set, to, board->getOccupiedSquares());
                 break;
@@ -1081,19 +1082,19 @@ inline void handleBlackPawnMoves(Board* board, int from, int to, int special, in
         blockRays(board, to);
         extendRays(board, from, occupied_squares);
         switch(special){
-            case 5: 
+            case N_PROMO: 
                 board->current_pieces->knight |= SHIFT(to);
                 addKnight(board->current_attack_set, to);
                 break;
-            case 6: 
+            case B_PROMO: 
                 board->current_pieces->bishop |= SHIFT(to);
                 addDiags(board->current_attack_set, to, occupied_squares);
                 break;
-            case 7: 
+            case ROOK_PROMO: 
                 board->current_pieces->rook |= SHIFT(to);
                 addLat(board->current_attack_set, to, occupied_squares);
                 break; 
-            case 8: 
+            case QUEEN_PROMO: 
                 board->current_pieces->queen |= SHIFT(to);
                 addQueen(board->current_attack_set, to, occupied_squares);
                 break;
@@ -1105,24 +1106,25 @@ inline void handleBlackPawnMoves(Board* board, int from, int to, int special, in
     
 }
 inline void handleWhitePawnMoves(Board* board, int from, int to, int special, int capture){
-    if (special == 1){
+    if (to - from == 16){
         board->en_pass_square = to - 8;
     }
     else{
         board->en_pass_square = 0; 
 
         //ep capture
-        if (special == 4){
+        if (special == EP){
             board->other_pieces->pawn ^= SHIFT(to - 8);
             removePawn(board, board->current_attack_set, from, true);
             removePawn(board, board->other_attack_set, to - 8, false);
             board->current_pieces->pawn ^= SHIFT(from);
+            blockRays(board, to);
             addWhitePawn(board->current_attack_set, to);
             board->current_pieces->pawn |= SHIFT(to);
             uint64_t occupied_squares = board->getOccupiedSquares();
             extendRays(board, from, occupied_squares);
             extendRays(board, to - 8, occupied_squares);
-            blockRays(board, to);
+
 
             return;
         }
@@ -1136,19 +1138,19 @@ inline void handleWhitePawnMoves(Board* board, int from, int to, int special, in
         occupied_squares |= SHIFT(to);
         extendRays(board, from, occupied_squares);
         switch(special){
-            case 5: 
+            case N_PROMO: 
                 board->current_pieces->knight |= SHIFT(to);
                 addKnight(board->current_attack_set, to);
                 break;
-            case 6: 
+            case B_PROMO: 
                 board->current_pieces->bishop |= SHIFT(to);
                 addDiags(board->current_attack_set, to, board->getOccupiedSquares());
                 break;
-            case 7: 
+            case ROOK_PROMO: 
                 board->current_pieces->rook |= SHIFT(to);
                 addLat(board->current_attack_set, to, board->getOccupiedSquares());
                 break; 
-            case 8: 
+            case QUEEN_PROMO: 
                 board->current_pieces->queen |= SHIFT(to);
                 addQueen(board->current_attack_set, to, board->getOccupiedSquares());
                 break;
@@ -1158,7 +1160,6 @@ inline void handleWhitePawnMoves(Board* board, int from, int to, int special, in
         }
     }
     else{
-
         removePawn(board, board->current_attack_set, from, true);
         board->current_pieces->pawn ^= SHIFT(from);
         uint64_t occupied_squares = board->getOccupiedSquares();
@@ -1166,19 +1167,19 @@ inline void handleWhitePawnMoves(Board* board, int from, int to, int special, in
         blockRays(board, to);
         extendRays(board, from, occupied_squares);
         switch(special){
-            case 5: 
+            case N_PROMO: 
                 board->current_pieces->knight |= SHIFT(to);
                 addKnight(board->current_attack_set, to);
                 break;
-            case 6: 
+            case B_PROMO: 
                 board->current_pieces->bishop |= SHIFT(to);
                 addDiags(board->current_attack_set, to, occupied_squares);
                 break;
-            case 7: 
+            case ROOK_PROMO: 
                 board->current_pieces->rook |= SHIFT(to);
                 addLat(board->current_attack_set, to, occupied_squares);
                 break; 
-            case 8: 
+            case QUEEN_PROMO: 
                 board->current_pieces->queen |= SHIFT(to);
                 addQueen(board->current_attack_set, to, occupied_squares);
                 break;
@@ -1268,7 +1269,7 @@ inline void handleKnightUnMoves(Board* board, int from, int to, int capture){
 inline void handleKingUnMove(Board* board, int from, int to, int special, int capture){
 
     if (special){
-        if (special == 2){
+        if (special == 1){
             handleKUnCastle(board, from < 32);
         }
         else{
@@ -1298,7 +1299,7 @@ inline void handleKingUnMove(Board* board, int from, int to, int special, int ca
         board->other_pieces->king = SHIFT(from);
         blockRays(board, from);
         extendRays(board, to, board->getOccupiedSquares());
-        addKing(board->other_attack_set, to);
+        addKing(board->other_attack_set, from);
     }
 }
 
@@ -1329,16 +1330,16 @@ inline void handleRookUnMoves(Board* board, int from, int to, int capture){
 inline void handleWhitePawnUnMove(Board* board, int from, int to, int special, int capture){
 
     //ep capture
-    if (special == 4){
+    if (special == EP){
         board->current_pieces->pawn |= SHIFT(to - 8);
         removePawn(board, board->other_attack_set, to, true);
+        blockRays(board, from);
+        blockRays(board, to - 8);
         addBlackPawn(board->current_attack_set, to - 8);
         board->other_pieces->pawn |= SHIFT(from);
         addWhitePawn(board->other_attack_set, from);
         board->other_pieces->pawn ^= SHIFT(to);
         uint64_t occupied_squares = board->getOccupiedSquares();
-        blockRays(board, from);
-        blockRays(board, to - 8);
         extendRays(board, to, occupied_squares);
 
         return;
@@ -1348,49 +1349,19 @@ inline void handleWhitePawnUnMove(Board* board, int from, int to, int special, i
         uint64_t occupied_squares = board->getOccupiedSquares();
         addCapturePiece(board, board->current_attack_set, to, capture, occupied_squares);
         switch(special){
-            case 5: 
+            case N_PROMO: 
                 board->other_pieces->knight ^= SHIFT(to);
                 removeKnight(board->other_attack_set, to);
                 break;
-            case 6: 
+            case B_PROMO: 
                 board->other_pieces->bishop ^= SHIFT(to);
                 removeBishop(board, board->other_attack_set, to, occupied_squares);
                 break;
-            case 7: 
+            case ROOK_PROMO: 
                 board->other_pieces->rook ^= SHIFT(to);
                 removeRook(board, board->other_attack_set, to, occupied_squares);
                 break; 
-            case 8: 
-                board->other_pieces->queen ^= SHIFT(to);
-                removeQueen(board, board->other_attack_set, to, occupied_squares);
-                break;
-            default: 
-                board->other_pieces->pawn ^= SHIFT(to);
-                removePawn(board, board->other_attack_set, from, true);
-        }
-        addWhitePawn(board->other_attack_set, from);
-        blockRays(board, from);
-        board->other_pieces->pawn |= SHIFT(from);
-    }
-    else{
-
-        uint64_t occupied_squares = board->getOccupiedSquares();
-        extendRays(board, to, occupied_squares);
-
-        switch(special){
-            case 5: 
-                board->other_pieces->knight ^= SHIFT(to);
-                removeKnight(board->other_attack_set, to);
-                break;
-            case 6: 
-                board->other_pieces->bishop ^= SHIFT(to);
-                removeBishop(board, board->other_attack_set, to, occupied_squares);
-                break;
-            case 7: 
-                board->other_pieces->rook ^= SHIFT(to);
-                removeRook(board, board->other_attack_set, to, occupied_squares);
-                break; 
-            case 8: 
+            case QUEEN_PROMO: 
                 board->other_pieces->queen ^= SHIFT(to);
                 removeQueen(board, board->other_attack_set, to, occupied_squares);
                 break;
@@ -1398,8 +1369,37 @@ inline void handleWhitePawnUnMove(Board* board, int from, int to, int special, i
                 board->other_pieces->pawn ^= SHIFT(to);
                 removePawn(board, board->other_attack_set, to, true);
         }
-        addWhitePawn(board->other_attack_set, from);
         blockRays(board, from);
+        addWhitePawn(board->other_attack_set, from);
+        board->other_pieces->pawn |= SHIFT(from);
+    }
+    else{
+
+        uint64_t occupied_squares = board->getOccupiedSquares();
+        switch(special){
+            case N_PROMO: 
+                board->other_pieces->knight ^= SHIFT(to);
+                removeKnight(board->other_attack_set, to);
+                break;
+            case B_PROMO: 
+                board->other_pieces->bishop ^= SHIFT(to);
+                removeBishop(board, board->other_attack_set, to, occupied_squares);
+                break;
+            case ROOK_PROMO: 
+                board->other_pieces->rook ^= SHIFT(to);
+                removeRook(board, board->other_attack_set, to, occupied_squares);
+                break; 
+            case QUEEN_PROMO: 
+                board->other_pieces->queen ^= SHIFT(to);
+                removeQueen(board, board->other_attack_set, to, occupied_squares);
+                break;
+            default: 
+                board->other_pieces->pawn ^= SHIFT(to);
+                removePawn(board, board->other_attack_set, to, true);
+        }
+        extendRays(board, to, occupied_squares);
+        blockRays(board, from);
+        addWhitePawn(board->other_attack_set, from);
         board->other_pieces->pawn |= SHIFT(from);
     }
 }
@@ -1407,16 +1407,16 @@ inline void handleWhitePawnUnMove(Board* board, int from, int to, int special, i
 inline void handleBlackPawnUnMove(Board* board, int from, int to, int special, int capture){
 
     //ep capture
-    if (special == 4){
+    if (special == EP){
         board->current_pieces->pawn |= SHIFT(to + 8);
         removePawn(board, board->other_attack_set, to, false);
+        blockRays(board, from);
+        blockRays(board, to + 8);
         addWhitePawn(board->current_attack_set, to + 8);
         board->other_pieces->pawn |= SHIFT(from);
         addBlackPawn(board->other_attack_set, from);
         board->other_pieces->pawn ^= SHIFT(to);
         uint64_t occupied_squares = board->getOccupiedSquares();
-        blockRays(board, from);
-        blockRays(board, to + 8);
         extendRays(board, to, occupied_squares);
 
         return;
@@ -1426,49 +1426,19 @@ inline void handleBlackPawnUnMove(Board* board, int from, int to, int special, i
         uint64_t occupied_squares = board->getOccupiedSquares();
         addCapturePiece(board, board->current_attack_set, to, capture, occupied_squares);
         switch(special){
-            case 5: 
+            case N_PROMO: 
                 board->other_pieces->knight ^= SHIFT(to);
                 removeKnight(board->other_attack_set, to);
                 break;
-            case 6: 
+            case B_PROMO: 
                 board->other_pieces->bishop ^= SHIFT(to);
                 removeBishop(board, board->other_attack_set, to, occupied_squares);
                 break;
-            case 7: 
+            case ROOK_PROMO: 
                 board->other_pieces->rook ^= SHIFT(to);
                 removeRook(board, board->other_attack_set, to, occupied_squares);
                 break; 
-            case 8: 
-                board->other_pieces->queen ^= SHIFT(to);
-                removeQueen(board, board->other_attack_set, to, occupied_squares);
-                break;
-            default: 
-                board->other_pieces->pawn ^= SHIFT(to);
-                removePawn(board, board->other_attack_set, from, false);
-        }
-        addBlackPawn(board->other_attack_set, from);
-        blockRays(board, from);
-        board->other_pieces->pawn |= SHIFT(from);
-    }
-    else{
-
-        uint64_t occupied_squares = board->getOccupiedSquares();
-        extendRays(board, to, occupied_squares);
-        
-        switch(special){
-            case 5: 
-                board->other_pieces->knight ^= SHIFT(to);
-                removeKnight(board->other_attack_set, to);
-                break;
-            case 6: 
-                board->other_pieces->bishop ^= SHIFT(to);
-                removeBishop(board, board->other_attack_set, to, occupied_squares);
-                break;
-            case 7: 
-                board->other_pieces->rook ^= SHIFT(to);
-                removeRook(board, board->other_attack_set, to, occupied_squares);
-                break; 
-            case 8: 
+            case QUEEN_PROMO: 
                 board->other_pieces->queen ^= SHIFT(to);
                 removeQueen(board, board->other_attack_set, to, occupied_squares);
                 break;
@@ -1476,8 +1446,38 @@ inline void handleBlackPawnUnMove(Board* board, int from, int to, int special, i
                 board->other_pieces->pawn ^= SHIFT(to);
                 removePawn(board, board->other_attack_set, to, false);
         }
-        addBlackPawn(board->other_attack_set, from);
         blockRays(board, from);
+        addBlackPawn(board->other_attack_set, from);
+        board->other_pieces->pawn |= SHIFT(from);
+    }
+    else{
+
+        uint64_t occupied_squares = board->getOccupiedSquares();
+        
+        switch(special){
+            case N_PROMO: 
+                board->other_pieces->knight ^= SHIFT(to);
+                removeKnight(board->other_attack_set, to);
+                break;
+            case B_PROMO: 
+                board->other_pieces->bishop ^= SHIFT(to);
+                removeBishop(board, board->other_attack_set, to, occupied_squares);
+                break;
+            case ROOK_PROMO: 
+                board->other_pieces->rook ^= SHIFT(to);
+                removeRook(board, board->other_attack_set, to, occupied_squares);
+                break; 
+            case QUEEN_PROMO: 
+                board->other_pieces->queen ^= SHIFT(to);
+                removeQueen(board, board->other_attack_set, to, occupied_squares);
+                break;
+            default: 
+                board->other_pieces->pawn ^= SHIFT(to);
+                removePawn(board, board->other_attack_set, to, false);
+        }
+        extendRays(board, to, occupied_squares);
+        blockRays(board, from);
+        addBlackPawn(board->other_attack_set, from);
         board->other_pieces->pawn |= SHIFT(from);
     }
 }
@@ -1491,18 +1491,17 @@ inline void handleQueenUnMove(Board* board, int from, int to, int capture){
         board->other_pieces->queen ^= SHIFT(to);
         board->other_pieces->queen |= SHIFT(from);
         blockRays(board, from);
-        addQueen(board->current_attack_set, from, board->getOccupiedSquares());
+        addQueen(board->other_attack_set, from, board->getOccupiedSquares());
     }
     else{
         board->other_pieces->queen |= SHIFT(from);
         uint64_t occupied_squares = board->getOccupiedSquares();
-        removeQueen(board, board->other_attack_set, from, occupied_squares);
+        removeQueen(board, board->other_attack_set, to, occupied_squares);
         board->other_pieces->queen ^= SHIFT(to);
         blockRays(board, from);
         occupied_squares = board->getOccupiedSquares();
         extendRays(board, to, occupied_squares);
-            
-        addQueen(board->current_attack_set, from, occupied_squares);
+        addQueen(board->other_attack_set, from, occupied_squares);
     }
 }
 
@@ -1524,7 +1523,7 @@ inline void handleBishopUnMove(Board* board, int from, int to, int capture){
         blockRays(board, from);
         occupied_squares = board->getOccupiedSquares();
         extendRays(board, to, occupied_squares);
-        addDiags(board->current_attack_set, from, occupied_squares);
+        addDiags(board->other_attack_set, from, occupied_squares);
     }
 
 }
@@ -1535,7 +1534,7 @@ void unmakeMove(Board* board, Move move){
     int special = move.special; 
     int capture = move.capture;
 
-    if (special >= 5){
+    if (special >= N_PROMO){
         if (!board->white_to_move){
             handleWhitePawnUnMove(board, from, to, special, capture);
         }
@@ -1582,15 +1581,15 @@ void unmakeMove(Board* board, Move move){
     board->white_to_move = !board->white_to_move;
     board->setCurrentState();
 
+    board->castle_rights.white_q_castle = (move.old_castle & 0x8) >> 3;
+    board->castle_rights.white_k_castle = (move.old_castle & 0x4) >> 2; 
+    board->castle_rights.black_q_castle = (move.old_castle & 0x2) >> 1; 
+    board->castle_rights.black_k_castle = (move.old_castle & 0x1); 
     /* After turn has already been flipped */
     if (board->white_to_move) {
-        board->castle_rights.white_q_castle = move.old_castle & 0x2 >> 1; 
-        board->castle_rights.white_k_castle = move.old_castle & 0x1; 
         board->en_pass_square = move.old_ep ? ((move.old_ep & 0x7) + 40) : 0; 
     }
     else{
-        board->castle_rights.black_q_castle = move.old_castle & 0x2 >> 1; 
-        board->castle_rights.black_k_castle = move.old_castle & 0x1;
         board->en_pass_square = move.old_ep ? ((move.old_ep & 0x7) + 16) : 0;  
         board->turn_number--;
     }

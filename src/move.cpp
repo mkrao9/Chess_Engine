@@ -66,10 +66,10 @@ void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces
                 if (!leavesInCheck(board, from_square, to_square, false)){
                     int code = getPieceCode(shifted_square, other_pieces);
                     if (to_square < 8 || to_square >= 56){
-                        addMove(board, from_square, to_square, 5, code);
-                        addMove(board, from_square, to_square, 6, code);
-                        addMove(board, from_square, to_square, 7, code);
-                        addMove(board, from_square, to_square, 8, code);
+                        addMove(board, from_square, to_square, N_PROMO, code);
+                        addMove(board, from_square, to_square, B_PROMO, code);
+                        addMove(board, from_square, to_square, ROOK_PROMO, code);
+                        addMove(board, from_square, to_square, QUEEN_PROMO, code);
                     }
                     else{
                         addMove(board, from_square, to_square, 0, code);
@@ -78,7 +78,7 @@ void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces
             }
             else{
                 if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
-                    addMove(board, from_square, to_square, 4, 1);
+                    addMove(board, from_square, to_square, EP, 1);
                 }
             }
         }
@@ -101,10 +101,10 @@ void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces
                 if (!leavesInCheck(board, from_square, to_square, false)){
                     int code = getPieceCode(shifted_square, other_pieces);
                     if (to_square < 8 || to_square >= 56){
-                        addMove(board, from_square, to_square, 5, code);
-                        addMove(board, from_square, to_square, 6, code);
-                        addMove(board, from_square, to_square, 7, code);
-                        addMove(board, from_square, to_square, 8, code);
+                        addMove(board, from_square, to_square, N_PROMO, code);
+                        addMove(board, from_square, to_square, B_PROMO, code);
+                        addMove(board, from_square, to_square, ROOK_PROMO, code);
+                        addMove(board, from_square, to_square, QUEEN_PROMO, code);
                     }
                     else{
                         addMove(board, from_square, to_square, 0, code);
@@ -113,7 +113,7 @@ void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces
             }
             else{
                 if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
-                    addMove(board, from_square, to_square, 4, 1);
+                    addMove(board, from_square, to_square, EP, 1);
                 }
             }
         }
@@ -136,10 +136,10 @@ void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces
                 if (!leavesInCheck(board, from_square, to_square, false)){
                     int code = getPieceCode(shifted_square, other_pieces);
                     if (to_square < 8 || to_square >= 56){
-                        addMove(board, from_square, to_square, 5, code);
-                        addMove(board, from_square, to_square, 6, code);
-                        addMove(board, from_square, to_square, 7, code);
-                        addMove(board, from_square, to_square, 8, code);
+                        addMove(board, from_square, to_square, N_PROMO, code);
+                        addMove(board, from_square, to_square, B_PROMO, code);
+                        addMove(board, from_square, to_square, ROOK_PROMO, code);
+                        addMove(board, from_square, to_square, QUEEN_PROMO, code);
                     }
                     else{
                         addMove(board, from_square, to_square, 0, code);
@@ -148,7 +148,7 @@ void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces
             }
             else{
                 if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
-                    addMove(board, from_square, to_square, 4, 1);
+                    addMove(board, from_square, to_square, EP, 1);
                 }
             }
         }
@@ -171,10 +171,10 @@ void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces
                 if (!leavesInCheck(board, from_square, to_square, false)){
                     int code = getPieceCode(shifted_square, other_pieces);
                     if (to_square < 8 || to_square >= 56){
-                        addMove(board, from_square, to_square, 5, code);
-                        addMove(board, from_square, to_square, 6, code);
-                        addMove(board, from_square, to_square, 7, code);
-                        addMove(board, from_square, to_square, 8, code);
+                        addMove(board, from_square, to_square, N_PROMO, code);
+                        addMove(board, from_square, to_square, B_PROMO, code);
+                        addMove(board, from_square, to_square, ROOK_PROMO, code);
+                        addMove(board, from_square, to_square, QUEEN_PROMO, code);
                     }
                     else{
                         addMove(board, from_square, to_square, 0, code);
@@ -183,7 +183,7 @@ void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces
             }
             else{
                 if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
-                    addMove(board, from_square, to_square, 4, 1);
+                    addMove(board, from_square, to_square, EP, 1);
                 }
             }
         }
@@ -339,13 +339,8 @@ inline void generateTakeKnight(Board* board){
 uint32_t generateAllMoves(Board *board, Move* move_list){
 
     
-    if (board->white_to_move){
-        board->old_castle = board->castle_rights.white_q_castle << 1 | board->castle_rights.white_k_castle;
-    }
-    else{
-        board->old_castle = board->castle_rights.black_q_castle << 1 | board->castle_rights.black_k_castle; 
-    }
-
+    board->old_castle = board->castle_rights.white_q_castle << 3 | board->castle_rights.white_k_castle << 2 | board->castle_rights.black_q_castle << 1 | board->castle_rights.black_k_castle;
+ 
     board->old_ep = board->en_pass_square ? board->en_pass_square % 8 | 1 << 3 : 0;
     board->old_half_move = board->move_since;
 
@@ -354,6 +349,7 @@ uint32_t generateAllMoves(Board *board, Move* move_list){
     board->curr_num_moves = 0; 
     uint8_t check = inCheck(board);
     if (check){
+        board->in_check = true; 
         if (check == 2){
     
             generateKingMoves(board, true);
@@ -372,6 +368,8 @@ uint32_t generateAllMoves(Board *board, Move* move_list){
         //generate king moves 
         return board->curr_num_moves;
     }
+
+    board->in_check = false; 
 
     uint64_t other_pieces_board = board->getOtherPieces(); 
     uint64_t curr_pieces_board = board->getCurrentPieces();
@@ -419,7 +417,7 @@ bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is
             if (king_direction_left){
                 if(opp_attack_set[right].fields.RIGHT &&
                     (SHIFT(right + opp_attack_set[right].fields.RIGHT*RIGHT_VAL) & (other_pieces->rook | other_pieces->queen))){
-                    for (int j = king_square + RIGHT_VAL; j != from_square; j+= RIGHT_VAL){
+                    for (int j = king_square + RIGHT_VAL; j != left; j+= RIGHT_VAL){
                         if (SHIFT(j) & occupied_squares){
                             return false;
                         }
@@ -430,7 +428,7 @@ bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is
             else{
                 if(opp_attack_set[left].fields.LEFT &&
                     (SHIFT(left + opp_attack_set[left].fields.LEFT*LEFT_VAL) & (other_pieces->rook | other_pieces->queen))){
-                    for (int j = king_square + LEFT_VAL; j != from_square; j+= LEFT_VAL){
+                    for (int j = king_square + LEFT_VAL; j != right; j+= LEFT_VAL){
                         if (SHIFT(j) & occupied_squares){
                             return false;
                         }
@@ -439,9 +437,6 @@ bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is
                 }
             }
         }
-     
-
-        
     }
     
     //same file 
@@ -459,7 +454,7 @@ bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is
                         return false;
                     }
                 }
-                return true;
+                return true; 
             }
             return false;
         }
@@ -613,14 +608,14 @@ void generateBlockMoves(Board* board, uint8_t code){
         uint64_t curr_pawns = board->current_pieces->pawn; 
         int pawn_check = king_square + diff; 
         if (pawn_check % 8 != 0 && (curr_pawns & SHIFT(pawn_check - 1))){
-            if (!leavesInCheck(board, pawn_check, board->en_pass_square, true)){
-                addMove(board, pawn_check - 1, board->en_pass_square, 4, 1);
+            if (!leavesInCheck(board, pawn_check - 1, board->en_pass_square, true)){
+                addMove(board, pawn_check - 1, board->en_pass_square, EP, 1);
             }
         }
 
         if (pawn_check % 8 != 7 && (curr_pawns & (SHIFT(pawn_check + 1)))){
-            if (!leavesInCheck(board, pawn_check, board->en_pass_square, true)){
-                addMove(board, pawn_check + 1, board->en_pass_square, 4, 1);
+            if (!leavesInCheck(board, pawn_check + 1, board->en_pass_square, true)){
+                addMove(board, pawn_check + 1, board->en_pass_square, EP, 1);
             }
         }
 
@@ -633,10 +628,10 @@ void generatePawnBlocks(Board* board, int current_square, uint64_t occupied_squa
         if (curr_pawns & SHIFT(current_square - 8)){
             if (!leavesInCheck(board, current_square - 8, current_square, false)){
                 if (current_square >= 56){
-                    addMove(board, current_square - 8, current_square, 5, 0);
-                    addMove(board, current_square - 8, current_square, 6, 0);
-                    addMove(board, current_square - 8, current_square, 7, 0);
-                    addMove(board, current_square - 8, current_square, 8, 0);
+                    addMove(board, current_square - 8, current_square, N_PROMO, 0);
+                    addMove(board, current_square - 8, current_square, B_PROMO, 0);
+                    addMove(board, current_square - 8, current_square, ROOK_PROMO, 0);
+                    addMove(board, current_square - 8, current_square, QUEEN_PROMO, 0);
                 }
                 else{
                     addMove(board, current_square - 8, current_square, 0, 0);
@@ -649,7 +644,7 @@ void generatePawnBlocks(Board* board, int current_square, uint64_t occupied_squa
                 if ((SHIFT(current_square - 16) & curr_pawns) && 
                     !(SHIFT(current_square - 8) & occupied_squares)){
                     if (!leavesInCheck(board, current_square - 16, current_square, false)){
-                        addMove(board, current_square - 16, current_square, 1, 0);
+                        addMove(board, current_square - 16, current_square, 0, 0);
                     }
                 }
             } 
@@ -661,10 +656,10 @@ void generatePawnBlocks(Board* board, int current_square, uint64_t occupied_squa
         if (curr_pawns & SHIFT(current_square + 8)){
             if (!leavesInCheck(board, current_square + 8, current_square, false)){
                 if (current_square < 8){
-                    addMove(board, current_square + 8, current_square, 5, 0);
-                    addMove(board, current_square + 8, current_square, 6, 0);
-                    addMove(board, current_square + 8, current_square, 7, 0);
-                    addMove(board, current_square + 8, current_square, 8, 0);    
+                    addMove(board, current_square + 8, current_square, N_PROMO, 0);
+                    addMove(board, current_square + 8, current_square, B_PROMO, 0);
+                    addMove(board, current_square + 8, current_square, ROOK_PROMO, 0);
+                    addMove(board, current_square + 8, current_square, QUEEN_PROMO, 0);    
                 }
                 else{
                     addMove(board, current_square + 8, current_square, 0, 0);
@@ -676,7 +671,7 @@ void generatePawnBlocks(Board* board, int current_square, uint64_t occupied_squa
                 if ((SHIFT(current_square + 16) & curr_pawns) && 
                     !(SHIFT(current_square + 8) & occupied_squares)){
                     if (!leavesInCheck(board, current_square + 16, current_square, false)){
-                        addMove(board, current_square + 16, current_square, 1, 0);
+                        addMove(board, current_square + 16, current_square, 0, 0);
                     }
                 }
             }    
@@ -717,16 +712,16 @@ void generateWhitePawnMove(Board *board, int from_square, uint64_t occupied_squa
     }
 
     if (from_square >= 48){
-        addMove(board, from_square, from_square + 8, 5, 0);
-        addMove(board, from_square, from_square + 8, 6, 0);
-        addMove(board, from_square, from_square + 8, 7, 0);
-        addMove(board, from_square, from_square + 8, 8, 0);
+        addMove(board, from_square, from_square + 8, N_PROMO, 0);
+        addMove(board, from_square, from_square + 8, B_PROMO, 0);
+        addMove(board, from_square, from_square + 8, ROOK_PROMO, 0);
+        addMove(board, from_square, from_square + 8, QUEEN_PROMO, 0);
         return;
     }
 
     addMove(board, from_square, from_square + 8, 0, 0);
     if (from_square < 16 && !(SHIFT(from_square + 16) & occupied_squares)){
-        addMove(board, from_square, from_square + 16, 1, 0);
+        addMove(board, from_square, from_square + 16, 0, 0);
     }
 }
 
@@ -740,16 +735,16 @@ void generateBlackPawnMoves(Board *board, int from_square, uint64_t occupied_squ
     }
 
     if (from_square < 16){
-        addMove(board, from_square, from_square - 8, 5, 0);
-        addMove(board, from_square, from_square - 8, 6, 0);
-        addMove(board, from_square, from_square - 8, 7, 0);
-        addMove(board, from_square, from_square - 8, 8, 0);
+        addMove(board, from_square, from_square - 8, N_PROMO, 0);
+        addMove(board, from_square, from_square - 8, B_PROMO, 0);
+        addMove(board, from_square, from_square - 8, ROOK_PROMO, 0);
+        addMove(board, from_square, from_square - 8, QUEEN_PROMO, 0);
         return;
     }
 
     addMove(board, from_square, from_square - 8, 0, 0);
     if (from_square >= 48 && !(SHIFT(from_square - 16) & occupied_squares)){
-        addMove(board, from_square, from_square - 16, 1, 0);
+        addMove(board, from_square, from_square - 16, 0, 0);
     }
 }
 
@@ -760,7 +755,7 @@ void generateCastleMoves(Board* board){
             uint64_t occupied_squares = board->getOccupiedSquares(); 
             if (!(occupied_squares & 0x6)){
                 if (!attack[1].bits && !attack[2].bits){
-                    addMove(board, 3, 1, 2, 0);
+                    addMove(board, 3, 1, 1, 0);
                 }
             }   
         }
@@ -769,7 +764,7 @@ void generateCastleMoves(Board* board){
             uint64_t occupied_squares = board->getOccupiedSquares(); 
             if (!(occupied_squares & 0x70)){
                 if (!attack[4].bits && !attack[5].bits){
-                    addMove(board, 3, 5, 3, 0);
+                    addMove(board, 3, 5, 2, 0);
                 }
             }
         }
@@ -781,7 +776,7 @@ void generateCastleMoves(Board* board){
             uint64_t occupied_squares = board->getOccupiedSquares(); 
             if (!(occupied_squares & 0x600000000000000)){
                 if (!attack[57].bits && !attack[58].bits){
-                    addMove(board, 59, 57, 2, 0);
+                    addMove(board, 59, 57, 1, 0);
                 }
             }
         }
@@ -790,7 +785,7 @@ void generateCastleMoves(Board* board){
             uint64_t occupied_squares = board->getOccupiedSquares(); 
             if (!(occupied_squares & 0x7000000000000000)){
                 if (!attack[60].bits && !attack[61].bits){
-                    addMove(board, 59, 61, 3, 0);
+                    addMove(board, 59, 61, 2, 0);
                 }
             }
         }
@@ -858,10 +853,10 @@ void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_bo
                 if (!leavesInCheck(board, from_square, to_square, false)){
                     int code = getPieceCode(shifted_square, other_pieces);
                     if (to_square < 8 || to_square >= 56){
-                        addMove(board, from_square, to_square, 5, code);
-                        addMove(board, from_square, to_square, 6, code);
-                        addMove(board, from_square, to_square, 7, code);
-                        addMove(board, from_square, to_square, 8, code);
+                        addMove(board, from_square, to_square, N_PROMO, code);
+                        addMove(board, from_square, to_square, B_PROMO, code);
+                        addMove(board, from_square, to_square, ROOK_PROMO, code);
+                        addMove(board, from_square, to_square, QUEEN_PROMO, code);
                     }
                     else{
                         addMove(board, from_square, to_square, 0, code);
@@ -869,8 +864,8 @@ void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_bo
                 }
             }
             else{
-                if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
-                    addMove(board, from_square, to_square, 4, 1);
+                if((to_square == board->en_pass_square && board->en_pass_square != 0) && (!leavesInCheck(board, from_square, to_square, true))){
+                    addMove(board, from_square, to_square, EP, 1);
                 }
             }
         }
@@ -893,10 +888,10 @@ void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_bo
                 if (!leavesInCheck(board, from_square, to_square, false)){
                     int code = getPieceCode(shifted_square, other_pieces);
                     if (to_square < 8 || to_square >= 56){
-                        addMove(board, from_square, to_square, 5, code);
-                        addMove(board, from_square, to_square, 6, code);
-                        addMove(board, from_square, to_square, 7, code);
-                        addMove(board, from_square, to_square, 8, code);
+                        addMove(board, from_square, to_square, N_PROMO, code);
+                        addMove(board, from_square, to_square, B_PROMO, code);
+                        addMove(board, from_square, to_square, ROOK_PROMO, code);
+                        addMove(board, from_square, to_square, QUEEN_PROMO, code);
                     }
                     else{
                         addMove(board, from_square, to_square, 0, code);
@@ -905,7 +900,7 @@ void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_bo
             }
             else{
                 if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
-                    addMove(board, from_square, to_square, 4, 1);
+                    addMove(board, from_square, to_square, EP, 1);
                 }
             }
         }
@@ -928,10 +923,10 @@ void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_bo
                 if (!leavesInCheck(board, from_square, to_square, false)){
                     int code = getPieceCode(shifted_square, other_pieces);
                     if (to_square < 8 || to_square >= 56){
-                        addMove(board, from_square, to_square, 5, code);
-                        addMove(board, from_square, to_square, 6, code);
-                        addMove(board, from_square, to_square, 7, code);
-                        addMove(board, from_square, to_square, 8, code);
+                        addMove(board, from_square, to_square, N_PROMO, code);
+                        addMove(board, from_square, to_square, B_PROMO, code);
+                        addMove(board, from_square, to_square, ROOK_PROMO, code);
+                        addMove(board, from_square, to_square, QUEEN_PROMO, code);
                     }
                     else{
                         addMove(board, from_square, to_square, 0, code);
@@ -940,7 +935,7 @@ void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_bo
             }
             else{
                 if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
-                    addMove(board, from_square, to_square, 4, 1);
+                    addMove(board, from_square, to_square, EP, 1);
                 }
             }
         }
@@ -963,10 +958,10 @@ void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_bo
                 if (!leavesInCheck(board, from_square, to_square, false)){
                     int code = getPieceCode(shifted_square, other_pieces);
                     if (to_square < 8 || to_square >= 56){
-                        addMove(board, from_square, to_square, 5, code);
-                        addMove(board, from_square, to_square, 6, code);
-                        addMove(board, from_square, to_square, 7, code);
-                        addMove(board, from_square, to_square, 8, code);
+                        addMove(board, from_square, to_square, N_PROMO, code);
+                        addMove(board, from_square, to_square, B_PROMO, code);
+                        addMove(board, from_square, to_square, ROOK_PROMO, code);
+                        addMove(board, from_square, to_square, QUEEN_PROMO, code);
                     }
                     else{
                         addMove(board, from_square, to_square, 0, code);
@@ -975,7 +970,7 @@ void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_bo
             }
             else{
                 if((to_square == board->en_pass_square) && (!leavesInCheck(board, from_square, to_square, true))){
-                    addMove(board, from_square, to_square, 4, 1);
+                    addMove(board, from_square, to_square, EP, 1);
                 }
             }
         }

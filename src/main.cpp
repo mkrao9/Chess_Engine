@@ -10,6 +10,58 @@
 
 void printBoard(Board *b);
 
+bool isBoardEqual(Board* b1, Board* b2){
+    if (b1->black_king_square != b2->black_king_square)
+        return false; 
+    if (b1->white_king_square != b2->white_king_square)
+        return false; 
+    if (b1->black_pieces.bishop != b2->black_pieces.bishop)
+        return false; 
+    if (b1->black_pieces.king != b2->black_pieces.king)
+        return false; 
+    if (b1->black_pieces.knight != b2->black_pieces.knight)
+        return false; 
+    if (b1->black_pieces.pawn != b2->black_pieces.pawn)
+        return false; 
+    if (b1->black_pieces.queen != b2->black_pieces.queen)
+        return false; 
+    if (b1->black_pieces.rook != b2->black_pieces.rook)
+        return false;
+    if (b1->white_pieces.bishop != b2->white_pieces.bishop)
+        return false; 
+    if (b1->white_pieces.king != b2->white_pieces.king)
+        return false; 
+    if (b1->white_pieces.knight != b2->white_pieces.knight)
+        return false; 
+    if (b1->white_pieces.pawn != b2->white_pieces.pawn)
+        return false; 
+    if (b1->white_pieces.queen != b2->white_pieces.queen)
+        return false; 
+    if (b1->white_pieces.rook != b2->white_pieces.rook)
+        return false;
+    if (b1->white_to_move != b2->white_to_move)
+        return false;
+    if (b1->turn_number != b2->turn_number)
+        return false;
+    if (b1->castle_rights.black_k_castle != b2->castle_rights.black_k_castle)
+        return false; 
+    if (b1->castle_rights.black_q_castle != b2->castle_rights.black_q_castle)
+        return false; 
+    if (b1->castle_rights.white_k_castle != b2->castle_rights.white_k_castle)
+        return false; 
+    if (b1->castle_rights.white_q_castle != b2->castle_rights.white_q_castle)
+        return false;         
+    for (int i = 0; i < 64; i++){
+        if (b1->full_attack_set.black_attack_set[i].bits != b2->full_attack_set.black_attack_set[i].bits)
+            return false;
+        if (b1->full_attack_set.white_attack_set[i].bits != b2->full_attack_set.white_attack_set[i].bits)
+            return false;
+    }
+
+    if (b1->en_pass_square != b2->en_pass_square)
+        return false;
+    return true;
+}
 
 uint32_t PerftFourNoUnmake(const char *fen){
     // std::cout << "\n\n\n\n";
@@ -54,20 +106,55 @@ uint32_t PerftFourNoUnmake(const char *fen){
     return count; 
 }
 
+uint64_t perft(Board* board, uint32_t depth){
+    Move ml[256];
+    
+    if (depth == 0){
+        return 1; 
+    }
+
+    if (depth == 1){
+        return generateAllMoves(board, ml); 
+    }
+    
+    uint64_t nodes = 0; 
+    int curr_num_moves = generateAllMoves(board, ml);
+    for (int i = 0; i < curr_num_moves; i++){
+        // Board b2 = *board; 
+        // makeMove(board, ml[i]);
+        // unmakeMove(board, ml[i]); 
+        // if (!isBoardEqual(board, &b2)){
+        //     std::cout << "PANIC: " << "from: " << ml[i].source << " to: " << ml[i].dest << std::endl;
+        // }
+
+        makeMove(board, ml[i]);
+        uint64_t thing = perft(board, depth - 1);
+        // if (depth == 2){
+        //     std::cout << "from: " << ml[i].source << " to: " << ml[i].dest << " special: " << ml[i].special << " " << thing << std::endl;
+        // } 
+        nodes += thing;
+        unmakeMove(board, ml[i]); 
+    }
+    return nodes; 
+}
+
+uint64_t perft(const char *fen, int depth){
+    Board *b = new Board(fen);
+    return perft(b, depth);
+}
+
+uint64_t perft(int depth){
+    Board *b = new Board(); 
+    return perft(b, depth);
+}
 
 int main(){
     
     clock_t start = clock(); 
-    uint32_t thing = PerftFourNoUnmake("2kr3r/pppq1ppp/2nbpn2/3p1b2/8/1P1PPN1P/PBPNBPP1/R2Q1RK1 b - - 0 9");
-    uint32_t thing2 = PerftFourNoUnmake("r3kb1r/pppq1ppp/2n5/5b2/3P1B2/2P2N1P/P3BPP1/R2QK2R b KQkq - 2 11");
-    uint32_t thing3 = PerftFourNoUnmake("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
-    uint32_t thing4 = PerftFourNoUnmake("r4rk1/ppp2ppp/2nq2B1/8/3P4/2P2N1P/P4PP1/R2Q1RK1 b - - 0 15");
+    uint64_t thing = perft("r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10", 6);
     clock_t end = clock(); 
     double time = double(end-start) / double(CLOCKS_PER_SEC);
     std::cout << thing << "\n";
-    std::cout << thing2 << "\n";
-    std::cout << thing3 << "\n";
-    std::cout << thing4 << "\n";
     std::cout << time << "\n";
 
     // Board board{}; 

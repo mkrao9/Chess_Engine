@@ -21,20 +21,21 @@
 
 /* Special flag codes: 
     0 - none 
-    1 - double pawn push 
-    2 - king side castle 
-    3 - queen side castle 
-    4 - ep 
-    5 - knight promo 
-    6 - bishop promo 
-    7 - rook promo 
-    8 - queen promo 
+    1 - king side castle 
+    2 - queen side castle 
+    3 - ep 
+    4 - knight promo 
+    5 - bishop promo 
+    6 - rook promo 
+    7 - queen promo 
 */
 
 #define FLAG_CODE(a) ((uint8_t) (a & 0xFF))
 #define SOURCE(a) ((uint8_t) ((a & 0x3F00) >> 8))
 #define DEST(a) ((uint8_t) ((a & 0xFC000) >> 14))
 #define CAPT_PIECE(a) ((uint8_t) ((a & 0xF00000) >> 20))
+
+
 
 #define RANK(a) (0xFFLL << a)
 #define COL(a) ((0x0101010101010101LL) << a)

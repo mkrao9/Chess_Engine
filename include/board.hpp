@@ -7,10 +7,10 @@
 struct Move {
     unsigned int source: 6; 
     unsigned int dest: 6; 
-    unsigned int special: 4; 
-    unsigned int capture: 4; 
+    unsigned int special: 3; 
+    unsigned int capture: 3; 
     unsigned int old_ep: 4; /*Bit 3: whether or not there was ep; rest: col (0 = h file, 7 = a file) */
-    unsigned int old_castle: 2; 
+    unsigned int old_castle: 4; 
     unsigned int old_half_move: 6;
 };
 
@@ -36,6 +36,15 @@ int constexpr N_DL_SHORT = -6;
 #define GET_N_HITS(a) ((a >> 24) & 0xFF)
 #define GET_LINE_HITS(a) ((a & 0xFFFFFF))
 #define SHIFT(a) (1LL << a)
+
+
+#define K_CASTLE 1
+#define Q_CASTLE 2
+#define EP 3
+#define N_PROMO 4
+#define B_PROMO 5
+#define ROOK_PROMO 6
+#define QUEEN_PROMO 7
 
 typedef union {
     struct {
@@ -107,6 +116,8 @@ struct Board{
     uint32_t turn_number; 
     uint32_t move_since;
 
+    bool in_check = false; 
+
     Move *move_list;
     uint32_t curr_num_moves;
 
@@ -167,6 +178,7 @@ struct Board{
         white_to_move = b2.white_to_move;
         castle_rights = b2.castle_rights;
         en_pass_square = b2.en_pass_square;
+        turn_number = b2.turn_number;
         setCurrentState();
     }
 } __attribute__ ((__packed__));

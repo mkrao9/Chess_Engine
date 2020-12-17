@@ -186,7 +186,7 @@ TEST(MakeMoveTests, board_default){
     Move mv{};
     mv.source = 11; 
     mv.dest = 27; 
-    mv.special = 12; 
+    mv.special = 0; 
 
     makeMove(board, mv);
     ASSERT_NE(board->white_pieces.pawn & (SHIFT(27)), 0);
