@@ -52,6 +52,8 @@ int main(){
     clock_t start = clock(); 
     uint64_t thing = perft(6);
     uint32_t thing2 = perft("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1", 6);
+
+
     clock_t end = clock(); 
     double time = double(end-start) / double(CLOCKS_PER_SEC);
     std::cout << thing << " " << thing2 << "\n";

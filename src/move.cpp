@@ -534,7 +534,12 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.LEFT = 0;
+        if (current_attack_set.bits == 0)
+            return;
     }
+
+
 
     if (current_attack_set.fields.UP){
         int from_square = to_square + current_attack_set.fields.UP * UP_VAL; 
@@ -546,6 +551,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.UP = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.RIGHT){
@@ -558,6 +566,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.RIGHT = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.DOWN){
@@ -570,6 +581,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.DOWN = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
 
@@ -606,6 +620,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
                 addMove(board, from_square, to_square, 0, code);
             }
         } 
+        current_attack_set.fields.UP_LEFT = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.UP_RIGHT){
@@ -641,6 +658,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
                 addMove(board, from_square, to_square, 0, code);
             }
         }
+        current_attack_set.fields.UP_RIGHT = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.DOWN_RIGHT){
@@ -676,6 +696,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
                 addMove(board, from_square, to_square, 0, code);
             }
         }  
+        current_attack_set.fields.DOWN_RIGHT = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.DOWN_LEFT){
@@ -711,6 +734,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
                 addMove(board, from_square, to_square, 0, code);
             }
         }
+        current_attack_set.fields.DOWN_LEFT = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.N_UL_SHORT){
@@ -723,6 +749,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_UL_SHORT = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.N_UL_TALL){
@@ -735,6 +764,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_UL_TALL = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.N_UR_TALL){
@@ -747,6 +779,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_UR_TALL = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
     if (current_attack_set.fields.N_UR_SHORT){
         int from_square = to_square + N_UR_SHORT; 
@@ -758,6 +793,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_UR_SHORT = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.N_DR_SHORT){
@@ -770,6 +808,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_DR_SHORT = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.N_DR_TALL){
@@ -782,6 +823,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_DR_TALL = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.N_DL_TALL){
@@ -794,6 +838,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_DL_TALL = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 
     if (current_attack_set.fields.N_DL_SHORT){
@@ -806,6 +853,9 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_DL_SHORT = 0;
+        if (current_attack_set.bits == 0)
+            return;    
     }
 }
 
@@ -1311,7 +1361,6 @@ uint32_t generateAllMoves(Board *board, Move* move_list){
     if (check){
         board->in_check = true; 
         if (check == 2){
-    
             generateKingMoves(board, true);
         }
         else{
@@ -1336,17 +1385,16 @@ uint32_t generateAllMoves(Board *board, Move* move_list){
     uint64_t other_pieces_board = board->getOtherPieces(); 
     uint64_t curr_pieces_board = board->getCurrentPieces();
     attack_set* curr_attack_set = board->current_attack_set;
-    int i = 64; 
+    int8_t i = 64; 
     while (i != 0){
         i--;
-        if (!(SHIFT(i) & curr_pieces_board) && (curr_attack_set[i].bits != 0)){
+        if ((curr_attack_set[i].bits != 0) && !(SHIFT(i) & curr_pieces_board) ){
             generateMovesToSquare(board, i, other_pieces_board);
         }
     }
 
     generateAllPawnMoves(board); 
     generateCastleMoves(board);
-
 
     return board->curr_num_moves;
 }

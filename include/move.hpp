@@ -70,11 +70,11 @@ uint32_t generateAllMoves(Board *board, Move* move_list);
 // uint8_t checkStraightCheck(attack_set attack, int target_square, Pieces* other_pieces);
 
 inline bool isSameDiag(uint8_t a, uint8_t b){
-   return (((a / 8) - (b / 8)) == (-1 * ((a % 8) - (b % 8))));
+   return (((a >> 3) - (b >> 3)) == (((b & 0x7) - (a & 0x7))));
 }
 
 inline bool isSameAntiDiag(uint8_t a, uint8_t b){
-    return (((a / 8) - (b / 8)) == ((a % 8) - (b % 8)));
+    return (((a >> 3) - (b >> 3)) == ((a & 0x7) - (b & 0x7)));
 }
 
 inline void addMove(Board* board, int from, int to, uint8_t special, uint8_t capture){
@@ -85,7 +85,6 @@ inline void addMove(Board* board, int from, int to, uint8_t special, uint8_t cap
     mv.special = special; 
     mv.capture = capture;
     board->move_list[board->curr_num_moves] = mv;
-
     board->curr_num_moves++;
 }
 

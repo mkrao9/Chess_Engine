@@ -1452,8 +1452,7 @@ inline void handleBlackPawnUnMove(Board* board, int from, int to, int special, i
     }
     else{
 
-        uint64_t occupied_squares = board->getOccupiedSquares();
-        
+        uint64_t occupied_squares = board->getOccupiedSquares(); 
         switch(special){
             case N_PROMO: 
                 board->other_pieces->knight ^= SHIFT(to);
