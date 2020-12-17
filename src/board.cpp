@@ -87,7 +87,6 @@ Board::Board(const char *fen){
 
     int counter = 63; 
     int index = 0;
-    int len = strlen(fen);
 
     while (counter >= 0){
         char c = fen[index];

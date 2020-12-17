@@ -301,7 +301,7 @@ inline void removeCapturePiece(Board* board, attack_set* attack_set, int square,
 inline void extendRayAttack(Board* board, attack_set* attack_set, int square, uint64_t occupied_squares, uint64_t lat_pieces, uint64_t diags){
     int curr = attack_set[square].fields.LEFT; 
     if (curr != 0){
-        if (SHIFT(square + curr*LEFT_VAL) & lat_pieces){
+        if (SHIFT((square + curr*LEFT_VAL)) & lat_pieces){
             int new_sq = square + RIGHT_VAL; 
             while ((unsigned) new_sq % 8 != 7){
                 attack_set[new_sq].fields.LEFT = curr + 1; 
@@ -1232,7 +1232,7 @@ void makeMove(Board* board, Move move){
     board->white_to_move = !board->white_to_move;
     board->setCurrentState();
 
-    if (SHIFT(move.source) & board->white_pieces.pawn | board->black_pieces.pawn || move.capture){
+    if ((SHIFT(move.source) & (board->white_pieces.pawn | board->black_pieces.pawn)) || move.capture){
         board->move_since = 0; 
     } 
     else{

@@ -72,7 +72,7 @@ uint32_t PerftFourNoUnmake(const char *fen){
     uint32_t num_first_moves = board.curr_num_moves; 
     uint32_t count = 0; 
 
-    for (int i = 0; i < num_first_moves; i++){
+    for (uint32_t i = 0; i < num_first_moves; i++){
         Board new_board = board;
 
         makeMove(&new_board, list[i]);
@@ -81,20 +81,20 @@ uint32_t PerftFourNoUnmake(const char *fen){
         generateAllMoves(&new_board, new_list);
 
  
-        for (int j = 0; j < new_board.curr_num_moves; j++){
+        for (uint32_t j = 0; j < new_board.curr_num_moves; j++){
 
             Board two_board = new_board;
             makeMove(&two_board, new_list[j]);
             Move third_list[256];
             generateAllMoves(&two_board, third_list);  
 
-            for (int k = 0; k < two_board.curr_num_moves; k++){
+            for (uint32_t k = 0; k < two_board.curr_num_moves; k++){
                 Board three_board = two_board;
                 Move last_list[256];
                 makeMove(&three_board, third_list[k]);
                 generateAllMoves(&three_board, last_list);
                 count += three_board.curr_num_moves;
-                for (int l = 0; l < three_board.curr_num_moves; l++){
+                for (uint32_t l = 0; l < three_board.curr_num_moves; l++){
                     Board four_brd = three_board; 
                     makeMove(&four_brd, last_list[l]);
                 }
@@ -151,7 +151,7 @@ uint64_t perft(int depth){
 int main(){
     
     clock_t start = clock(); 
-    uint64_t thing = perft("r4rk1/1pp1qppp/p1np1n2/2b1p1B1/2B1P1b1/P1NP1N2/1PP1QPPP/R4RK1 w - - 0 10", 6);
+    uint64_t thing = perft(5);
     clock_t end = clock(); 
     double time = double(end-start) / double(CLOCKS_PER_SEC);
     std::cout << thing << "\n";

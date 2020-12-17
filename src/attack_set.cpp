@@ -9,7 +9,6 @@ void initializeAttackSet(Board* board){
     Pieces black_pieces = board->black_pieces; 
     uint64_t occupied_squares = board->getOccupiedSquares();
 
-    int count = 0; 
     for (uint8_t i = 0; i < 64; i++){
         uint64_t square = SHIFT(i);
         if (SHIFT(i) & occupied_squares){

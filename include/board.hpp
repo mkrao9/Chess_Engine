@@ -35,7 +35,7 @@ int constexpr N_DL_SHORT = -6;
 
 #define GET_N_HITS(a) ((a >> 24) & 0xFF)
 #define GET_LINE_HITS(a) ((a & 0xFFFFFF))
-#define SHIFT(a) (1LL << a)
+#define SHIFT(a) (1LL << (a))
 
 
 #define K_CASTLE 1

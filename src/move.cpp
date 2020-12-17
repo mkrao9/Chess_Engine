@@ -400,7 +400,7 @@ bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is
     //handle edge case w/ en pessant (both pawns disappear from the same rank w/ the king)
     if (is_ep){
         int diff = board->white_to_move ? -8 : 8; 
-        if (king_square / 8 == ((board->en_pass_square + diff) / 8)){
+        if (king_square / 8 == (uint32_t) ((board->en_pass_square + diff) / 8)){
             int left;
             int right;
             if ((board->en_pass_square + diff) > from_square){
@@ -1285,7 +1285,6 @@ uint8_t checkStraightCheck(attack_set attack, int target_square, Pieces* other_p
     uint64_t line_pieces = other_pieces->bishop | other_pieces->rook | other_pieces->pawn | other_pieces->queen;
     uint8_t count = 0; 
     uint8_t curr = 0; 
-    uint32_t hit;
 
     if (attack.fields.LEFT && (SHIFT(target_square + LEFT_VAL * attack.fields.LEFT) & line_pieces)){
         curr = 0;  
