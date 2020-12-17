@@ -36,8 +36,7 @@ bool isBoardEqual(Board* b1, Board* b2){
         return false;
     if (b1->white_to_move != b2->white_to_move)
         return false;
-    if (b1->turn_number != b2->turn_number)
-        return false;
+
     if (b1->castle_rights.black_k_castle != b2->castle_rights.black_k_castle)
         return false; 
     if (b1->castle_rights.black_q_castle != b2->castle_rights.black_q_castle)

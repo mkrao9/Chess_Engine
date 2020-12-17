@@ -18,7 +18,6 @@ Board::Board(){
     castle_rights.white_q_castle = 1; 
 
     white_to_move = true; 
-    turn_number = 1;
     en_pass_square = 0;
     move_since = 0; 
 
@@ -81,7 +80,6 @@ Board::Board(const char *fen){
 
     en_pass_square = 0; 
     white_to_move = true;
-    turn_number = 0; 
 
 
 
@@ -217,7 +215,6 @@ Board::Board(const char *fen){
         index++;
     }
 
-    turn_number = curr;
 
     for (int i = 0; i < 64; i++){
         full_attack_set.black_attack_set[i].bits = 0; 

@@ -66,7 +66,7 @@ typedef union {
         unsigned int N_DL_SHORT : 1;
     } fields; 
     uint32_t bits;
-} attack_set;
+} AttackSet;
 
 
 struct Pieces {
@@ -86,8 +86,8 @@ struct CastleRights{
 } __attribute__ ((__packed__));
 
 struct FullAttackSet{
-    attack_set white_attack_set[64];
-    attack_set black_attack_set[64];
+    AttackSet white_attack_set[64];
+    AttackSet black_attack_set[64];
 } __attribute__ ((__packed__));
 
 struct Board{
@@ -113,7 +113,7 @@ struct Board{
 
     /* game information */
     bool white_to_move;
-    uint32_t turn_number; 
+
     uint8_t move_since;
 
     bool in_check = false; 
@@ -124,8 +124,8 @@ struct Board{
     Pieces* current_pieces; 
     Pieces* other_pieces; 
     int current_king_square; 
-    attack_set* current_attack_set; 
-    attack_set* other_attack_set; 
+    AttackSet* current_attack_set; 
+    AttackSet* other_attack_set; 
     
     Board();
 
@@ -175,7 +175,6 @@ struct Board{
         white_to_move = b2.white_to_move;
         castle_rights = b2.castle_rights;
         en_pass_square = b2.en_pass_square;
-        turn_number = b2.turn_number;
         setCurrentState();
     }
 } __attribute__ ((__packed__));

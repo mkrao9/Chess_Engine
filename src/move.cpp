@@ -2,6 +2,7 @@
 #include "../include/move.hpp"
 #include <stdlib.h>
 #include <iostream>
+#include <intrin.h>
 
 int code_to_val[8] = {1, 9, 8, 7, -1, -9, -8, -7};
 
@@ -10,10 +11,11 @@ inline void generateKingMoves(Board* board, bool do_capture){
     Pieces* other_pieces = board->other_pieces;
     uint64_t other_pieces_board = board->getOtherPieces();
     uint64_t curr_pieces_board = board->getCurrentPieces();
-    attack_set* attack = board->other_attack_set;
+    AttackSet* attack = board->other_attack_set;
     int king_square = board->current_king_square;
-    attack_set king_attack_set = attack[king_square];
+    AttackSet king_attack_set = attack[king_square];
 
+    
 
     //up 
     if (king_square < 56 && (!king_attack_set.fields.DOWN)){
@@ -176,7 +178,7 @@ inline void generateKingMoves(Board* board, bool do_capture){
     }
 }
 
-inline uint8_t checkStraightCheck(attack_set attack, int target_square, Pieces* other_pieces){
+inline uint8_t checkStraightCheck(AttackSet attack, int target_square, Pieces* other_pieces){
     if (!(GET_LINE_HITS(attack.bits))){
         return 0;
     }
@@ -250,7 +252,6 @@ inline uint8_t checkStraightCheck(attack_set attack, int target_square, Pieces* 
     return count | (curr << 4);
 }
 
-
 inline uint8_t inCheck(Board* board){
 
     int king_square = board->current_king_square;
@@ -261,7 +262,7 @@ inline uint8_t inCheck(Board* board){
     else{
         Pieces* other_pieces = board->other_pieces;
 
-        attack_set attack = board->other_attack_set[king_square];
+        AttackSet attack = board->other_attack_set[king_square];
         int target_square = king_square;
         if (GET_N_HITS(attack.bits)){
             if (GET_LINE_HITS(attack.bits)){
@@ -276,9 +277,9 @@ inline uint8_t inCheck(Board* board){
     }
 }
 
-inline bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is_ep){
+inline  bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is_ep) {
     uint32_t king_square = board->current_king_square;
-    attack_set* opp_attack_set = board->other_attack_set;
+    AttackSet* opp_attack_set = board->other_attack_set;
     Pieces* other_pieces = board->other_pieces;
     uint64_t occupied_squares = board->getOccupiedSquares();
 
@@ -359,6 +360,7 @@ inline bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, 
             }
             return false;
         }
+        return false;
     }
 
     //same row 
@@ -392,7 +394,7 @@ inline bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, 
             }
             return false;
         }
-
+        return false;
     }
 
     if (isSameDiag(from_square, king_square)){
@@ -426,6 +428,7 @@ inline bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, 
             }
             return false;
         }
+        return false;
     }
 
     if (isSameAntiDiag(from_square, king_square)){
@@ -458,6 +461,7 @@ inline bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, 
             }
             return false;
         }
+        return false;
     }
 
     return false;
@@ -522,7 +526,7 @@ inline void generatePawnBlocks(Board* board, int current_square, uint64_t occupi
 
 inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pieces_board){
 
-    attack_set current_attack_set = board->current_attack_set[to_square];
+    AttackSet current_attack_set = board->current_attack_set[to_square];
     Pieces* other_pieces = board->other_pieces;
     if (current_attack_set.fields.LEFT){
         int from_square = to_square + current_attack_set.fields.LEFT * LEFT_VAL; 
@@ -859,11 +863,10 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
     }
 }
 
-
 inline void generateCastleMoves(Board* board){
     if (board->white_to_move){
         if (board->castle_rights.white_k_castle){
-            attack_set* attack = board->other_attack_set;
+            AttackSet* attack = board->other_attack_set;
             uint64_t occupied_squares = board->getOccupiedSquares(); 
             if (!(occupied_squares & 0x6)){
                 if (!attack[1].bits && !attack[2].bits){
@@ -872,7 +875,7 @@ inline void generateCastleMoves(Board* board){
             }   
         }
         if (board->castle_rights.white_q_castle){
-            attack_set* attack = board->other_attack_set;
+            AttackSet* attack = board->other_attack_set;
             uint64_t occupied_squares = board->getOccupiedSquares(); 
             if (!(occupied_squares & 0x70)){
                 if (!attack[4].bits && !attack[5].bits){
@@ -884,7 +887,7 @@ inline void generateCastleMoves(Board* board){
     }
     else{
         if (board->castle_rights.black_k_castle){
-            attack_set* attack = board->other_attack_set;
+            AttackSet* attack = board->other_attack_set;
             uint64_t occupied_squares = board->getOccupiedSquares(); 
             if (!(occupied_squares & 0x600000000000000)){
                 if (!attack[57].bits && !attack[58].bits){
@@ -893,7 +896,7 @@ inline void generateCastleMoves(Board* board){
             }
         }
         if (board->castle_rights.black_q_castle){
-            attack_set* attack = board->other_attack_set;
+            AttackSet* attack = board->other_attack_set;
             uint64_t occupied_squares = board->getOccupiedSquares(); 
             if (!(occupied_squares & 0x7000000000000000)){
                 if (!attack[60].bits && !attack[61].bits){
@@ -904,7 +907,7 @@ inline void generateCastleMoves(Board* board){
     }
 }
 
-inline void generateWhitePawnMoves(Board *board, int from_square, uint64_t occupied_squares){
+inline  void generateWhitePawnMoves(Board *board, int from_square, uint64_t occupied_squares){
     if (SHIFT(from_square + 8) & occupied_squares){
         return;
     }
@@ -950,32 +953,29 @@ inline void generateBlackPawnMoves(Board *board, int from_square, uint64_t occup
     }
 }
 
-inline void generateAllPawnMoves(Board *board){
+inline  void generateAllPawnMoves(Board *board){
     uint64_t occupied_squares = board->getOccupiedSquares();
     uint64_t pawn_mask = board->current_pieces->pawn;
+    unsigned long index;
     if (board->white_to_move){
-        for (int i = 8; i < 56 && (pawn_mask); i++){
-            uint64_t shifted = SHIFT(i);
-            if (shifted & pawn_mask){
-                generateWhitePawnMoves(board, i, occupied_squares);
-                pawn_mask ^= shifted;
-            }
-        }   
+        while (pawn_mask){
+            _BitScanForward64(&index, pawn_mask);
+            generateWhitePawnMoves(board, index, occupied_squares);
+            pawn_mask ^= SHIFT(index);
+        }
     }
     else{
-        for (int i = 8; i < 56 && (pawn_mask); i++){
-            uint64_t shifted = SHIFT(i);
-            if (shifted & pawn_mask){
-                generateBlackPawnMoves(board, i, occupied_squares);
-                pawn_mask ^= shifted;
-            }
-        }   
+        while (pawn_mask){
+            _BitScanForward64(&index, pawn_mask);
+            generateBlackPawnMoves(board, index, occupied_squares);
+            pawn_mask ^= SHIFT(index);
+        }
     }
 }
 
 inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other_pieces_board){
 
-    attack_set current_attack_set = board->current_attack_set[to_square];
+    AttackSet current_attack_set = board->current_attack_set[to_square];
     Pieces* other_pieces = board->other_pieces;
     if (current_attack_set.fields.LEFT){
         int from_square = to_square + current_attack_set.fields.LEFT * LEFT_VAL; 
@@ -987,6 +987,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.LEFT = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.UP){
@@ -999,6 +1002,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.UP = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.RIGHT){
@@ -1011,6 +1017,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.RIGHT = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.DOWN){
@@ -1023,6 +1032,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.DOWN = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
 
@@ -1059,6 +1071,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
                 addMove(board, from_square, to_square, 0, code);
             }
         } 
+        current_attack_set.fields.UP_LEFT = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.UP_RIGHT){
@@ -1094,6 +1109,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
                 addMove(board, from_square, to_square, 0, code);
             }
         }
+        current_attack_set.fields.UP_RIGHT = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.DOWN_RIGHT){
@@ -1129,6 +1147,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
                 addMove(board, from_square, to_square, 0, code);
             }
         }  
+        current_attack_set.fields.DOWN_RIGHT = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.DOWN_LEFT){
@@ -1164,6 +1185,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
                 addMove(board, from_square, to_square, 0, code);
             }
         }
+        current_attack_set.fields.DOWN_LEFT = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.N_UL_SHORT){
@@ -1176,6 +1200,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_UL_SHORT = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.N_UL_TALL){
@@ -1188,6 +1215,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_UL_TALL = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.N_UR_TALL){
@@ -1200,6 +1230,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_UR_TALL = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
     if (current_attack_set.fields.N_UR_SHORT){
         int from_square = to_square + N_UR_SHORT; 
@@ -1211,6 +1244,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_UR_SHORT = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.N_DR_SHORT){
@@ -1223,6 +1259,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_DR_SHORT = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.N_DR_TALL){
@@ -1235,6 +1274,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_DR_TALL = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.N_DL_TALL){
@@ -1247,6 +1289,9 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_DL_TALL = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 
     if (current_attack_set.fields.N_DL_SHORT){
@@ -1259,12 +1304,15 @@ inline void generateMovesToSquareOld(Board *board, int to_square, uint64_t other
             }
             addMove(board, from_square, to_square, 0, code);
         }
+        current_attack_set.fields.N_DL_SHORT = 0; 
+        if (!current_attack_set.bits)
+            return;
     }
 }
 
 inline void generateBlockMoves(Board* board, uint8_t code){
 
-    attack_set* curr_attack_set = board->current_attack_set;
+    AttackSet* curr_attack_set = board->current_attack_set;
     int king_square = board->current_king_square;
     uint64_t other_pieces = board->getOtherPieces();
     uint64_t curr_pawns = board->current_pieces->pawn;
@@ -1310,9 +1358,8 @@ inline void generateBlockMoves(Board* board, uint8_t code){
     }
 }
 
-
 inline void generateTakeKnight(Board* board){
-    attack_set king = board->other_attack_set[board->current_king_square];
+    AttackSet king = board->other_attack_set[board->current_king_square];
     if (king.fields.N_DL_SHORT){
         generateMovesToSquare(board, board->current_king_square + N_DL_SHORT, board->getOtherPieces());
         return;
@@ -1384,7 +1431,7 @@ uint32_t generateAllMoves(Board *board, Move* move_list){
 
     uint64_t other_pieces_board = board->getOtherPieces(); 
     uint64_t curr_pieces_board = board->getCurrentPieces();
-    attack_set* curr_attack_set = board->current_attack_set;
+    AttackSet* curr_attack_set = board->current_attack_set;
     int8_t i = 64; 
     while (i != 0){
         i--;

@@ -13,7 +13,7 @@ TEST(BoardTests, board_default){
     checkNoOverlap(board);
     ASSERT_EQ(board->en_pass_square, 0);
     ASSERT_EQ(board->white_to_move, true);
-    ASSERT_EQ(board->turn_number, 1);
+ 
     ASSERT_EQ(board->white_pieces.pawn, (0xff << 8));
     ASSERT_EQ(board->getBlackPieces(), 0xFFFF000000000000) << hex << board->getBlackPieces(); 
     ASSERT_EQ(board->getWhitePieces(), 0xFFFF) << hex << board->getWhitePieces();
@@ -26,7 +26,6 @@ TEST(BoardTests, fen_test_default){
 
     ASSERT_EQ(board->en_pass_square, 0);
     ASSERT_EQ(board->white_to_move, true);
-    ASSERT_EQ(board->turn_number, 1);
     ASSERT_EQ(board->move_since, 0);
     ASSERT_EQ(board->castle_rights.black_k_castle, 1);
     ASSERT_EQ(board->castle_rights.black_q_castle, 1);
@@ -51,7 +50,7 @@ TEST(BoardTests, fen_test_1e4){
 
     ASSERT_EQ(board->en_pass_square, 19);
     ASSERT_EQ(board->white_to_move, false);
-    ASSERT_EQ(board->turn_number, 1);
+
     ASSERT_EQ(board->move_since, 0);
     ASSERT_EQ(board->castle_rights.black_k_castle, 1);
     ASSERT_EQ(board->castle_rights.black_q_castle, 1);
@@ -76,7 +75,6 @@ TEST(BoardTests, fen_test_1e4_c5){
 
     ASSERT_EQ(board->en_pass_square, 45);
     ASSERT_EQ(board->white_to_move, true);
-    ASSERT_EQ(board->turn_number, 2);
     ASSERT_EQ(board->move_since, 0);
     ASSERT_EQ(board->castle_rights.black_k_castle, 1);
     ASSERT_EQ(board->castle_rights.black_q_castle, 1);
@@ -101,7 +99,7 @@ TEST(BoardTests, fen_test_1e4_c5_2nf3){
 
     ASSERT_EQ(board->en_pass_square, 0);
     ASSERT_EQ(board->white_to_move, false);
-    ASSERT_EQ(board->turn_number, 2);
+
     ASSERT_EQ(board->move_since, 1);
     ASSERT_EQ(board->castle_rights.black_k_castle, 1);
     ASSERT_EQ(board->castle_rights.black_q_castle, 1);
@@ -127,7 +125,6 @@ TEST(BoardTests, fen_test_random_board){
     ASSERT_EQ(board->castle_rights.white_q_castle, 0);
     ASSERT_EQ(board->en_pass_square, 0);
     ASSERT_EQ(board->white_to_move, false);
-    ASSERT_EQ(board->turn_number, 74);
     ASSERT_EQ(board->move_since, 17);
     ASSERT_EQ(board->white_pieces.pawn, SHIFT(10) | SHIFT(21) | SHIFT(28) | SHIFT(31) | SHIFT(35));
     ASSERT_EQ(board->white_pieces.knight, 0);

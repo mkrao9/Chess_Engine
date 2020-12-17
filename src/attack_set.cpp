@@ -78,7 +78,7 @@ void initializeAttackSet(Board* board){
 
 
 
-void setDiags(attack_set* attack_set, uint8_t square, uint64_t occupied_squares){
+void setDiags(AttackSet* attack_set, uint8_t square, uint64_t occupied_squares){
 
     uint32_t ind = 0; 
     int square_num = square;
@@ -130,7 +130,7 @@ void setDiags(attack_set* attack_set, uint8_t square, uint64_t occupied_squares)
     }
 }
 
-void setLat(attack_set *attack_set, uint8_t square, uint64_t occupied_squares){
+void setLat(AttackSet *attack_set, uint8_t square, uint64_t occupied_squares){
     uint32_t ind = 0; 
     int square_num = square;
 
@@ -181,20 +181,20 @@ void setLat(attack_set *attack_set, uint8_t square, uint64_t occupied_squares){
     }
 }
 
-void setQueen(attack_set *attack_set, uint8_t square, uint64_t occupied_squares){
+void setQueen(AttackSet *attack_set, uint8_t square, uint64_t occupied_squares){
     setDiags(attack_set, square, occupied_squares);
     setLat(attack_set, square, occupied_squares);
 }
 
-void setBishop(attack_set *attack_set, uint8_t square, uint64_t occupied_squares){
+void setBishop(AttackSet *attack_set, uint8_t square, uint64_t occupied_squares){
     setDiags(attack_set, square, occupied_squares);
 }
 
-void setRook(attack_set *attack_set, uint8_t square, uint64_t occupied_squares){
+void setRook(AttackSet *attack_set, uint8_t square, uint64_t occupied_squares){
     setLat(attack_set, square, occupied_squares);
 }
 
-void setKing(attack_set *attack_set, uint8_t square, uint64_t occupied_squares){
+void setKing(AttackSet *attack_set, uint8_t square, uint64_t occupied_squares){
 
     int square_num = square; 
 
@@ -240,7 +240,7 @@ void setKing(attack_set *attack_set, uint8_t square, uint64_t occupied_squares){
 
 }
 
-void setKnight(attack_set *attack_set, uint8_t square, uint64_t occupied_sqares){
+void setKnight(AttackSet *attack_set, uint8_t square, uint64_t occupied_sqares){
     int square_num = square; 
 
     //ul short 
@@ -284,7 +284,7 @@ void setKnight(attack_set *attack_set, uint8_t square, uint64_t occupied_sqares)
     }
 }
 
-void setWhitePawn(attack_set *attack_set, uint8_t square, uint64_t occupied_sqares){
+void setWhitePawn(AttackSet *attack_set, uint8_t square, uint64_t occupied_sqares){
     int square_num = square; 
     
     if (square_num % 8 != 7){
@@ -296,7 +296,7 @@ void setWhitePawn(attack_set *attack_set, uint8_t square, uint64_t occupied_sqar
     }
 }
 
-void setBlackPawn(attack_set *attack_set, uint8_t square, uint64_t occupied_sqares){
+void setBlackPawn(AttackSet *attack_set, uint8_t square, uint64_t occupied_sqares){
 
     int square_num = square; 
     
@@ -309,7 +309,7 @@ void setBlackPawn(attack_set *attack_set, uint8_t square, uint64_t occupied_sqar
     }
 }
 
-void printAttackSet(attack_set *attack_set){
+void printAttackSet(AttackSet *attack_set){
     for (int i = 48; i < 64; i++){
         if (attack_set[i].bits != 0){
             std::cout << "\n"; 

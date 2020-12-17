@@ -2,7 +2,7 @@
 #include "../include/board.hpp"
 
 
-inline void removeKing(attack_set* attack_set, int square){
+inline void removeKing(AttackSet* attack_set, int square){
     //up 
     if (square < 56){
         attack_set[square + UP_VAL].fields.DOWN = 0; 
@@ -43,7 +43,7 @@ inline void removeKing(attack_set* attack_set, int square){
         attack_set[square + DOWN_RIGHT_VAL].fields.UP_LEFT = 0;
     }
 }
-inline void removePawn(Board* board, attack_set* attack_set, int square, bool is_white){
+inline void removePawn(Board* board, AttackSet* attack_set, int square, bool is_white){
     if (is_white){
         attack_set[square + UP_LEFT_VAL].fields.DOWN_RIGHT = 0; 
         attack_set[square + UP_RIGHT_VAL].fields.DOWN_LEFT = 0; 
@@ -53,7 +53,7 @@ inline void removePawn(Board* board, attack_set* attack_set, int square, bool is
         attack_set[square + DOWN_RIGHT_VAL].fields.UP_LEFT = 0; 
     }
 }
-inline void removeRook(Board* board, attack_set* attack_set, int from, uint64_t occupied_squares){
+inline void removeRook(Board* board, AttackSet* attack_set, int from, uint64_t occupied_squares){
     int curr = from + LEFT_VAL;
     while (curr % 8 != 0){
         attack_set[curr].fields.RIGHT = 0; 
@@ -92,7 +92,7 @@ inline void removeRook(Board* board, attack_set* attack_set, int from, uint64_t 
     }
 
 }
-inline void removeBishop(Board* board, attack_set* attack_set, int square, uint64_t occupied_squares){
+inline void removeBishop(Board* board, AttackSet* attack_set, int square, uint64_t occupied_squares){
     //go each direction until you hit smth 
 
    //go each direction until you hit smth 
@@ -137,7 +137,7 @@ inline void removeBishop(Board* board, attack_set* attack_set, int square, uint6
 
 }
 /* can change this to avoid shifting and just seeing if the value increases like i did for block */
-inline void removeQueen(Board* board, attack_set* attack_set, int from, uint64_t occupied_squares){
+inline void removeQueen(Board* board, AttackSet* attack_set, int from, uint64_t occupied_squares){
     int curr = from + LEFT_VAL;
     while (curr % 8 != 0){
         attack_set[curr].fields.RIGHT = 0; 
@@ -210,7 +210,7 @@ inline void removeQueen(Board* board, attack_set* attack_set, int from, uint64_t
         curr += DOWN_LEFT_VAL;
     }
 }
-inline void removeKnight(attack_set* attack_set, int from){
+inline void removeKnight(AttackSet* attack_set, int from){
 
     //ul short 
     if (from % 8 < 6 && from < 56){
@@ -253,19 +253,21 @@ inline void removeKnight(attack_set* attack_set, int from){
     }
 }
 
-inline void removeCapturePiece(Board* board, attack_set* attack_set, int square, int code, uint64_t ouccpied_squares){
+inline void removeCapturePiece(Board* board, AttackSet* attack_set, int square, int code, uint64_t ouccpied_squares){
+    board->move_since = 0;
+    Pieces* other = board->other_pieces;
     switch(code){
         case 1:    
             removePawn(board, attack_set, square, !board->white_to_move);
-            board->other_pieces->pawn ^= SHIFT(square);
+            other->pawn ^= SHIFT(square);
             return;
         case 2: 
             removeKnight(attack_set, square);
-            board->other_pieces->knight ^= SHIFT(square);
+            other->knight ^= SHIFT(square);
             return; 
         case 3: 
             removeBishop(board, attack_set, square, ouccpied_squares);
-            board->other_pieces->bishop ^= SHIFT(square);
+            other->bishop ^= SHIFT(square);
             return;
         case 4: 
             if (square == 0){
@@ -287,19 +289,21 @@ inline void removeCapturePiece(Board* board, attack_set* attack_set, int square,
                 }
             }
             removeRook(board, attack_set, square, ouccpied_squares); 
-            board->other_pieces->rook ^= SHIFT(square);
+            other->rook ^= SHIFT(square);
             return; 
         case 5: 
             removeQueen(board, attack_set, square, ouccpied_squares);
-            board->other_pieces->queen ^= SHIFT(square);
+            other->queen ^= SHIFT(square);
             return;
         default: 
             return;
     }
 }
 
-inline void extendRayAttack(Board* board, attack_set* attack_set, int square, uint64_t occupied_squares, uint64_t lat_pieces, uint64_t diags){
-    int curr = attack_set[square].fields.LEFT; 
+inline void extendRayAttack(Board* board, AttackSet* attack_set, int square, uint64_t occupied_squares, uint64_t lat_pieces, uint64_t diags){
+    AttackSet attack = attack_set[square];
+    
+    int curr = attack.fields.LEFT; 
     if (curr != 0){
         if (SHIFT((square + curr*LEFT_VAL)) & lat_pieces){
             int new_sq = square + RIGHT_VAL; 
@@ -312,9 +316,12 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
                 curr++;
             }
         }
+        attack.fields.LEFT = 0; 
+        if (!attack.bits)
+            return;
     }
 
-    curr = attack_set[square].fields.UP_LEFT; 
+    curr = attack.fields.UP_LEFT; 
     if (curr != 0){
         if (SHIFT(square + curr*UP_LEFT_VAL) & diags){
             int new_sq = square + DOWN_RIGHT_VAL; 
@@ -327,9 +334,12 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
                 curr++;
             }
         }
+        attack.fields.UP_LEFT = 0; 
+        if (!attack.bits)
+            return;
     }
 
-    curr = attack_set[square].fields.UP; 
+    curr = attack.fields.UP; 
     if (curr != 0){
         if (SHIFT(square + curr*UP_VAL) & lat_pieces){
             int new_sq = square + DOWN_VAL; 
@@ -342,9 +352,12 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
                 curr++;
             }
         }
+        attack.fields.UP = 0; 
+        if (!attack.bits)
+            return;
     }
 
-    curr = attack_set[square].fields.UP_RIGHT; 
+    curr = attack.fields.UP_RIGHT; 
     if (curr != 0){
         if (SHIFT(square + curr*UP_RIGHT_VAL) & diags){
             int new_sq = square + DOWN_LEFT_VAL; 
@@ -357,9 +370,12 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
                 curr++;
             }
         }
+        attack.fields.UP_RIGHT = 0; 
+        if (!attack.bits)
+            return;
     }
 
-    curr = attack_set[square].fields.RIGHT; 
+    curr = attack.fields.RIGHT; 
     if (curr != 0){
         if (SHIFT(square + curr*RIGHT_VAL) & lat_pieces){
             int new_sq = square + LEFT_VAL; 
@@ -372,9 +388,12 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
                 curr++;
             }
         }
+        attack.fields.RIGHT = 0; 
+        if (!attack.bits)
+            return;
     }
 
-    curr = attack_set[square].fields.DOWN_RIGHT; 
+    curr = attack.fields.DOWN_RIGHT; 
     if (curr != 0){
         if (SHIFT(square + curr*DOWN_RIGHT_VAL) & diags){
             int new_sq = square + UP_LEFT_VAL; 
@@ -387,9 +406,12 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
                 curr++;
             }
         }
+        attack.fields.DOWN_RIGHT = 0; 
+        if (!attack.bits)
+            return;
     }
 
-    curr = attack_set[square].fields.DOWN; 
+    curr = attack.fields.DOWN; 
     if (curr != 0){
         if (SHIFT(square + curr*DOWN_VAL) & lat_pieces){
             int new_sq = square + UP_VAL; 
@@ -402,9 +424,12 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
                 curr++;
             }
         }
+        attack.fields.DOWN = 0; 
+        if (!attack.bits)
+            return;
     }
 
-   curr = attack_set[square].fields.DOWN_LEFT; 
+    curr = attack.fields.DOWN_LEFT; 
     if (curr != 0){
         if (SHIFT(square + curr*DOWN_LEFT_VAL) & diags){
             int new_sq = square + UP_RIGHT_VAL; 
@@ -418,11 +443,11 @@ inline void extendRayAttack(Board* board, attack_set* attack_set, int square, ui
             }
         }
     }
-
 }
-inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
+
+inline void blockRayAttacks(Board* board, AttackSet* attack_set, int square){
     int curr; 
-    
+    AttackSet attack = attack_set[square];
     int old = attack_set[square].fields.LEFT;
     if(old != 0){
         curr = square + RIGHT_VAL; 
@@ -431,6 +456,9 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
             attack_set[curr].fields.LEFT = 0; 
             curr += RIGHT_VAL;
         }
+        attack.fields.LEFT = 0; 
+        if (!attack.bits)
+            return;
     }
 
     old = attack_set[square].fields.UP_LEFT;
@@ -441,6 +469,9 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
             attack_set[curr].fields.UP_LEFT = 0; 
             curr += DOWN_RIGHT_VAL;
         }
+        attack.fields.UP_LEFT = 0; 
+        if (!attack.bits)
+            return;
     }
  
   
@@ -452,6 +483,9 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
             attack_set[curr].fields.UP = 0; 
             curr += DOWN_VAL;
         }
+        attack.fields.UP = 0; 
+        if (!attack.bits)
+            return;
     }
  
     old = attack_set[square].fields.UP_RIGHT;
@@ -462,6 +496,9 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
             attack_set[curr].fields.UP_RIGHT = 0; 
             curr += DOWN_LEFT_VAL;
         }
+        attack.fields.UP_RIGHT = 0; 
+        if (!attack.bits)
+            return;
     }
 
     old = attack_set[square].fields.RIGHT;
@@ -472,6 +509,9 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
             attack_set[curr].fields.RIGHT = 0; 
             curr += LEFT_VAL;
         }
+        attack.fields.RIGHT = 0; 
+        if (!attack.bits)
+            return;
     }
 
     old = attack_set[square].fields.DOWN_RIGHT;
@@ -482,6 +522,9 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
             attack_set[curr].fields.DOWN_RIGHT = 0; 
             curr += UP_LEFT_VAL;
         }
+        attack.fields.DOWN_RIGHT = 0; 
+        if (!attack.bits)
+            return;
     }
 
     old = attack_set[square].fields.DOWN;
@@ -492,6 +535,9 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
             attack_set[curr].fields.DOWN = 0; 
             curr += UP_VAL;
         }
+        attack.fields.DOWN = 0; 
+        if (!attack.bits)
+            return;
     }
  
     old = attack_set[square].fields.DOWN_LEFT;
@@ -502,12 +548,15 @@ inline void blockRayAttacks(Board* board, attack_set* attack_set, int square){
             attack_set[curr].fields.DOWN_LEFT = 0; 
             curr += UP_RIGHT_VAL;
         }
+        attack.fields.DOWN_LEFT = 0; 
+        if (!attack.bits)
+            return;
     }
 }
 
 
 
-inline void addDiags(attack_set* attack_set, int square, uint64_t occupied_squares){
+inline void addDiags(AttackSet* attack_set, int square, uint64_t occupied_squares){
     uint32_t ind = 0; 
     int square_num = square;
 
@@ -557,7 +606,7 @@ inline void addDiags(attack_set* attack_set, int square, uint64_t occupied_squar
         }
     }
 }
-inline void addLat(attack_set* attack_set, int square, uint64_t occupied_squares){
+inline void addLat(AttackSet* attack_set, int square, uint64_t occupied_squares){
     uint32_t ind = 0; 
     int square_num = square;
 
@@ -608,7 +657,7 @@ inline void addLat(attack_set* attack_set, int square, uint64_t occupied_squares
     }
 }
 
-inline void addKing(attack_set* attack_set, int square){
+inline void addKing(AttackSet* attack_set, int square){
     //up 
     if (square < 56){
         attack_set[square + UP_VAL].fields.DOWN = 1; 
@@ -650,7 +699,7 @@ inline void addKing(attack_set* attack_set, int square){
     }
 }
 
-inline void addKnight(attack_set* attack_set, int square){
+inline void addKnight(AttackSet* attack_set, int square){
 
     //ul short 
     if ((unsigned) square % 8 < 6 && square < 56){
@@ -692,7 +741,7 @@ inline void addKnight(attack_set* attack_set, int square){
         attack_set[square + N_DL_SHORT].fields.N_UR_SHORT = 1;
     }
 }
-inline void addWhitePawn(attack_set* attack_set, int square){
+inline void addWhitePawn(AttackSet* attack_set, int square){
     if (square % 8 != 7){
         attack_set[square + UP_LEFT_VAL].fields.DOWN_RIGHT = 1;
     }
@@ -701,7 +750,7 @@ inline void addWhitePawn(attack_set* attack_set, int square){
         attack_set[square + UP_RIGHT_VAL].fields.DOWN_LEFT = 1;
     }
 }
-inline void addBlackPawn(attack_set* attack_set, int square){
+inline void addBlackPawn(AttackSet* attack_set, int square){
     if (square % 8 != 7){
         attack_set[square + DOWN_LEFT_VAL].fields.UP_RIGHT = 1;
     }
@@ -712,25 +761,29 @@ inline void addBlackPawn(attack_set* attack_set, int square){
 }
 
 
-inline void addQueen(attack_set* curr_attack_set, int square, uint64_t occupied_squares){
+inline void addQueen(AttackSet* curr_attack_set, int square, uint64_t occupied_squares){
     addDiags(curr_attack_set, square, occupied_squares);
     addLat(curr_attack_set, square, occupied_squares);
 }
 
 inline void blockRays(Board* board, int square){
-    blockRayAttacks(board, board->current_attack_set, square);
-    blockRayAttacks(board, board->other_attack_set, square);
+    if (board->current_attack_set[square].bits)
+        blockRayAttacks(board, board->current_attack_set, square);
+    if (board->other_attack_set[square].bits)
+        blockRayAttacks(board, board->other_attack_set, square);
 }
 inline void extendRays(Board* board, int square, uint64_t occupied_squares){
     uint64_t queens = board->white_pieces.queen | board->black_pieces.queen;
     uint64_t lat_pieces = board->white_pieces.rook | board->black_pieces.rook | queens; 
     uint64_t diags = board->white_pieces.bishop | board->black_pieces.bishop | queens;
-    extendRayAttack(board, board->current_attack_set, square, occupied_squares, lat_pieces, diags);
-    extendRayAttack(board, board->other_attack_set, square, occupied_squares, lat_pieces, diags);    
+    if (board->current_attack_set[square].bits)
+        extendRayAttack(board, board->current_attack_set, square, occupied_squares, lat_pieces, diags);
+    if (board->other_attack_set[square].bits)
+        extendRayAttack(board, board->other_attack_set, square, occupied_squares, lat_pieces, diags);    
 }
 
 
-inline void addCapturePiece(Board* board, attack_set* attack_set, int square, int code, uint64_t ouccpied_squares){
+inline void addCapturePiece(Board* board, AttackSet* attack_set, int square, int code, uint64_t ouccpied_squares){
     switch(code){
         case 1:
             if (board->white_to_move){
@@ -761,8 +814,6 @@ inline void addCapturePiece(Board* board, attack_set* attack_set, int square, in
             return;
     }
 }
-
-
 
 inline void handleKCastle(Board* board, bool is_white){
     if (is_white){
@@ -1197,10 +1248,18 @@ void makeMove(Board* board, Move move){
     int special = move.special; 
     int capture = move.capture;
     uint64_t shifted = SHIFT(from);
-    if (shifted & board->current_pieces->queen){
-        handleQueenMove(board, from, to, capture);
+    if (shifted & board->current_pieces->pawn){
+        if (board->white_to_move){
+            board->move_since = 0; 
+            handleWhitePawnMoves(board, from, to, special, capture);
+        }
+        else{
+            handleBlackPawnMoves(board, from, to, special, capture);
+        }
     }
-    else{
+    else{   
+        board->curr_num_moves++; 
+        
         if (shifted & board->current_pieces->bishop){
             handleBishopMove(board, from, to, capture);
         }
@@ -1217,12 +1276,7 @@ void makeMove(Board* board, Move move){
                         handleRookMoves(board, from, to, capture);
                     }
                     else{
-                        if (board->white_to_move){
-                            handleWhitePawnMoves(board, from, to, special, capture);
-                        }
-                        else{
-                            handleBlackPawnMoves(board, from, to, special, capture);
-                        }
+                        handleQueenMove(board, from, to, capture);
                     }
                 }
             }
@@ -1231,15 +1285,6 @@ void makeMove(Board* board, Move move){
 
     board->white_to_move = !board->white_to_move;
     board->setCurrentState();
-
-    if ((SHIFT(move.source) & (board->white_pieces.pawn | board->black_pieces.pawn)) || move.capture){
-        board->move_since = 0; 
-    } 
-    else{
-        board->move_since++;
-    }
-    
-    if (board->white_to_move) board->turn_number++;
 }
 
 
@@ -1580,10 +1625,4 @@ void unmakeMove(Board* board, Move move){
     board->white_to_move = !board->white_to_move;
     board->setCurrentState();
 
-    /* After turn has already been flipped */
-    if (board->white_to_move) {
-    }
-    else{
-        board->turn_number--;
-    }
 }
