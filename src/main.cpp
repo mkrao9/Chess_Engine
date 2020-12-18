@@ -143,7 +143,7 @@ bool getColor(){
             return false;
             cout << "You've selected white" << endl;
         }
-        if (input.compare("w") == 0 || input.compare("W") == 0 || input.compare("white") == 0 || input.compare("WHITE") == 0 || input.compare("White") == 0){
+        if (input.compare("b") == 0 || input.compare("B") == 0 || input.compare("black") == 0 || input.compare("BLACK") == 0 || input.compare("Black") == 0){
             return true; 
             cout << "You've selected black" << endl;
         }
