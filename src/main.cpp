@@ -132,11 +132,52 @@ int handleInputMove(Board* b, Move* ml, int num_moves){
     }
 }
 
+//returns whether or not the computer is white
+bool getColor(){
+    bool is_valid = false; 
+    while (!is_valid){
+        string input; 
+        cout << "Which side do you want? Enter w for white and b for black" << endl;
+        cin >> input;
+        if (input.compare("w") == 0 || input.compare("W") == 0 || input.compare("white") == 0 || input.compare("WHITE") == 0 || input.compare("White") == 0){
+            return false;
+            cout << "You've selected white" << endl;
+        }
+        if (input.compare("w") == 0 || input.compare("W") == 0 || input.compare("white") == 0 || input.compare("WHITE") == 0 || input.compare("White") == 0){
+            return true; 
+            cout << "You've selected black" << endl;
+        }
+        cout << "Not a valid side selection, try again" << endl;
+    }
+    
+    return false;
+}
+
+Move getComputerMove(Board* b, Move* ml, int num_moves){
+    int num = rand() % num_moves;
+    return (ml[num]);
+}
+
+string moveToUCI(Move move){
+    string out = "";
+    int fromCol = move.source % 8; 
+    int fromRow = move.source / 8; 
+    int toCol = move.dest % 8; 
+    int toRow = move.dest / 8; 
+    out += ((char) (7 - fromCol) + 'a');
+    out += ((char) fromRow + '1');
+    out += ((char) (7 - toCol) + 'a'); 
+    out += ((char) toRow + '1');
+    return out;
+}
+
 int main(){
 
     Move ml[256];    
     Board* b = new Board(); 
     bool is_game = true; 
+    srand(time(0));
+    bool is_comp_white = getColor();
     while (is_game){
         int num_moves = generateAllMoves(b, ml);
         if (num_moves == 0){
@@ -150,13 +191,21 @@ int main(){
             is_game = false; 
             break;
         }
-        cout << "Enter Move" << endl;
-        int index = -1;             
-        while (index == -1){
-            index = handleInputMove(b, ml, num_moves);
-        }
 
-        makeMove(b, ml[index]); 
+        if (b->white_to_move == is_comp_white){
+            cout << "The computer is moving "; 
+            Move mv = getComputerMove(b, ml, num_moves);
+            makeMove(b, mv); 
+            cout << moveToUCI(mv) << endl;
+        }
+        else{
+            cout << "Enter Move" << endl;
+            int index = -1;             
+            while (index == -1){
+                index = handleInputMove(b, ml, num_moves);
+            }
+            makeMove(b, ml[index]); 
+        }
     }
 
 
