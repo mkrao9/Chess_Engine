@@ -4,7 +4,7 @@
 #include "../include/move.hpp"
 #include <stdlib.h>
 
-void printSqr(uint8_t square){
+void printSqr(int square){
     char rank = square / 8 + '1'; 
     char file = (7 - square % 8) + 'a';
     std::cout << file; 
@@ -48,7 +48,7 @@ uint32_t PerftTwoNoUnmake(const char *fen){
 
 
 
-uint8_t toInd(const char *str){
+int toInd(const char *str){
     int col = 7 - (str[0] - 'a');
     int row = str[1] - '1';
     return 8*row + col;

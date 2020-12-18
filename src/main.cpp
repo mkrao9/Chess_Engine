@@ -7,6 +7,7 @@
 #include <string>
 #include <time.h>
 
+using namespace std;
 
 void printBoard(Board *b);
 
@@ -47,21 +48,120 @@ uint64_t perft(int depth){
     return perft(b, depth);
 }
 
+
+int searchBoard(Board* board, Move* ml, int num_moves, int from, int to, int promo){
+    for (int i = 0; i < num_moves; i++){
+        if ((ml[i].source == from && ml[i].dest == to) && (!promo || ml[i].special == promo)){
+            return i;
+        }
+    }
+    return -1;
+}
+
+int getSquare(string input){
+    if (isalpha(input[0]) && isdigit(input[1])){
+        int col = 7 - (input[0] - 'a');
+        int row = input[1] - '1';
+        if (col < 0 || row < 0 || row > 7)
+            return - 1;
+        return 8*row + col;
+    }
+    return -1;
+}
+
+
+bool isInCheck(Board* board){
+    if (board->other_attack_set[board->current_king_square].bits)
+        return true; 
+    return false;
+}
+
+int handleInputMove(Board* b, Move* ml, int num_moves){
+    std::string input;
+    std::cin >> input;
+    int from, to, promo;
+    if (input.size() == 4){
+        from = getSquare(input.substr(0, 2));
+        to = getSquare(input.substr(2, 2));
+        if (from == -1 || to == -1){
+            cout << "Invalid Move try again" << endl; 
+            return -1;
+        }
+        int mv = searchBoard(b,ml, num_moves, from, to, 0);
+        if (mv == -1)
+            cout << "Invalid Move try again" << endl; 
+        return mv;
+    }
+    else{
+        if (input.size() == 5){
+            from = getSquare(input.substr(0, 2));
+            to = getSquare(input.substr(2, 2));
+            if (from == -1 || to == -1){
+                cout << "Invalid Move try again" << endl; 
+                return -1;
+            }
+            char prom = input[4];
+            switch (prom){
+                case 'Q': 
+                case 'q': 
+                    promo = 7; 
+                    break; 
+                case 'N': 
+                case 'n': 
+                    promo = 4; 
+                    break; 
+                case 'B': 
+                case 'b': 
+                    promo = 5;
+                    break; 
+                case 'R': 
+                case 'r': 
+                    promo = 6; 
+                    break; 
+                default:
+                    cout << "Invalid Move try again" << endl; 
+                    return -1;
+            }
+            int mv = searchBoard(b,ml, num_moves, from, to, promo);
+            if (mv == -1)
+                cout << "Invalid Move try again" << endl; 
+            return mv;
+        }
+        cout << "Invalid Move try again" << endl;
+        return -1; 
+    }
+}
+
 int main(){
-    
-    clock_t start = clock(); 
-    uint64_t thing = perft(6);
-    uint32_t thing2 = perft("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR b KQkq - 0 1", 6);
+
+    Move ml[256];    
+    Board* b = new Board(); 
+    bool is_game = true; 
+    while (is_game){
+        int num_moves = generateAllMoves(b, ml);
+        if (num_moves == 0){
+            if (isInCheck(b)){
+                string color = b->white_to_move ? "black " : "white ";
+                cout << "gg " << color << "wins" << endl;
+            }
+            else{
+                cout << "it's a draw" << endl;
+            }
+            is_game = false; 
+            break;
+        }
+        cout << "Enter Move" << endl;
+        int index = -1;             
+        while (index == -1){
+            index = handleInputMove(b, ml, num_moves);
+        }
+
+        makeMove(b, ml[index]); 
+    }
 
 
-    clock_t end = clock(); 
-    double time = double(end-start) / double(CLOCKS_PER_SEC);
-    std::cout << thing << " " << thing2 << "\n";
-    std::cout << time << "\n";
 
-    // Board board{}; 
-    // Board b2 = board;
-    // board.castle_rights.white_k_castle = false; 
+
 
     return 0;
 }

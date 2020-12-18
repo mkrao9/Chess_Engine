@@ -96,8 +96,8 @@ struct Board{
     struct Pieces white_pieces;
     struct Pieces black_pieces;
 
-    uint8_t white_king_square; 
-    uint8_t black_king_square; 
+    int white_king_square; 
+    int black_king_square; 
 
 
 /* square-centric attack sets: 
@@ -109,12 +109,12 @@ struct Board{
     CastleRights castle_rights; 
 
     /* 1 << square = bit indication */
-    uint8_t en_pass_square;
+    int en_pass_square;
 
     /* game information */
     bool white_to_move;
 
-    uint8_t move_since;
+    int move_since;
 
     bool in_check = false; 
 

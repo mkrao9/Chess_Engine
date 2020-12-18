@@ -63,7 +63,7 @@ inline void generateKingMoves(Board* board, bool do_capture){
     }
 
     //left
-    if (king_square % 8 != 7 && (!king_attack_set.fields.RIGHT)){
+    if ((king_square & 0x7) != 7 && (!king_attack_set.fields.RIGHT)){
         int val = king_square + LEFT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if (!(curr_pieces_board & shifted_square)){
@@ -82,7 +82,7 @@ inline void generateKingMoves(Board* board, bool do_capture){
     }
 
     //right 
-    if (king_square % 8 != 0 && (!king_attack_set.fields.LEFT)){
+    if ((king_square & 0x7) && (!king_attack_set.fields.LEFT)){
         int val = king_square + RIGHT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if (!(curr_pieces_board & shifted_square)){
@@ -101,7 +101,7 @@ inline void generateKingMoves(Board* board, bool do_capture){
     }
 
     //up left 
-    if (king_square % 8 != 7 && king_square < 56){
+    if ((king_square & 0x7) != 7 && king_square < 56){
         int val = king_square + UP_LEFT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if ((!(curr_pieces_board & shifted_square)) && (attack[val].bits == 0)){
@@ -121,7 +121,7 @@ inline void generateKingMoves(Board* board, bool do_capture){
     }
 
     //up right 
-    if (king_square % 8 != 0 && king_square < 56){
+    if ((king_square & 0x7) && king_square < 56){
         int val = king_square + UP_RIGHT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if ((!(curr_pieces_board & shifted_square)) && (attack[val].bits == 0)){
@@ -140,7 +140,7 @@ inline void generateKingMoves(Board* board, bool do_capture){
     }
 
     //down left 
-    if(king_square % 8 != 7  && king_square > 7){
+    if((king_square & 0x7) != 7  && king_square > 7){
         int val = king_square + DOWN_LEFT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if ((!(curr_pieces_board & shifted_square)) && (attack[val].bits == 0)){
@@ -159,7 +159,7 @@ inline void generateKingMoves(Board* board, bool do_capture){
     }
 
     //down right
-    if (king_square % 8 != 0 && king_square > 7){
+    if ((king_square & 0x7) && king_square > 7){
         int val = king_square + DOWN_RIGHT_VAL;
         uint64_t shifted_square = SHIFT(val);
         if ((!(curr_pieces_board & shifted_square)) && (attack[val].bits == 0)){
@@ -277,8 +277,8 @@ inline uint8_t inCheck(Board* board){
     }
 }
 
-inline  bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is_ep) {
-    uint32_t king_square = board->current_king_square;
+inline bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square, bool is_ep) {
+    int king_square = board->current_king_square;
     AttackSet* opp_attack_set = board->other_attack_set;
     Pieces* other_pieces = board->other_pieces;
     uint64_t occupied_squares = board->getOccupiedSquares();
@@ -290,7 +290,7 @@ inline  bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square,
     //handle edge case w/ en pessant (both pawns disappear from the same rank w/ the king)
     if (is_ep){
         int diff = board->white_to_move ? -8 : 8; 
-        if (king_square / 8 == (uint32_t) ((board->en_pass_square + diff) / 8)){
+        if (king_square >> 3 == ((board->en_pass_square + diff) >> 3)){
             int left;
             int right;
             if ((board->en_pass_square + diff) > from_square){
@@ -330,8 +330,8 @@ inline  bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square,
     }
     
     //same file 
-    if ((from_square - king_square) % 8 == 0){
-        if ((to_square - king_square) % 8 == 0){
+    if (!((from_square - king_square) & 0x7)){
+        if (!((to_square - king_square) & 0x7)){
             return false; 
         }
 
@@ -364,8 +364,8 @@ inline  bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square,
     }
 
     //same row 
-    if ((from_square / 8 == king_square / 8)){  
-        if (to_square / 8 == king_square / 8){
+    if ((from_square >> 3 == king_square >> 3)){  
+        if (to_square >> 3 == king_square >> 3){
             return false; 
         }
 
@@ -394,7 +394,6 @@ inline  bool leavesInCheck(Board* board, uint8_t from_square, uint8_t to_square,
             }
             return false;
         }
-        return false;
     }
 
     if (isSameDiag(from_square, king_square)){
@@ -539,7 +538,7 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             addMove(board, from_square, to_square, 0, code);
         }
         current_attack_set.fields.LEFT = 0;
-        if (current_attack_set.bits == 0)
+        if (!current_attack_set.bits)
             return;
     }
 
@@ -556,7 +555,7 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             addMove(board, from_square, to_square, 0, code);
         }
         current_attack_set.fields.UP = 0;
-        if (current_attack_set.bits == 0)
+        if (!current_attack_set.bits)
             return;    
     }
 
@@ -571,7 +570,7 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             addMove(board, from_square, to_square, 0, code);
         }
         current_attack_set.fields.RIGHT = 0;
-        if (current_attack_set.bits == 0)
+        if (!current_attack_set.bits)
             return;    
     }
 
@@ -586,7 +585,7 @@ inline void generateMovesToSquare(Board *board, int to_square, uint64_t other_pi
             addMove(board, from_square, to_square, 0, code);
         }
         current_attack_set.fields.DOWN = 0;
-        if (current_attack_set.bits == 0)
+        if (!current_attack_set.bits)
             return;    
     }
 
@@ -953,7 +952,7 @@ inline void generateBlackPawnMoves(Board *board, int from_square, uint64_t occup
     }
 }
 
-inline  void generateAllPawnMoves(Board *board){
+inline void generateAllPawnMoves(Board *board){
     uint64_t occupied_squares = board->getOccupiedSquares();
     uint64_t pawn_mask = board->current_pieces->pawn;
     unsigned long index;
@@ -1343,13 +1342,13 @@ inline void generateBlockMoves(Board* board, uint8_t code){
     if (board->en_pass_square != 0 && (board->other_pieces->pawn & SHIFT(king_square + diff))){
         uint64_t curr_pawns = board->current_pieces->pawn; 
         int pawn_check = king_square + diff; 
-        if (pawn_check % 8 != 0 && (curr_pawns & SHIFT(pawn_check - 1))){
+        if ((pawn_check & 0x7) && (curr_pawns & SHIFT(pawn_check - 1))){
             if (!leavesInCheck(board, pawn_check - 1, board->en_pass_square, true)){
                 addMove(board, pawn_check - 1, board->en_pass_square, EP, 1);
             }
         }
 
-        if (pawn_check % 8 != 7 && (curr_pawns & (SHIFT(pawn_check + 1)))){
+        if ((pawn_check & 0x7) != 7 && (curr_pawns & (SHIFT(pawn_check + 1)))){
             if (!leavesInCheck(board, pawn_check + 1, board->en_pass_square, true)){
                 addMove(board, pawn_check + 1, board->en_pass_square, EP, 1);
             }
@@ -1432,10 +1431,9 @@ uint32_t generateAllMoves(Board *board, Move* move_list){
     uint64_t other_pieces_board = board->getOtherPieces(); 
     uint64_t curr_pieces_board = board->getCurrentPieces();
     AttackSet* curr_attack_set = board->current_attack_set;
-    int8_t i = 64; 
-    while (i != 0){
-        i--;
-        if ((curr_attack_set[i].bits != 0) && !(SHIFT(i) & curr_pieces_board) ){
+    unsigned int i = 64; 
+    while (i){
+        if ((curr_attack_set[--i].bits) && !(SHIFT(i) & curr_pieces_board) ){
             generateMovesToSquare(board, i, other_pieces_board);
         }
     }

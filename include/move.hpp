@@ -30,10 +30,10 @@
     7 - queen promo 
 */
 
-#define FLAG_CODE(a) ((uint8_t) (a & 0xFF))
-#define SOURCE(a) ((uint8_t) ((a & 0x3F00) >> 8))
-#define DEST(a) ((uint8_t) ((a & 0xFC000) >> 14))
-#define CAPT_PIECE(a) ((uint8_t) ((a & 0xF00000) >> 20))
+#define FLAG_CODE(a) ((int) (a & 0xFF))
+#define SOURCE(a) ((int) ((a & 0x3F00) >> 8))
+#define DEST(a) ((int) ((a & 0xFC000) >> 14))
+#define CAPT_PIECE(a) ((int) ((a & 0xF00000) >> 20))
 
 
 
@@ -69,15 +69,15 @@ uint32_t generateAllMoves(Board *board, Move* move_list);
 //    last 4 bits: code for direction, 0 = Left, 7 = down left */ 
 // uint8_t checkStraightCheck(attack_set attack, int target_square, Pieces* other_pieces);
 
-inline bool isSameDiag(uint8_t a, uint8_t b){
+inline bool isSameDiag(int a, int b){
    return (((a >> 3) - (b >> 3)) == (((b & 0x7) - (a & 0x7))));
 }
 
-inline bool isSameAntiDiag(uint8_t a, uint8_t b){
+inline bool isSameAntiDiag(int a, int b){
     return (((a >> 3) - (b >> 3)) == ((a & 0x7) - (b & 0x7)));
 }
 
-inline void addMove(Board* board, int from, int to, uint8_t special, uint8_t capture){
+inline void addMove(Board* board, int from, int to, int special, int capture){
  
     Move mv{};
     mv.source = from; 
@@ -88,7 +88,7 @@ inline void addMove(Board* board, int from, int to, uint8_t special, uint8_t cap
     board->curr_num_moves++;
 }
 
-inline uint8_t getPieceCode(uint64_t square, Pieces* other_pieces){
+inline int getPieceCode(uint64_t square, Pieces* other_pieces){
     if (other_pieces->pawn & square){
         return 1; 
     }
