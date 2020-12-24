@@ -69,6 +69,15 @@ typedef union {
 } AttackSet;
 
 
+
+struct NumPieces{
+    uint8_t num_pawns; 
+    uint8_t num_knights; 
+    uint8_t num_bishops; 
+    uint8_t num_rooks; 
+    uint8_t num_queens; 
+} __attribute__ ((__packed__));
+
 struct Pieces {
     uint64_t pawn;
     uint64_t rook;
@@ -76,6 +85,7 @@ struct Pieces {
     uint64_t bishop;
     uint64_t queen;
     uint64_t king;
+    NumPieces num_pieces;
 } __attribute__ ((__packed__));
 
 struct CastleRights{
@@ -120,6 +130,8 @@ struct Board{
 
     Move *move_list;
     uint32_t curr_num_moves;
+    NumPieces num_white_pieces; 
+    NumPieces num_black_pieces; 
 
     Pieces* current_pieces; 
     Pieces* other_pieces; 

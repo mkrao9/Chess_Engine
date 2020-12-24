@@ -269,3 +269,13 @@ TEST(Perft_Tests, random_positions){
     ASSERT_EQ(perftFourDoubleCheckUnmake("r3k2r/p1ppqpb1/bn2pnp1/3PN3/1p2P3/2N2Q1p/PPPBBPPP/R3K2R w KQkq - 0 0"), 4085603);
     ASSERT_EQ(perftTwoDoubleCheckUnmake("8/2p5/3p4/KP3k1r/5p2/5R2/4P1P1/8 w - - 4 3"), 293);
 }
+
+TEST(NumPiecesChange, qf7){
+    Board *b = new Board("rnbqkbnr/1ppp1Qpp/8/p3p3/4P3/8/PPPP1PPP/RNB1KBNR b KQkq - 0 3");
+    Move ml[256];
+    generateAllMoves(b, ml);
+    makeMove(b, ml[0]);
+    ASSERT_EQ(b->white_pieces.num_pieces.num_queens, 0);
+    unmakeMove(b, ml[0]);
+    ASSERT_EQ(b->white_pieces.num_pieces.num_queens, 1);
+}

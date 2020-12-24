@@ -253,21 +253,24 @@ inline void removeKnight(AttackSet* attack_set, int from){
     }
 }
 
-inline __attribute__((always_inline))void removeCapturePiece(Board* board, AttackSet* attack_set, int square, int code, uint64_t ouccpied_squares){
+inline __attribute__((always_inline)) void removeCapturePiece(Board* board, AttackSet* attack_set, int square, int code, uint64_t ouccpied_squares){
     board->move_since = 0;
     Pieces* other = board->other_pieces;
     switch(code){
         case 1:    
             removePawn(board, attack_set, square, !board->white_to_move);
             other->pawn ^= SHIFT(square);
+            other->num_pieces.num_pawns--;
             return;
         case 2: 
             removeKnight(attack_set, square);
             other->knight ^= SHIFT(square);
+            other->num_pieces.num_knights--;
             return; 
         case 3: 
             removeBishop(board, attack_set, square, ouccpied_squares);
             other->bishop ^= SHIFT(square);
+            other->num_pieces.num_bishops--;
             return;
         case 4: 
             if (square == 0){
@@ -289,11 +292,13 @@ inline __attribute__((always_inline))void removeCapturePiece(Board* board, Attac
                 }
             }
             removeRook(board, attack_set, square, ouccpied_squares); 
+            other->num_pieces.num_rooks--;
             other->rook ^= SHIFT(square);
             return; 
         case 5: 
             removeQueen(board, attack_set, square, ouccpied_squares);
             other->queen ^= SHIFT(square);
+            other->num_pieces.num_queens--;
             return;
         default: 
             return;
@@ -790,22 +795,27 @@ inline void addCapturePiece(Board* board, AttackSet* attack_set, int square, int
                 addBlackPawn(attack_set, square); 
             }  
             board->current_pieces->pawn |= SHIFT(square);
+            board->current_pieces->num_pieces.num_pawns++;
             return;
         case 2: 
             addKnight(attack_set, square);
             board->current_pieces->knight |= SHIFT(square);
+            board->current_pieces->num_pieces.num_knights++;
             return; 
         case 3: 
             addDiags(attack_set, square, ouccpied_squares);
             board->current_pieces->bishop |= SHIFT(square);
+            board->current_pieces->num_pieces.num_bishops++;
             return;
         case 4: 
             addLat(attack_set, square, ouccpied_squares); 
             board->current_pieces->rook |= SHIFT(square);
+            board->current_pieces->num_pieces.num_rooks++;
             return; 
         case 5: 
             addQueen(attack_set, square, ouccpied_squares);
             board->current_pieces->queen |= SHIFT(square);
+            board->current_pieces->num_pieces.num_queens++;
             return;
         default: 
             return;

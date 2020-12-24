@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -O3 -Wall
+CFLAGS = -Wall -g
 
 all: 
 	$(CC) $(CFLAGS) src/*.cpp -o engine.exe

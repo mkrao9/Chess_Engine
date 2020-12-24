@@ -4,6 +4,7 @@
 #include "../include/board.hpp"
 #include "../include/move.hpp"
 #include "../include/make_unmake.hpp"
+#include "../include/search.hpp"
 #include <string>
 #include <time.h>
 
@@ -70,11 +71,7 @@ int getSquare(string input){
 }
 
 
-bool isInCheck(Board* board){
-    if (board->other_attack_set[board->current_king_square].bits)
-        return true; 
-    return false;
-}
+
 
 int handleInputMove(Board* b, Move* ml, int num_moves){
     std::string input;
@@ -141,11 +138,9 @@ bool getColor(){
         cin >> input;
         if (input.compare("w") == 0 || input.compare("W") == 0 || input.compare("white") == 0 || input.compare("WHITE") == 0 || input.compare("White") == 0){
             return false;
-            cout << "You've selected white" << endl;
         }
         if (input.compare("b") == 0 || input.compare("B") == 0 || input.compare("black") == 0 || input.compare("BLACK") == 0 || input.compare("Black") == 0){
             return true; 
-            cout << "You've selected black" << endl;
         }
         cout << "Not a valid side selection, try again" << endl;
     }
@@ -154,8 +149,7 @@ bool getColor(){
 }
 
 Move getComputerMove(Board* b, Move* ml, int num_moves){
-    int num = rand() % num_moves;
-    return (ml[num]);
+    return basicSearch(b, 4, ml, num_moves);
 }
 
 string moveToUCI(Move move){

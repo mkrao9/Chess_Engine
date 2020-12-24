@@ -17,6 +17,18 @@ Board::Board(){
     castle_rights.black_q_castle = 1; 
     castle_rights.white_q_castle = 1; 
 
+
+    black_pieces.num_pieces.num_bishops = 2; 
+    black_pieces.num_pieces.num_knights = 2; 
+    black_pieces.num_pieces.num_rooks = 2; 
+    black_pieces.num_pieces.num_queens = 1; 
+    black_pieces.num_pieces.num_pawns = 8; 
+    white_pieces.num_pieces.num_bishops = 2; 
+    white_pieces.num_pieces.num_knights = 2; 
+    white_pieces.num_pieces.num_rooks = 2; 
+    white_pieces.num_pieces.num_queens = 1; 
+    white_pieces.num_pieces.num_pawns = 8; 
+
     white_to_move = true; 
     en_pass_square = 0;
     move_since = 0; 
@@ -73,6 +85,18 @@ Board::Board(const char *fen){
     black_pieces.queen = 0;
     black_pieces.king = 0;
     
+    black_pieces.num_pieces.num_bishops = 0; 
+    black_pieces.num_pieces.num_knights = 0; 
+    black_pieces.num_pieces.num_rooks = 0; 
+    black_pieces.num_pieces.num_queens = 0; 
+    black_pieces.num_pieces.num_pawns = 0; 
+    white_pieces.num_pieces.num_bishops = 0; 
+    white_pieces.num_pieces.num_knights = 0; 
+    white_pieces.num_pieces.num_rooks = 0; 
+    white_pieces.num_pieces.num_queens = 0; 
+    white_pieces.num_pieces.num_pawns = 0; 
+    
+
     castle_rights.white_k_castle = 0; 
     castle_rights.black_k_castle = 0; 
     castle_rights.white_q_castle = 0; 
@@ -91,15 +115,19 @@ Board::Board(const char *fen){
         switch (c){
             case 'r': 
                 black_pieces.rook |= (1LL << counter);
+                black_pieces.num_pieces.num_rooks++;
                 break;
             case 'n': 
                 black_pieces.knight |= (1LL << counter);
+                black_pieces.num_pieces.num_knights++;
                 break;
             case 'b':
                 black_pieces.bishop |= (1LL << counter);
+                black_pieces.num_pieces.num_bishops++;
                 break;
             case 'q': 
                 black_pieces.queen  |= (1LL << counter);
+                black_pieces.num_pieces.num_queens++;
                 break;
             case 'k':
                 black_pieces.king  |= (1LL << counter);
@@ -107,21 +135,27 @@ Board::Board(const char *fen){
                 break;
             case 'p':
                 black_pieces.pawn  |=  (1LL << counter);
+                black_pieces.num_pieces.num_pawns++;
                 break;
             case 'P': 
-            white_pieces.pawn  |= (1LL << counter);
+                white_pieces.pawn  |= (1LL << counter);
+                white_pieces.num_pieces.num_pawns++;
                 break;
             case 'R': 
                 white_pieces.rook |= (1LL << counter);
+                white_pieces.num_pieces.num_rooks++;
                 break;
             case 'N': 
                 white_pieces.knight |= (1LL << counter);
+                white_pieces.num_pieces.num_knights++;
                 break;
             case 'B': 
                 white_pieces.bishop |= (1LL << counter);
+                white_pieces.num_pieces.num_bishops++;
                 break;
             case 'Q': 
                 white_pieces.queen |= (1LL << counter);
+                white_pieces.num_pieces.num_queens++;
                 break;
             case 'K': 
                 white_pieces.king |= (1LL << counter);
