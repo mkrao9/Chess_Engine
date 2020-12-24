@@ -11,7 +11,7 @@ int basicRecursiveSearch(Board* board, int depth){
     int num_moves = generateAllMoves(board, ml);
     if (num_moves == 0){
         if (isInCheck(board)){
-            return INT32_MIN;
+            return INT16_MIN;
         }
         else
         {
@@ -24,22 +24,22 @@ int basicRecursiveSearch(Board* board, int depth){
         return eval;
     }
 
-    int max_value = INT32_MIN;
+    int max_value = INT16_MAX;
     for (int i = 0; i < num_moves; i++){
         int old_ep = board->en_pass_square; 
         int old_moves_since = board->move_since; 
         CastleRights old_castle_rights = board->castle_rights; 
         makeMove(board, ml[i]);
-        int res = -1 * basicRecursiveSearch(board, depth - 1);
+        int res = basicRecursiveSearch(board, depth - 1);
         unmakeMove(board, ml[i]); 
         board->en_pass_square = old_ep; 
         board->move_since = old_moves_since;
         board->castle_rights = old_castle_rights;
-        if (res > max_value)
+        if (res < max_value)
             max_value = res;
     }
 
-    return max_value;
+    return -1 * max_value;
 }
 
 Move basicSearch(Board* board, int depth, Move* ml, int num_moves){
