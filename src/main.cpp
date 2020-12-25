@@ -165,11 +165,17 @@ string moveToUCI(Move move){
     return out;
 }
 
+void initializeComputer(){
+    initializeZorbistKeys();
+}
+
 int main(){
 
     Move ml[256];    
     Board* b = new Board(); 
     bool is_game = true; 
+
+    initializeComputer();
     srand(time(0));
     bool is_comp_white = getColor();
     while (is_game){

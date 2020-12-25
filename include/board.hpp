@@ -9,9 +9,6 @@ struct Move {
     unsigned int dest: 6; 
     unsigned int special: 3; 
     unsigned int capture: 3; 
-    // unsigned int old_ep: 4; /*Bit 3: whether or not there was ep; rest: col (0 = h file, 7 = a file) */
-    // unsigned int old_castle: 4; 
-    // unsigned int old_half_move: 6;
 };
 
 /* constants for directions */ 
